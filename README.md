@@ -13,8 +13,6 @@ package Backend {
     abstract class AbstractSignal {
         - function: Function
         - A: double
-        - t1: double
-        - d: double
         + getAverage()
         + getAbsoluteAverage()
         + getEffectiveValue()
@@ -24,9 +22,12 @@ package Backend {
         + getHistogramData()
     }
     
-    class AbstractContinuousSignal {
+    abstract class AbstractContinuousSignal {
+        - t1: double
+        - d: double
     }
-    class AbstractDiscreteSignal {
+    abstract class AbstractDiscreteSignal {
+        - f: double
     }
     
     AbstractSignal <|-- AbstractContinuousSignal
@@ -34,15 +35,40 @@ package Backend {
     
     class UniformlyDistributedNoise
     class GaussianNoise
-    class SinusoidalSignal
-    class OneHalfRectifiedSinusoidalSignal
-    class TwoHalfRectifiedSinusoidalSignal
-    class RectangularSignal
-    class SymmetricalRectangularSignal
-    class TriangleSignal
-    class UnitJump
-    class UnitImpulse
-    class ImpulseNoise
+    class SinusoidalSignal {
+        - T: double
+    }
+    class OneHalfRectifiedSinusoidalSignal {
+        - T: double
+    }
+    class TwoHalfRectifiedSinusoidalSignal {
+        - T: double
+    }
+    class RectangularSignal {
+        - T: double
+        - kw: double
+    }
+    class SymmetricalRectangularSignal {
+        - T: double
+        - kw: double
+    }
+    class TriangleSignal {
+        - T: double
+        - kw: double
+    }
+    class UnitJump {
+        - ts: double
+    }
+    class UnitImpulse {
+        - ns: double
+        - n1: double
+        - l: double
+    }
+    class ImpulseNoise {
+        - t1: double
+        - d: double
+        - p: double
+    }
     
     AbstractContinuousSignal <|-- UniformlyDistributedNoise
     AbstractContinuousSignal <|-- GaussianNoise
