@@ -3,8 +3,8 @@ package backend.signal.continuous;
 public class OneHaltRectifiedSinusoidalSignal extends ContinuousSignal {
     private double T;
 
-    public OneHaltRectifiedSinusoidalSignal(double a, double t1, double d, double T) {
-        super(a, t1, d);
+    public OneHaltRectifiedSinusoidalSignal(double A, double t1, double d, double T) {
+        super(A, t1, d);
         this.T = T;
         calculateAllPoints();
     }

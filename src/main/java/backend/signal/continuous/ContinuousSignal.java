@@ -8,10 +8,13 @@ public class ContinuousSignal extends AbstractSignal {
     protected double t1;
     protected double d;
 
-    public ContinuousSignal(double a, double t1, double d) {
-        super(a);
+    public ContinuousSignal(double A, double t1, double d) {
+        super(A, d);
         this.t1 = t1;
-        this.d = d;
+    }
+
+    public ContinuousSignal(Map<Double, Double> points) {
+        super(points);
     }
 
     public void calculateAllPoints() {
@@ -50,11 +53,6 @@ public class ContinuousSignal extends AbstractSignal {
     @Override
     public double getMeanSpeed() {
         return 0;
-    }
-
-    @Override
-    public Map<Double, Double> getAmplitudeFromTimeChartData() {
-        return null;
     }
 
     @Override

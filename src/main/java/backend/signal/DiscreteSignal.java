@@ -3,11 +3,15 @@ package backend.signal;
 import java.util.Map;
 
 public class DiscreteSignal extends AbstractSignal {
-    protected double t;
+    protected double f;
 
-    public DiscreteSignal(double a, double t) {
-        super(a);
-        this.t = t;
+    public DiscreteSignal(double A, double d, double f) {
+        super(A, d);
+        this.f = f;
+    }
+
+    public DiscreteSignal(Map<Double, Double> points) {
+        super(points);
     }
 
     @Override
@@ -33,11 +37,6 @@ public class DiscreteSignal extends AbstractSignal {
     @Override
     public double getMeanSpeed() {
         return 0;
-    }
-
-    @Override
-    public Map<Double, Double> getAmplitudeFromTimeChartData() {
-        return null;
     }
 
     @Override
