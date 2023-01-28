@@ -1,4 +1,4 @@
-package backend.Signal;
+package backend.signal;
 
 public class UnitJump extends ContinuousSignal {
     private double ts;

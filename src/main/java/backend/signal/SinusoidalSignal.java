@@ -1,4 +1,4 @@
-package backend.Signal;
+package backend.signal;
 
 public class SinusoidalSignal extends ContinuousSignal {
     private double T;

@@ -1,4 +1,4 @@
-package backend.Signal;
+package backend.signal;
 
 public class SymmetricalRectangularSignal extends ContinuousSignal {
     private double T;

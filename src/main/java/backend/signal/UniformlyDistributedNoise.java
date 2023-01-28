@@ -1,10 +1,7 @@
-package backend.Signal;
+package backend.signal;
 
-import java.util.Random;
-
-public class GaussianNoise extends ContinuousSignal {
-    private final Random r = new Random();
-    public GaussianNoise(double a, double t1, double d) {
+public class UniformlyDistributedNoise extends ContinuousSignal {
+    public UniformlyDistributedNoise(double a, double t1, double d) {
         super(a, t1, d);
         int t1Rounded = (int) (t1 * pointsDecimalPlacesDivision);
         int t2Rounded = (int) ((t1 + d) * pointsDecimalPlacesDivision);
@@ -14,6 +11,6 @@ public class GaussianNoise extends ContinuousSignal {
     }
 
     private double calculatePointValue() {
-        return r.nextGaussian() * 2 * A - A;
+        return Math.random() * 2 * A - A;
     }
 }

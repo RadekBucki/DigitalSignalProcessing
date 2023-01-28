@@ -1,8 +1,8 @@
-package backend.Signal;
+package backend.signal;
 
 import java.util.Map;
 
-public class DiscreteSignal extends AbstractSignal{
+public class DiscreteSignal extends AbstractSignal {
     protected double t;
 
     public DiscreteSignal(double a, double t) {

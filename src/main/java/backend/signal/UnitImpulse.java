@@ -1,6 +1,6 @@
-package backend.Signal;
+package backend.signal;
 
-public class UnitImpulse extends DiscreteSignal{
+public class UnitImpulse extends DiscreteSignal {
     private double ns;
     private double n1;
     private double l;

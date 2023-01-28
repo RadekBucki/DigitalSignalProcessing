@@ -1,6 +1,6 @@
-package backend.Signal;
+package backend.signal;
 
-public class TriangleSignal extends ContinuousSignal{
+public class TriangleSignal extends ContinuousSignal {
     private double T;
     private double kw;
 

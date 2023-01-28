@@ -1,4 +1,4 @@
-package backend.Signal;
+package backend.signal;
 
 public class OneHaltRectifiedSinusoidalSignal extends ContinuousSignal {
     private double T;

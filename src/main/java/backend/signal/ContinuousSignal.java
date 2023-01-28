@@ -1,4 +1,4 @@
-package backend.Signal;
+package backend.signal;
 
 import java.util.Map;
 

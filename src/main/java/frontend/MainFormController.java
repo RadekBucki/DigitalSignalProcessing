@@ -1,7 +1,7 @@
 package frontend;
 
-import backend.Signal.AbstractSignal;
-import backend.Signal.UniformlyDistributedNoise;
+import backend.signal.AbstractSignal;
+import backend.signal.UniformlyDistributedNoise;
 
 public class MainFormController {
     public static final String MAIN_FORM_RESOURCE = "MainForm.fxml";

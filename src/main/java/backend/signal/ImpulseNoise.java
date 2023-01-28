@@ -1,4 +1,4 @@
-package backend.Signal;
+package backend.signal;
 
 public class ImpulseNoise extends DiscreteSignal {
     private double t1;
