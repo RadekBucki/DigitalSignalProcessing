@@ -7,9 +7,8 @@ public class ContinuousSignal extends AbstractSignal {
     protected double d;
 
     public ContinuousSignal(double a, double t1, double d) {
-        super(a);
+        super(a, d);
         this.t1 = t1;
-        this.d = d;
     }
 
     @Override

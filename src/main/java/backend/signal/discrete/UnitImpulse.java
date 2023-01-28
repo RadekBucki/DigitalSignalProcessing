@@ -5,13 +5,11 @@ import backend.signal.DiscreteSignal;
 public class UnitImpulse extends DiscreteSignal {
     private int ns;
     private int n1;
-    private double l;
 
-    public UnitImpulse(double a, double t, int ns, int n1, double l) {
-        super(a, t);
+    public UnitImpulse(double a, double t, int ns, int n1, double d) {
+        super(a, t, d);
         this.ns = ns;
         this.n1 = n1;
-        this.l = l;
         for (int i = n1; i < ns; i++) {
             double time = i / f;
             if (i == 0) {

@@ -5,8 +5,8 @@ import java.util.Map;
 public class DiscreteSignal extends AbstractSignal {
     protected double f;
 
-    public DiscreteSignal(double a, double f) {
-        super(a);
+    public DiscreteSignal(double a, double d, double f) {
+        super(a, d);
         this.f = f;
     }
 

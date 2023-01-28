@@ -7,9 +7,11 @@ public abstract class AbstractSignal {
     protected static final double POINTS_DECIMAL_PLACES_DIVISION = 10000;
     protected Map<Double, Double> points = new LinkedHashMap<>();
     protected double A;
+    protected double d;
 
-    protected AbstractSignal(double a) {
-        A = a;
+    protected AbstractSignal(double A, double d) {
+        this.A = A;
+        this.d = d;
     }
 
     public abstract double getAverage();
