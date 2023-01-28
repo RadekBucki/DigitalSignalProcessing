@@ -12,7 +12,7 @@ public class UnitImpulse extends DiscreteSignal {
         this.n1 = n1;
         for (int i = n1; i < n1 + Math.floor(d * f); i++) {
             double time = i / f;
-            if (i - ns == 0) {
+            if (i == ns) {
                 points.put(time, A);
             } else {
                 points.put(time, 0.0);
