@@ -19,7 +19,7 @@ package backend {
     package signal {
         SignalFactory ....> AbstractSignal
         abstract class AbstractSignal {
-            - function: Function
+            - points: double[][]
             - A: double
             + {abstract} getAverage()
             + {abstract} getAbsoluteAverage()
@@ -30,7 +30,7 @@ package backend {
             + getHistogramData()
         }
         
-        abstract class AbstractContinuousSignal {
+        class ContinuousSignal {
             - t1: double
             - d: double
             + getAverage()
@@ -41,7 +41,7 @@ package backend {
             + getAmplitudeFromTimeChartData()
             + getHistogramData()
         }
-        abstract class AbstractDiscreteSignal {
+        class DiscreteSignal {
             - f: double
             + getAverage()
             + getAbsoluteAverage()
@@ -52,8 +52,8 @@ package backend {
             + getHistogramData()
         }
         
-        AbstractSignal <|-- AbstractContinuousSignal
-        AbstractSignal <|-- AbstractDiscreteSignal
+        AbstractSignal <|-- ContinuousSignal
+        AbstractSignal <|-- DiscreteSignal
         
         package continuous {
             class UniformlyDistributedNoise
@@ -96,18 +96,18 @@ package backend {
             }
         }
         
-        AbstractContinuousSignal <|-- UniformlyDistributedNoise
-        AbstractContinuousSignal <|-- GaussianNoise
-        AbstractContinuousSignal <|-- SinusoidalSignal
-        AbstractContinuousSignal <|-- OneHalfRectifiedSinusoidalSignal
-        AbstractContinuousSignal <|-- TwoHalfRectifiedSinusoidalSignal
-        AbstractContinuousSignal <|-- RectangularSignal
-        AbstractContinuousSignal <|-- SymmetricalRectangularSignal
-        AbstractContinuousSignal <|-- TriangleSignal
-        AbstractContinuousSignal <|-- UnitJump
+        ContinuousSignal <|-- UniformlyDistributedNoise
+        ContinuousSignal <|-- GaussianNoise
+        ContinuousSignal <|-- SinusoidalSignal
+        ContinuousSignal <|-- OneHalfRectifiedSinusoidalSignal
+        ContinuousSignal <|-- TwoHalfRectifiedSinusoidalSignal
+        ContinuousSignal <|-- RectangularSignal
+        ContinuousSignal <|-- SymmetricalRectangularSignal
+        ContinuousSignal <|-- TriangleSignal
+        ContinuousSignal <|-- UnitJump
         
-        AbstractDiscreteSignal <|-- UnitImpulse
-        AbstractDiscreteSignal <|-- ImpulseNoise
+        DiscreteSignal <|-- UnitImpulse
+        DiscreteSignal <|-- ImpulseNoise
     }
     
     class SignalFacade {
