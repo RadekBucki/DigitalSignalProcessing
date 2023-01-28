@@ -4,11 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class AbstractSignal {
-    protected final double pointsDecimalPlacesDivision = 10000;
+    protected static final double POINTS_DECIMAL_PLACES_DIVISION = 10000;
     protected Map<Double, Double> points = new HashMap<>();
     protected double A;
 
-    public AbstractSignal(double a) {
+    protected AbstractSignal(double a) {
         A = a;
     }
 
@@ -17,6 +17,8 @@ public abstract class AbstractSignal {
     public abstract double getEffectiveValue();
     public abstract double getVariance();
     public abstract double getMeanSpeed();
-    public abstract Map<Double, Double> getAmplitudeFromTimeChartData();
+    public Map<Double, Double> getAmplitudeFromTimeChartData() {
+        return points;
+    }
     public abstract Map<Double, Double> getHistogramData();
 }

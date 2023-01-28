@@ -38,11 +38,6 @@ public class ContinuousSignal extends AbstractSignal {
     }
 
     @Override
-    public Map<Double, Double> getAmplitudeFromTimeChartData() {
-        return null;
-    }
-
-    @Override
     public Map<Double, Double> getHistogramData() {
         return null;
     }
