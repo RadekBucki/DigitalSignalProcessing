@@ -99,10 +99,18 @@ package Backend {
     
     SignalFacade --> SignalOperationFactory
     
-    class SignalAdd
-    class SignalSubtract
-    class SignalMultiply
-    class SignalDivide
+    class SignalAdd {
+        + add(AbstractSignal, AbstractSignal): AbstractSignal
+    }
+    class SignalSubtract {
+        + subtract(AbstractSignal, AbstractSignal): AbstractSignal
+    }
+    class SignalMultiply {
+        + multiply(AbstractSignal, AbstractSignal): AbstractSignal
+    }
+    class SignalDivide {
+        + divide(AbstractSignal, AbstractSignal): AbstractSignal
+    }
     
     SignalOperationFactory ..> SignalAdd
     SignalOperationFactory ..> SignalSubtract
@@ -134,6 +142,6 @@ package Frontend {
     ChartGenerator <|-- AmplitudeFromTimeChartGenerator
     ChartGenerator <|-- HistogramChartGenerator
 }
-MainFormController ...> SignalFacade
-MainFormController ...> SignalFactory
+MainFormController ....> SignalFacade
+MainFormController ....> SignalFactory
 ```
