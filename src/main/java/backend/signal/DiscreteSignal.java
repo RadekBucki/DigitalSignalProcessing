@@ -3,11 +3,11 @@ package backend.signal;
 import java.util.Map;
 
 public class DiscreteSignal extends AbstractSignal {
-    protected double t;
+    protected double f;
 
-    public DiscreteSignal(double a, double t) {
+    public DiscreteSignal(double a, double f) {
         super(a);
-        this.t = t;
+        this.f = f;
     }
 
     @Override
