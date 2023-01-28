@@ -14,6 +14,10 @@ public abstract class AbstractSignal {
         this.d = d;
     }
 
+    protected AbstractSignal(Map<Double, Double> points) {
+        this.points = points;
+    }
+
     public abstract double getAverage();
     public abstract double getAbsoluteAverage();
     public abstract double getEffectiveValue();

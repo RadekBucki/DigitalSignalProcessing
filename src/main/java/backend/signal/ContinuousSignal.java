@@ -11,6 +11,10 @@ public class ContinuousSignal extends AbstractSignal {
         this.t1 = t1;
     }
 
+    public ContinuousSignal(Map<Double, Double> points) {
+        super(points);
+    }
+
     @Override
     public double getAverage() {
         return 0;

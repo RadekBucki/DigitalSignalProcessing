@@ -10,6 +10,10 @@ public class DiscreteSignal extends AbstractSignal {
         this.f = f;
     }
 
+    public DiscreteSignal(Map<Double, Double> points) {
+        super(points);
+    }
+
     @Override
     public double getAverage() {
         return 0;
