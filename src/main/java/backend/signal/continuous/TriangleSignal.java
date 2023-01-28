@@ -13,6 +13,7 @@ public class TriangleSignal extends ContinuousSignal {
         calculateAllPoints();
     }
 
+    @Override
     public double calculatePointValue(double x) {
         int k = (int) Math.floor(x / T);
         if (x >= k * T + t1 && x < kw * T + k * T + t1) {

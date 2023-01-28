@@ -10,7 +10,7 @@ public class GaussianNoise extends ContinuousSignal {
         super(A, t1, d);
         calculateAllPoints();
     }
-
+    @Override
     public double calculatePointValue(double x) {
         return r.nextGaussian() * 2 * A - A;
     }

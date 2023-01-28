@@ -11,6 +11,7 @@ public class UnitJump extends ContinuousSignal {
         calculateAllPoints();
     }
 
+    @Override
     public double calculatePointValue(double x) {
         if (x > ts) {
             return A;

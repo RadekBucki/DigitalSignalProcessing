@@ -8,6 +8,7 @@ public class UniformlyDistributedNoise extends ContinuousSignal {
         calculateAllPoints();
     }
 
+    @Override
     public double calculatePointValue(double x) {
         return Math.random() * 2 * A - A;
     }
