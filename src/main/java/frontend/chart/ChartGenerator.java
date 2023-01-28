@@ -1,4 +1,4 @@
-package frontend;
+package frontend.chart;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;

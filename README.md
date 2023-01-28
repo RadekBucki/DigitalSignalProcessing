@@ -19,8 +19,8 @@ package backend {
     package signal {
         SignalFactory ....> AbstractSignal
         abstract class AbstractSignal {
-            - points: double[][]
-            - A: double
+            # points: double[][]
+            # A: double
             + {abstract} getAverage()
             + {abstract} getAbsoluteAverage()
             + {abstract} getEffectiveValue()
@@ -31,8 +31,8 @@ package backend {
         }
         
         class ContinuousSignal {
-            - t1: double
-            - d: double
+            # t1: double
+            # d: double
             + getAverage()
             + getAbsoluteAverage()
             + getEffectiveValue()
@@ -42,7 +42,7 @@ package backend {
             + getHistogramData()
         }
         class DiscreteSignal {
-            - f: double
+            # f: double
             + getAverage()
             + getAbsoluteAverage()
             + getEffectiveValue()
@@ -59,40 +59,40 @@ package backend {
             class UniformlyDistributedNoise
             class GaussianNoise
             class SinusoidalSignal {
-                - T: double
+                # T: double
             }
             class OneHalfRectifiedSinusoidalSignal {
-                - T: double
+                # T: double
             }
             class TwoHalfRectifiedSinusoidalSignal {
-                - T: double
+                # T: double
             }
             class RectangularSignal {
-                - T: double
-                - kw: double
+                # T: double
+                # kw: double
             }
             class SymmetricalRectangularSignal {
-                - T: double
-                - kw: double
+                # T: double
+                # kw: double
             }
             class TriangleSignal {
-                - T: double
-                - kw: double
+                # T: double
+                # kw: double
             }
             class UnitJump {
-                - ts: double
+                # ts: double
             }
         }
         package discrete {
             class UnitImpulse {
-                - ns: double
-                - n1: double
-                - l: double
+                # ns: double
+                # n1: double
+                # l: double
             }
             class ImpulseNoise {
-                - t1: double
-                - d: double
-                - p: double
+                # t1: double
+                # d: double
+                # p: double
             }
         }
         
@@ -118,33 +118,39 @@ package backend {
     }
     
     class SignalOperationFactory {
-        + createSignalAdd(): SignalAdd
-        + createSignalSubtract(): SignalSubtract
-        + createSignalMultiply(): SignalMultiply
-        + createSignalDivide(): SignalDivide
+        + createSignalAdd(): AbstractSignalOperation
+        + createSignalSubtract(): AbstractSignalOperation
+        + createSignalMultiply(): AbstractSignalOperation
+        + createSignalDivide(): AbstractSignalOperation
     }
     
-    SignalFacade --> SignalOperationFactory
+    SignalFacade ---> SignalOperationFactory
     
     package signal_operation {
+        abstract class AbstractSignalOperation {
+            + execute(AbstractSignal, AbstractSignal): AbstractSignal
+            # {abstract} operation(double, double): double
+        }
         class SignalAdd {
-            + add(AbstractSignal, AbstractSignal): AbstractSignal
+            # operation(double, double): double
         }
         class SignalSubtract {
-            + subtract(AbstractSignal, AbstractSignal): AbstractSignal
+            # operation(double, double): double
         }
         class SignalMultiply {
-            + multiply(AbstractSignal, AbstractSignal): AbstractSignal
+            # operation(double, double): double
         }
         class SignalDivide {
-            + divide(AbstractSignal, AbstractSignal): AbstractSignal
+            # operation(double, double): double
         }
     }
     
-    SignalOperationFactory ..> SignalAdd
-    SignalOperationFactory ..> SignalSubtract
-    SignalOperationFactory ..> SignalMultiply
-    SignalOperationFactory ..> SignalDivide
+    AbstractSignalOperation <|-- SignalAdd
+    AbstractSignalOperation <|-- SignalSubtract
+    AbstractSignalOperation <|-- SignalMultiply
+    AbstractSignalOperation <|-- SignalDivide
+    
+    SignalOperationFactory ..> AbstractSignalOperation
 }
 
 package frontend {
