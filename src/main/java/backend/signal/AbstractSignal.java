@@ -1,11 +1,11 @@
 package backend.signal;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public abstract class AbstractSignal {
     protected final double pointsDecimalPlacesDivision = 10000;
-    protected Map<Double, Double> points = new HashMap<>();
+    protected Map<Double, Double> points = new LinkedHashMap<>();
     protected double A;
 
     public AbstractSignal(double a) {
