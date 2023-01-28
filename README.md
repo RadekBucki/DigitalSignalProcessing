@@ -3,7 +3,7 @@
 ## Task 1 - Signal and noise generation
 
 ```plantuml
-package Backend {
+package backend {
     class SignalFactory {
         + createUniformlyDistributedNoise()(): AbstractSignal
         + createGaussianNoise(): AbstractSignal
@@ -15,94 +15,100 @@ package Backend {
         + createTriangleSignal(): AbstractSignal
         + createUnitJump(): AbstractSignal
     }
-    SignalFactory ...> AbstractSignal
     
-    abstract class AbstractSignal {
-        - function: Function
-        - A: double
-        + {abstract} getAverage()
-        + {abstract} getAbsoluteAverage()
-        + {abstract} getEffectiveValue()
-        + {abstract} getVariance()
-        + {abstract} getMeanSpeed()
-        + getAmplitudeFromTimeChartData()
-        + getHistogramData()
+    package signal {
+        SignalFactory ....> AbstractSignal
+        abstract class AbstractSignal {
+            - function: Function
+            - A: double
+            + {abstract} getAverage()
+            + {abstract} getAbsoluteAverage()
+            + {abstract} getEffectiveValue()
+            + {abstract} getVariance()
+            + {abstract} getMeanSpeed()
+            + getAmplitudeFromTimeChartData()
+            + getHistogramData()
+        }
+        
+        abstract class AbstractContinuousSignal {
+            - t1: double
+            - d: double
+            + getAverage()
+            + getAbsoluteAverage()
+            + getEffectiveValue()
+            + getVariance()
+            + getMeanSpeed()
+            + getAmplitudeFromTimeChartData()
+            + getHistogramData()
+        }
+        abstract class AbstractDiscreteSignal {
+            - f: double
+            + getAverage()
+            + getAbsoluteAverage()
+            + getEffectiveValue()
+            + getVariance()
+            + getMeanSpeed()
+            + getAmplitudeFromTimeChartData()
+            + getHistogramData()
+        }
+        
+        AbstractSignal <|-- AbstractContinuousSignal
+        AbstractSignal <|-- AbstractDiscreteSignal
+        
+        package continuous {
+            class UniformlyDistributedNoise
+            class GaussianNoise
+            class SinusoidalSignal {
+                - T: double
+            }
+            class OneHalfRectifiedSinusoidalSignal {
+                - T: double
+            }
+            class TwoHalfRectifiedSinusoidalSignal {
+                - T: double
+            }
+            class RectangularSignal {
+                - T: double
+                - kw: double
+            }
+            class SymmetricalRectangularSignal {
+                - T: double
+                - kw: double
+            }
+            class TriangleSignal {
+                - T: double
+                - kw: double
+            }
+            class UnitJump {
+                - ts: double
+            }
+        }
+        package discrete {
+            class UnitImpulse {
+                - ns: double
+                - n1: double
+                - l: double
+            }
+            class ImpulseNoise {
+                - t1: double
+                - d: double
+                - p: double
+            }
+        }
+        
+        AbstractContinuousSignal <|-- UniformlyDistributedNoise
+        AbstractContinuousSignal <|-- GaussianNoise
+        AbstractContinuousSignal <|-- SinusoidalSignal
+        AbstractContinuousSignal <|-- OneHalfRectifiedSinusoidalSignal
+        AbstractContinuousSignal <|-- TwoHalfRectifiedSinusoidalSignal
+        AbstractContinuousSignal <|-- RectangularSignal
+        AbstractContinuousSignal <|-- SymmetricalRectangularSignal
+        AbstractContinuousSignal <|-- TriangleSignal
+        AbstractContinuousSignal <|-- UnitJump
+        
+        AbstractDiscreteSignal <|-- UnitImpulse
+        AbstractDiscreteSignal <|-- ImpulseNoise
     }
-    
-    abstract class AbstractContinuousSignal {
-        - t1: double
-        - d: double
-        + getAverage()
-        + getAbsoluteAverage()
-        + getEffectiveValue()
-        + getVariance()
-        + getMeanSpeed()
-        + getAmplitudeFromTimeChartData()
-        + getHistogramData()
-    }
-    abstract class AbstractDiscreteSignal {
-        - f: double
-        + getAverage()
-        + getAbsoluteAverage()
-        + getEffectiveValue()
-        + getVariance()
-        + getMeanSpeed()
-        + getAmplitudeFromTimeChartData()
-        + getHistogramData()
-    }
-    
-    AbstractSignal <|-- AbstractContinuousSignal
-    AbstractSignal <|-- AbstractDiscreteSignal
-    
-    class UniformlyDistributedNoise
-    class GaussianNoise
-    class SinusoidalSignal {
-        - T: double
-    }
-    class OneHalfRectifiedSinusoidalSignal {
-        - T: double
-    }
-    class TwoHalfRectifiedSinusoidalSignal {
-        - T: double
-    }
-    class RectangularSignal {
-        - T: double
-        - kw: double
-    }
-    class SymmetricalRectangularSignal {
-        - T: double
-        - kw: double
-    }
-    class TriangleSignal {
-        - T: double
-        - kw: double
-    }
-    class UnitJump {
-        - ts: double
-    }
-    class UnitImpulse {
-        - ns: double
-        - n1: double
-        - l: double
-    }
-    class ImpulseNoise {
-        - t1: double
-        - d: double
-        - p: double
-    }
-    
-    AbstractContinuousSignal <|-- UniformlyDistributedNoise
-    AbstractContinuousSignal <|-- GaussianNoise
-    AbstractContinuousSignal <|-- SinusoidalSignal
-    AbstractContinuousSignal <|-- OneHalfRectifiedSinusoidalSignal
-    AbstractContinuousSignal <|-- TwoHalfRectifiedSinusoidalSignal
-    AbstractContinuousSignal <|-- RectangularSignal
-    AbstractContinuousSignal <|-- SymmetricalRectangularSignal
-    AbstractContinuousSignal <|-- TriangleSignal
-    AbstractContinuousSignal <|-- UnitJump
-    
-    AbstractDiscreteSignal <|-- UnitImpulse
-    AbstractDiscreteSignal <|-- ImpulseNoise
     
     class SignalFacade {
         + add(AbstractSignal,AbstractSignal): AbstractSignal
@@ -120,17 +126,19 @@ package Backend {
     
     SignalFacade --> SignalOperationFactory
     
-    class SignalAdd {
-        + add(AbstractSignal, AbstractSignal): AbstractSignal
-    }
-    class SignalSubtract {
-        + subtract(AbstractSignal, AbstractSignal): AbstractSignal
-    }
-    class SignalMultiply {
-        + multiply(AbstractSignal, AbstractSignal): AbstractSignal
-    }
-    class SignalDivide {
-        + divide(AbstractSignal, AbstractSignal): AbstractSignal
+    package signal_operation {
+        class SignalAdd {
+            + add(AbstractSignal, AbstractSignal): AbstractSignal
+        }
+        class SignalSubtract {
+            + subtract(AbstractSignal, AbstractSignal): AbstractSignal
+        }
+        class SignalMultiply {
+            + multiply(AbstractSignal, AbstractSignal): AbstractSignal
+        }
+        class SignalDivide {
+            + divide(AbstractSignal, AbstractSignal): AbstractSignal
+        }
     }
     
     SignalOperationFactory ..> SignalAdd
@@ -139,21 +147,25 @@ package Backend {
     SignalOperationFactory ..> SignalDivide
 }
 
-package Frontend {
+package frontend {
     class MainApplication
     class MainFormController
-    class FileChoose {
-        + saveChooser()
-        + openChooser()
-        - choose()
+    package file {
+        class FileChoose {
+            + saveChooser()
+            + openChooser()
+            - choose()
+        }
     }
-    class ChartGenerator {
-        + generatePlot()
-        - formatAxis()
-        - changeVisibility()
+    package chart {
+        class ChartGenerator {
+            + generatePlot()
+            - formatAxis()
+            - changeVisibility()
+        }
+        class AmplitudeFromTimeChartGenerator
+        class HistogramChartGenerator
     }
-    class AmplitudeFromTimeChartGenerator
-    class HistogramChartGenerator
     
     MainApplication ..> MainFormController
     
