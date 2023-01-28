@@ -33,6 +33,8 @@ package backend {
         class ContinuousSignal {
             # t1: double
             # d: double
+            + {abstract} calculatePointValue()
+            + calculateAllPoints()
             + getAverage()
             + getAbsoluteAverage()
             + getEffectiveValue()
@@ -56,31 +58,42 @@ package backend {
         AbstractSignal <|-- DiscreteSignal
         
         package continuous {
-            class UniformlyDistributedNoise
-            class GaussianNoise
+            class UniformlyDistributedNoise {
+                + calculatePointValue()
+            }
+            class GaussianNoise {
+                + calculatePointValue()
+            }
             class SinusoidalSignal {
                 # T: double
+                + calculatePointValue()
             }
             class OneHalfRectifiedSinusoidalSignal {
                 # T: double
+                + calculatePointValue()
             }
             class TwoHalfRectifiedSinusoidalSignal {
                 # T: double
+                + calculatePointValue()
             }
             class RectangularSignal {
                 # T: double
                 # kw: double
+                + calculatePointValue()
             }
             class SymmetricalRectangularSignal {
                 # T: double
                 # kw: double
+                + calculatePointValue()
             }
             class TriangleSignal {
                 # T: double
                 # kw: double
+                + calculatePointValue()
             }
             class UnitJump {
                 # ts: double
+                + calculatePointValue()
             }
         }
         package discrete {
