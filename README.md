@@ -11,7 +11,27 @@ package Backend {
     SignalFactory ...> AbstractSignal
     
     abstract class AbstractSignal {
+        - function: Function
+        - A: double
+        - t1: double
+        - d: double
+        + getAverage()
+        + getAbsoluteAverage()
+        + getEffectiveValue()
+        + getVariance()
+        + getMeanSpeed()
+        + getAmplitudeFromTimeChartData()
+        + getHistogramData()
     }
+    
+    class AbstractContinuousSignal {
+    }
+    class AbstractDiscreteSignal {
+    }
+    
+    AbstractSignal <|-- AbstractContinuousSignal
+    AbstractSignal <|-- AbstractDiscreteSignal
+    
     class UniformlyDistributedNoise
     class GaussianNoise
     class SinusoidalSignal
@@ -21,18 +41,21 @@ package Backend {
     class SymmetricalRectangularSignal
     class TriangleSignal
     class UnitJump
+    class UnitImpulse
     class ImpulseNoise
     
-    AbstractSignal <|-- UniformlyDistributedNoise
-    AbstractSignal <|-- GaussianNoise
-    AbstractSignal <|-- SinusoidalSignal
-    AbstractSignal <|-- OneHalfRectifiedSinusoidalSignal
-    AbstractSignal <|-- TwoHalfRectifiedSinusoidalSignal
-    AbstractSignal <|-- RectangularSignal
-    AbstractSignal <|-- SymmetricalRectangularSignal
-    AbstractSignal <|-- TriangleSignal
-    AbstractSignal <|-- UnitJump
-    AbstractSignal <|-- ImpulseNoise
+    AbstractContinuousSignal <|-- UniformlyDistributedNoise
+    AbstractContinuousSignal <|-- GaussianNoise
+    AbstractContinuousSignal <|-- SinusoidalSignal
+    AbstractContinuousSignal <|-- OneHalfRectifiedSinusoidalSignal
+    AbstractContinuousSignal <|-- TwoHalfRectifiedSinusoidalSignal
+    AbstractContinuousSignal <|-- RectangularSignal
+    AbstractContinuousSignal <|-- SymmetricalRectangularSignal
+    AbstractContinuousSignal <|-- TriangleSignal
+    AbstractContinuousSignal <|-- UnitJump
+    
+    AbstractDiscreteSignal <|-- UnitImpulse
+    AbstractDiscreteSignal <|-- ImpulseNoise
     
     class SignalFacade {
         + add(AbstractSignal,AbstractSignal): AbstractSignal
