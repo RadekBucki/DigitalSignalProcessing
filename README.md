@@ -4,20 +4,35 @@
 
 ```plantuml
 package Backend {
-    abstract class AbstractSignal {
-    }
-    class Signal1
-    class Signal2
-    
-    AbstractSignal <|-- Signal1
-    AbstractSignal <|-- Signal2
-    
     class SignalFactory {
         + createSignal1(params): AbstractSignal
         + createSignal2(params): AbstractSignal
     }
+    SignalFactory ...> AbstractSignal
     
-    SignalFactory ..> AbstractSignal
+    abstract class AbstractSignal {
+    }
+    class UniformlyDistributedNoise
+    class GaussianNoise
+    class SinusoidalSignal
+    class OneHalfRectifiedSinusoidalSignal
+    class TwoHalfRectifiedSinusoidalSignal
+    class RectangularSignal
+    class SymmetricalRectangularSignal
+    class TriangleSignal
+    class UnitJump
+    class ImpulseNoise
+    
+    AbstractSignal <|-- UniformlyDistributedNoise
+    AbstractSignal <|-- GaussianNoise
+    AbstractSignal <|-- SinusoidalSignal
+    AbstractSignal <|-- OneHalfRectifiedSinusoidalSignal
+    AbstractSignal <|-- TwoHalfRectifiedSinusoidalSignal
+    AbstractSignal <|-- RectangularSignal
+    AbstractSignal <|-- SymmetricalRectangularSignal
+    AbstractSignal <|-- TriangleSignal
+    AbstractSignal <|-- UnitJump
+    AbstractSignal <|-- ImpulseNoise
     
     class SignalFacade {
         + add(AbstractSignal,AbstractSignal): AbstractSignal
