@@ -1,12 +1,46 @@
 package backend.signal;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public class DiscreteSignal extends AbstractSignal {
-    public HashMap<Double, Double> getAmplitudeFromTimeChartData() {
-        return new HashMap<>();
+    protected double f;
+
+    public DiscreteSignal(double A, double d, double f) {
+        super(A, d);
+        this.f = f;
     }
 
-    public DiscreteSignal(HashMap<Double, Double> points) {
+    public DiscreteSignal(Map<Double, Double> points) {
+        super(points);
+    }
+
+    @Override
+    public double getAverage() {
+        return 0;
+    }
+
+    @Override
+    public double getAbsoluteAverage() {
+        return 0;
+    }
+
+    @Override
+    public double getEffectiveValue() {
+        return 0;
+    }
+
+    @Override
+    public double getVariance() {
+        return 0;
+    }
+
+    @Override
+    public double getMeanSpeed() {
+        return 0;
+    }
+
+    @Override
+    public Map<Double, Double> getHistogramData() {
+        return null;
     }
 }

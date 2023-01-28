@@ -4,13 +4,13 @@ import backend.signal.AbstractSignal;
 import backend.signal.ContinuousSignal;
 import backend.signal.DiscreteSignal;
 
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public abstract class AbstractSignalOperation {
     public AbstractSignal execute(AbstractSignal signal1, AbstractSignal signal2) {
-        HashMap<Double, Double> resultPoints = new HashMap<>();
+        LinkedHashMap<Double, Double> resultPoints = new LinkedHashMap<>();
         Iterator<Map.Entry<Double, Double>> signal1Iterator = signal1.getAmplitudeFromTimeChartData().entrySet().iterator();
         Iterator<Map.Entry<Double, Double>> signal2Iterator = signal2.getAmplitudeFromTimeChartData().entrySet().iterator();
         while (signal1Iterator.hasNext()) {

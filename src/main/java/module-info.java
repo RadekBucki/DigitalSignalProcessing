@@ -12,6 +12,8 @@ module cps {
     exports backend.signal;
     exports backend.signal_operation;
     exports frontend.file;
+    exports backend.signal.discrete;
+    opens backend.signal.discrete to javafx.fxml;
     opens frontend.file to javafx.fxml;
     exports frontend.chart;
     opens frontend.chart to javafx.fxml;
