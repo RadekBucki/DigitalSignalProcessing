@@ -1,4 +1,6 @@
-package backend.signal;
+package backend.signal.continuous;
+
+import backend.signal.AbstractSignal;
 
 import java.util.Map;
 
@@ -10,6 +12,19 @@ public class ContinuousSignal extends AbstractSignal {
         super(a);
         this.t1 = t1;
         this.d = d;
+    }
+
+    public void calculateAllPoints() {
+        int t1Rounded = (int) (t1 * pointsDecimalPlacesDivision);
+        int t2Rounded = (int) ((t1 + d) * pointsDecimalPlacesDivision);
+        for (int i = t1Rounded; i < t2Rounded; i++) {
+            double pointX = i / pointsDecimalPlacesDivision;
+            points.put(pointX, calculatePointValue(pointX));
+        }
+    }
+
+    public double calculatePointValue(double x) {
+        return 0;
     }
 
     @Override
