@@ -118,33 +118,39 @@ package backend {
     }
     
     class SignalOperationFactory {
-        + createSignalAdd(): SignalAdd
-        + createSignalSubtract(): SignalSubtract
-        + createSignalMultiply(): SignalMultiply
-        + createSignalDivide(): SignalDivide
+        + createSignalAdd(): AbstractSignalOperation
+        + createSignalSubtract(): AbstractSignalOperation
+        + createSignalMultiply(): AbstractSignalOperation
+        + createSignalDivide(): AbstractSignalOperation
     }
     
-    SignalFacade --> SignalOperationFactory
+    SignalFacade ---> SignalOperationFactory
     
     package signal_operation {
+        abstract class AbstractSignalOperation {
+            + execute(AbstractSignal, AbstractSignal): AbstractSignal
+            # {abstract} operation(double, double): double
+        }
         class SignalAdd {
-            + add(AbstractSignal, AbstractSignal): AbstractSignal
+            # operation(double, double): double
         }
         class SignalSubtract {
-            + subtract(AbstractSignal, AbstractSignal): AbstractSignal
+            # operation(double, double): double
         }
         class SignalMultiply {
-            + multiply(AbstractSignal, AbstractSignal): AbstractSignal
+            # operation(double, double): double
         }
         class SignalDivide {
-            + divide(AbstractSignal, AbstractSignal): AbstractSignal
+            # operation(double, double): double
         }
     }
     
-    SignalOperationFactory ..> SignalAdd
-    SignalOperationFactory ..> SignalSubtract
-    SignalOperationFactory ..> SignalMultiply
-    SignalOperationFactory ..> SignalDivide
+    AbstractSignalOperation <|-- SignalAdd
+    AbstractSignalOperation <|-- SignalSubtract
+    AbstractSignalOperation <|-- SignalMultiply
+    AbstractSignalOperation <|-- SignalDivide
+    
+    SignalOperationFactory ..> AbstractSignalOperation
 }
 
 package frontend {
