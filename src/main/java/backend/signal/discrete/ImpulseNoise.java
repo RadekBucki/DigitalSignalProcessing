@@ -8,17 +8,19 @@ public class ImpulseNoise extends DiscreteSignal {
     private double t1;
     private double p;
 
-    public ImpulseNoise(double a, double t, double t1, double d, double p) {
-        super(a, t, d);
+    public ImpulseNoise(double A, double f, double t1, double d, double p) {
+        super(A, d, f);
         this.t1 = t1;
         this.p = p;
         Random random = new Random();
-        for (double i = t1; i < t1 + d; i += d) {
+        double time = t1;
+        for (int i = 0; i < Math.floor(d * f); i ++) {
             if (random.nextDouble(0,1) <= p) {
-                points.put(i, A);
+                points.put(time, A);
             } else {
-                points.put(i, 0.0);
+                points.put(time, 0.0);
             }
+            time = i / f;
         }
     }
 }
