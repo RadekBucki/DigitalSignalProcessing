@@ -1,4 +1,4 @@
-package backend.signal.continuous;
+package backend.signal;
 
 import backend.signal.AbstractSignal;
 
@@ -18,10 +18,10 @@ public class ContinuousSignal extends AbstractSignal {
     }
 
     public void calculateAllPoints() {
-        int t1Rounded = (int) (t1 * pointsDecimalPlacesDivision);
-        int t2Rounded = (int) ((t1 + d) * pointsDecimalPlacesDivision);
+        int t1Rounded = (int) (t1 * POINTS_DECIMAL_PLACES_DIVISION);
+        int t2Rounded = (int) ((t1 + d) * POINTS_DECIMAL_PLACES_DIVISION);
         for (int i = t1Rounded; i < t2Rounded; i++) {
-            double pointX = i / pointsDecimalPlacesDivision;
+            double pointX = i / POINTS_DECIMAL_PLACES_DIVISION;
             points.put(pointX, calculatePointValue(pointX));
         }
     }

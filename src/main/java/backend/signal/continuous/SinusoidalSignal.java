@@ -1,5 +1,7 @@
 package backend.signal.continuous;
 
+import backend.signal.ContinuousSignal;
+
 public class SinusoidalSignal extends ContinuousSignal {
     private double T;
 

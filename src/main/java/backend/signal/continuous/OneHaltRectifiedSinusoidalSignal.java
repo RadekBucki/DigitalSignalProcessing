@@ -1,5 +1,7 @@
 package backend.signal.continuous;
 
+import backend.signal.ContinuousSignal;
+
 public class OneHaltRectifiedSinusoidalSignal extends ContinuousSignal {
     private double T;
 

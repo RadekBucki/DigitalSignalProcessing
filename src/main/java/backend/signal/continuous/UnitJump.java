@@ -1,5 +1,7 @@
 package backend.signal.continuous;
 
+import backend.signal.ContinuousSignal;
+
 public class UnitJump extends ContinuousSignal {
     private double ts;
 

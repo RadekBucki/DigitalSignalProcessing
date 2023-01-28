@@ -1,5 +1,7 @@
 package backend.signal.continuous;
 
+import backend.signal.ContinuousSignal;
+
 import java.util.Random;
 
 public class GaussianNoise extends ContinuousSignal {

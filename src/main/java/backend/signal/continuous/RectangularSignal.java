@@ -1,5 +1,7 @@
 package backend.signal.continuous;
 
+import backend.signal.ContinuousSignal;
+
 public class RectangularSignal extends ContinuousSignal {
     private double T;
     private double kw;
