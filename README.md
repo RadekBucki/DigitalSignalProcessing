@@ -5,14 +5,33 @@
 ```plantuml
 package Backend {
     class SignalFactory {
-        + createSignal1(params): AbstractSignal
-        + createSignal2(params): AbstractSignal
+        + createUniformlyDistributedNoise()(): AbstractSignal
+        + createGaussianNoise(): AbstractSignal
+        + createSinusoidalSignal(): AbstractSignal
+        + createOneHalfRectifiedSinusoidalSignal(): AbstractSignal
+        + createTwoHalfRectifiedSinusoidalSignal(): AbstractSignal
+        + createRectangularSignal(): AbstractSignal
+        + createSymmetricalRectangularSignal(): AbstractSignal
+        + createTriangleSignal(): AbstractSignal
+        + createUnitJump(): AbstractSignal
     }
     SignalFactory ...> AbstractSignal
     
     abstract class AbstractSignal {
         - function: Function
         - A: double
+        + {abstract} getAverage()
+        + {abstract} getAbsoluteAverage()
+        + {abstract} getEffectiveValue()
+        + {abstract} getVariance()
+        + {abstract} getMeanSpeed()
+        + getAmplitudeFromTimeChartData()
+        + getHistogramData()
+    }
+    
+    abstract class AbstractContinuousSignal {
+        - t1: double
+        - d: double
         + getAverage()
         + getAbsoluteAverage()
         + getEffectiveValue()
@@ -21,13 +40,15 @@ package Backend {
         + getAmplitudeFromTimeChartData()
         + getHistogramData()
     }
-    
-    abstract class AbstractContinuousSignal {
-        - t1: double
-        - d: double
-    }
     abstract class AbstractDiscreteSignal {
         - f: double
+        + getAverage()
+        + getAbsoluteAverage()
+        + getEffectiveValue()
+        + getVariance()
+        + getMeanSpeed()
+        + getAmplitudeFromTimeChartData()
+        + getHistogramData()
     }
     
     AbstractSignal <|-- AbstractContinuousSignal
