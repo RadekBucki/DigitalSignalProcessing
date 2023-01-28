@@ -9,4 +9,10 @@ module cps {
     exports frontend;
     exports backend;
     opens backend to javafx.fxml;
+    exports backend.signal;
+    exports backend.signal_operation;
+    exports frontend.file;
+    opens frontend.file to javafx.fxml;
+    exports frontend.chart;
+    opens frontend.chart to javafx.fxml;
 }
