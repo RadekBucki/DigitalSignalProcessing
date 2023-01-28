@@ -6,8 +6,8 @@ import java.util.Random;
 
 public class GaussianNoise extends ContinuousSignal {
     private final Random r = new Random();
-    public GaussianNoise(double a, double t1, double d) {
-        super(a, t1, d);
+    public GaussianNoise(double A, double t1, double d) {
+        super(A, t1, d);
         calculateAllPoints();
     }
 

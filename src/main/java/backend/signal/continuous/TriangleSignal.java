@@ -3,11 +3,11 @@ package backend.signal.continuous;
 import backend.signal.ContinuousSignal;
 
 public class TriangleSignal extends ContinuousSignal {
-    private double T;
-    private double kw;
+    private final double T;
+    private final double kw;
 
-    public TriangleSignal(double a, double t1, double d, double T, double kw) {
-        super(a, t1, d);
+    public TriangleSignal(double A, double t1, double d, double T, double kw) {
+        super(A, t1, d);
         this.T = T;
         this.kw = kw;
         calculateAllPoints();
