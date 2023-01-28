@@ -14,7 +14,7 @@ public class ImpulseNoise extends DiscreteSignal {
         this.p = p;
         Random random = new Random();
         double time = t1;
-        for (int i = 0; i < Math.floor(d * f); i ++) {
+        for (int i = 0; i < Math.floor(d * f); i++) {
             if (random.nextDouble(0,1) <= p) {
                 points.put(time, A);
             } else {
