@@ -6,16 +6,16 @@ import backend.signal_operation.SignalMultiply;
 import backend.signal_operation.SignalSubtract;
 
 public class SignalOperationFactory {
-    public SignalAdd createSignalAdd() {
-        return new SignalAdd();
+    public SignalAdd createSignalAdd(SignalFactory signalFactory) {
+        return new SignalAdd(signalFactory);
     }
-    public SignalSubtract createSignalSubtract() {
-        return new SignalSubtract();
+    public SignalSubtract createSignalSubtract(SignalFactory signalFactory) {
+        return new SignalSubtract(signalFactory);
     }
-    public SignalMultiply createSignalMultiply() {
-        return new SignalMultiply();
+    public SignalMultiply createSignalMultiply(SignalFactory signalFactory) {
+        return new SignalMultiply(signalFactory);
     }
-    public SignalDivide createSignalDivide() {
-        return new SignalDivide();
+    public SignalDivide createSignalDivide(SignalFactory signalFactory) {
+        return new SignalDivide(signalFactory);
     }
 }

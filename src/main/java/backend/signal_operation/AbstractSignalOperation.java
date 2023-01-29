@@ -1,7 +1,7 @@
 package backend.signal_operation;
 
+import backend.SignalFactory;
 import backend.signal.AbstractSignal;
-import backend.signal.ContinuousSignal;
 import backend.signal.DiscreteSignal;
 
 import java.util.Iterator;
@@ -9,6 +9,12 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public abstract class AbstractSignalOperation {
+    private final SignalFactory signalFactory;
+
+    protected AbstractSignalOperation(SignalFactory signalFactory) {
+        this.signalFactory = signalFactory;
+    }
+
     public AbstractSignal execute(AbstractSignal signal1, AbstractSignal signal2) {
         LinkedHashMap<Double, Double> resultPoints = new LinkedHashMap<>();
         Iterator<Map.Entry<Double, Double>> signal1Iterator = signal1.getAmplitudeFromTimeChartData().entrySet().iterator();
@@ -23,9 +29,9 @@ public abstract class AbstractSignalOperation {
         }
 
         if (signal1 instanceof DiscreteSignal && signal2 instanceof DiscreteSignal) {
-            return new DiscreteSignal(resultPoints);
+            return signalFactory.createDiscreteSignal(resultPoints);
         }
-        return new ContinuousSignal(resultPoints);
+        return signalFactory.createContinuousSignal(resultPoints);
     }
     protected abstract Double operation(double signal1Amplitude, double signal2Amplitude);
 }

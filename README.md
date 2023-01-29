@@ -5,7 +5,7 @@
 ```plantuml
 package backend {
     class SignalFactory {
-        + createUniformlyDistributedNoise()(): AbstractSignal
+        + createUniformlyDistributedNoise(): AbstractSignal
         + createGaussianNoise(): AbstractSignal
         + createSinusoidalSignal(): AbstractSignal
         + createOneHalfRectifiedSinusoidalSignal(): AbstractSignal
@@ -14,6 +14,8 @@ package backend {
         + createSymmetricalRectangularSignal(): AbstractSignal
         + createTriangleSignal(): AbstractSignal
         + createUnitJump(): AbstractSignal
+        + createContinuousSignal(): AbstractSignal
+        + createDiscreteSignal(): AbstractSignal
     }
     
     package signal {
@@ -128,6 +130,7 @@ package backend {
         + subtract(AbstractSignal,AbstractSignal): AbstractSignal
         + multiply(AbstractSignal,AbstractSignal): AbstractSignal
         + divide(AbstractSignal,AbstractSignal): AbstractSignal
+        + getSignalFactory(): SignalFactory
     }
     
     class SignalOperationFactory {
@@ -138,6 +141,7 @@ package backend {
     }
     
     SignalFacade ---> SignalOperationFactory
+    SignalFacade ---> SignalFactory
     
     package signal_operation {
         abstract class AbstractSignalOperation {
@@ -162,6 +166,8 @@ package backend {
     AbstractSignalOperation <|-- SignalSubtract
     AbstractSignalOperation <|-- SignalMultiply
     AbstractSignalOperation <|-- SignalDivide
+    
+    AbstractSignalOperation ---> SignalFactory
     
     SignalOperationFactory ..> AbstractSignalOperation
 }
@@ -195,5 +201,4 @@ package frontend {
     ChartGenerator <|-- HistogramChartGenerator
 }
 MainFormController ....> SignalFacade
-MainFormController ....> SignalFactory
 ```
