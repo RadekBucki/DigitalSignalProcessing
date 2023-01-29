@@ -20,4 +20,6 @@ module cps {
     exports backend.signal.continuous;
     opens backend.signal.continuous to javafx.fxml;
     opens backend.signal to javafx.fxml;
+    exports frontend.fields;
+    opens frontend.fields to javafx.fxml;
 }
