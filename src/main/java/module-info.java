@@ -4,6 +4,7 @@ module cps {
     requires jfreechart;
     requires java.datatransfer;
     requires java.desktop;
+    requires org.reflections;
 
     opens frontend to javafx.fxml;
     exports frontend;
@@ -22,4 +23,6 @@ module cps {
     opens backend.signal to javafx.fxml;
     exports frontend.fields;
     opens frontend.fields to javafx.fxml;
+    exports frontend.classes;
+    opens frontend.classes to javafx.fxml;
 }
