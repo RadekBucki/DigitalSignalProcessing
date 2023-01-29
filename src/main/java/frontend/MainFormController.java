@@ -36,12 +36,31 @@ public class MainFormController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        List<String> names = FieldsReader.getFieldNames(new UnitJump(1.0, 1.0, 1.0, 1.0));
+        createParametersTextFields(AbstractSignal.class);
+        Map<Class<?>, String> signals = ClassesReader.getChildClasses(
+                AbstractSignal.class,
+                ClassesTranslator::translatePascalCaseToText
+        );
+        signalTypes.getItems().addAll(signals.values());
+        signalTypes.setOnAction(event -> {
+            String selectedValue = signalTypes.getValue();
+            for (Map.Entry<Class<?>, String> entry : signals.entrySet()) {
+                if (selectedValue.equals(entry.getValue())) {
+                    createParametersTextFields(entry.getKey());
+                    // TODO: Create instance
+                    break;
+                }
+            }
+        });
+    }
+
+    public void createParametersTextFields(Class<?> classInstance) {
+        List<String> names = FieldsReader.getFieldNames(classInstance);
         parametersGrid.getChildren().clear();
         for (int i = 0; i < names.size(); i++) {
             Group group = new Group();
 
-            TextField textField = new TextField("1.0");
+            TextField textField = new TextField();
             textField.setLayoutX(334);
             textField.setTextFormatter(new TextFormatter<>(c -> {
                 String newText = c.getControlNewText().replace(",", ".");
@@ -60,19 +79,5 @@ public class MainFormController implements Initializable {
             parametersGrid.addRow(i, group);
             list.add(textField);
         }
-        Map<Class<?>, String> signals = ClassesReader.getChildClasses(
-                AbstractSignal.class,
-                ClassesTranslator::translatePascalCaseToText
-        );
-        signalTypes.getItems().addAll(signals.values());
-        signalTypes.setOnAction(event -> {
-            String selectedValue = signalTypes.getValue();
-            for (Map.Entry<Class<?>, String> entry : signals.entrySet()) {
-                if (selectedValue.equals(entry.getValue())) {
-                    // TODO: Create instance
-                    break;
-                }
-            }
-        });
     }
 }

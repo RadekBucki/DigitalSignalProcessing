@@ -6,9 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FieldsReader {
-    public static List<String> getFieldNames(Object object) {
+    public static List<String> getFieldNames(Class<?> currentClass) {
         List<String> fieldNames = new ArrayList<>();
-        Class<?> currentClass = object.getClass();
         while (currentClass != null) {
             for (Field field : currentClass.getDeclaredFields()) {
                 if (
