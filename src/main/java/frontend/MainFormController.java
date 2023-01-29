@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.GridPane;
 
 import java.net.URL;
@@ -33,8 +34,16 @@ public class MainFormController implements Initializable {
         for (int i = 0; i < names.size(); i++) {
             Group group = new Group();
 
-            TextField textField = new TextField();
+            TextField textField = new TextField("1.0");
             textField.setLayoutX(334);
+            textField.setTextFormatter(new TextFormatter<>(c -> {
+                String newText = c.getControlNewText().replace(",",".");
+                if (!newText.matches("-?([0-9]*[.])?[0-9]*")) {
+                    textField.clear();
+                    return null;
+                }
+                return c;
+            }));
 
             Label label = new Label(FieldsMapper.map(names.get(i)));
             label.setLabelFor(textField);
