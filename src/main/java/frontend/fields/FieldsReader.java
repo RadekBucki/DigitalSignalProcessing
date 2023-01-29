@@ -16,7 +16,7 @@ public class FieldsReader {
                                 && !Modifier.isStatic(field.getModifiers())
                                 && field.getType().isPrimitive()
                 ) {
-                    fieldNames.add(field.getName());
+                    fieldNames.add(0, field.getName());
                 }
             }
             currentClass = currentClass.getSuperclass();
