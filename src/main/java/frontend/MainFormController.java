@@ -92,6 +92,7 @@ public class MainFormController implements Initializable {
     private Label createGroupLabel(String text, TextField labelFor) {
         Label label = new Label(text);
         label.setLabelFor(labelFor);
+        label.setLayoutY(4);
         return label;
     }
 
