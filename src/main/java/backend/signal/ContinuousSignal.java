@@ -5,7 +5,7 @@ import java.util.Map;
 public class ContinuousSignal extends AbstractSignal {
     protected double t1;
 
-    public ContinuousSignal(double A, double t1, double d) {
+    public ContinuousSignal(double A, double d, double t1) {
         super(A, d);
         this.t1 = t1;
     }

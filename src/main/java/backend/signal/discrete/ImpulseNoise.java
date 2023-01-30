@@ -5,10 +5,10 @@ import backend.signal.DiscreteSignal;
 import java.util.Random;
 
 public class ImpulseNoise extends DiscreteSignal {
-    private double t1;
-    private double p;
+    private final double t1;
+    private final double p;
 
-    public ImpulseNoise(double A, double f, double t1, double d, double p) {
+    public ImpulseNoise(double A, double d, double f, double t1, double p) {
         super(A, d, f);
         this.t1 = t1;
         this.p = p;

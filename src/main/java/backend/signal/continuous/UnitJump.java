@@ -5,8 +5,8 @@ import backend.signal.ContinuousSignal;
 public class UnitJump extends ContinuousSignal {
     private final double ts;
 
-    public UnitJump(double A, double t1, double d, double ts) {
-        super(A, t1, d);
+    public UnitJump(double A, double d, double t1, double ts) {
+        super(A, d, t1);
         this.ts = ts;
         calculateAllPoints();
     }

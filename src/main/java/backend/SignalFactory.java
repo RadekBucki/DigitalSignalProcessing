@@ -31,48 +31,48 @@ public class SignalFactory {
     public List<Class<? extends AbstractSignal>> getPossibleSignals() {
         return POSSIBLE_SIGNALS;
     }
-    public AbstractSignal createUniformlyDistributedNoise(double A, double t1, double d) {
-        return new UniformlyDistributedNoise(A, t1, d);
+    public AbstractSignal createUniformlyDistributedNoise(double A, double d, double t1) {
+        return new UniformlyDistributedNoise(A, d, t1);
     }
 
-    public AbstractSignal createGaussianNoise(double A, double t1, double d) {
-        return new GaussianNoise(A, t1, d);
+    public AbstractSignal createGaussianNoise(double A, double d, double t1) {
+        return new GaussianNoise(A, d, t1);
     }
 
-    public AbstractSignal createSinusoidalSignal(double A, double t1, double d, double T) {
-        return new SinusoidalSignal(A, t1, d, T);
+    public AbstractSignal createSinusoidalSignal(double A, double d, double t1, double T) {
+        return new SinusoidalSignal(A, d, t1, T);
     }
 
-    public AbstractSignal createOneHalfRectifiedSinusoidalSignal(double A, double t1, double d, double T) {
-        return new OneHaltRectifiedSinusoidalSignal(A, t1, d, T);
+    public AbstractSignal createOneHalfRectifiedSinusoidalSignal(double A, double d, double t1, double T) {
+        return new OneHaltRectifiedSinusoidalSignal(A, d, t1, T);
     }
 
-    public AbstractSignal createTwoHalfRectifiedSinusoidalSignal(double A, double t1, double d, double T) {
-        return new TwoHalfRectifiedSinusoidalSignal(A, t1, d, T);
+    public AbstractSignal createTwoHalfRectifiedSinusoidalSignal(double A, double d, double t1, double T) {
+        return new TwoHalfRectifiedSinusoidalSignal(A, d, t1, T);
     }
 
-    public AbstractSignal createRectangularSignal(double A, double t1, double d, double T, double kw) {
-        return new RectangularSignal(A, t1, d, T, kw);
+    public AbstractSignal createRectangularSignal(double A, double d, double t1, double T, double kw) {
+        return new RectangularSignal(A, d, t1, T, kw);
     }
 
-    public AbstractSignal createSymmetricalRectangularSignal(double A, double t1, double d, double T, double kw) {
-        return new SymmetricalRectangularSignal(A, t1, d, T, kw);
+    public AbstractSignal createSymmetricalRectangularSignal(double A, double d, double t1, double T, double kw) {
+        return new SymmetricalRectangularSignal(A, d, t1, T, kw);
     }
 
-    public AbstractSignal createTriangleSignal(double A, double t1, double d, double T, double kw) {
-        return new TriangleSignal(A, t1, d, T, kw);
+    public AbstractSignal createTriangleSignal(double A, double d, double t1, double T, double kw) {
+        return new TriangleSignal(A, d, t1, T, kw);
     }
 
-    public AbstractSignal createUnitJump(double A, double t1, double d, double ts) {
-        return new UnitJump(A, t1, d, ts);
+    public AbstractSignal createUnitJump(double A, double d, double t1, double ts) {
+        return new UnitJump(A, d, t1, ts);
     }
 
-    public AbstractSignal createImpulseNoise(double A, double f, double t1, double d, double p) {
-        return new ImpulseNoise(A, f, t1, d, p);
+    public AbstractSignal createImpulseNoise(double A, double d, double f, double t1, double p) {
+        return new ImpulseNoise(A, d, f, t1, p);
     }
 
-    public AbstractSignal createUnitImpulse(double A, double f, int ns, int n1, double d) {
-        return new UnitImpulse(A, f, ns, n1, d);
+    public AbstractSignal createUnitImpulse(double A, double d, double f, int ns, int n1) {
+        return new UnitImpulse(A, d, f, ns, n1);
     }
 
     public AbstractSignal createContinuousSignal(Map<Double, Double> points) {
@@ -159,9 +159,9 @@ public class SignalFactory {
             return createUnitImpulse(
                     parameters.get(0),
                     parameters.get(1),
-                    parameters.get(2).intValue(),
+                    parameters.get(2),
                     parameters.get(3).intValue(),
-                    parameters.get(4)
+                    parameters.get(4).intValue()
             );
         }
         return null;

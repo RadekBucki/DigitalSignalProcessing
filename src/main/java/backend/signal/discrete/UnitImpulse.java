@@ -3,10 +3,10 @@ package backend.signal.discrete;
 import backend.signal.DiscreteSignal;
 
 public class UnitImpulse extends DiscreteSignal {
-    private int ns;
-    private int n1;
+    private final int ns;
+    private final int n1;
 
-    public UnitImpulse(double A, double f, int ns, int n1, double d) {
+    public UnitImpulse(double A, double d, double f, int ns, int n1) {
         super(A, d, f);
         this.ns = ns;
         this.n1 = n1;
