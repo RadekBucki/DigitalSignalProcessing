@@ -2,6 +2,8 @@ package backend;
 
 import backend.signal.AbstractSignal;
 
+import java.util.List;
+
 public class SignalFacade {
     private final SignalOperationFactory signalOperationFactory = new SignalOperationFactory();
     private final SignalFactory signalFactory = new SignalFactory();
@@ -21,7 +23,14 @@ public class SignalFacade {
     public AbstractSignal divide(AbstractSignal signal1, AbstractSignal signal2) {
         return signalOperationFactory.createSignalDivide(signalFactory).execute(signal1, signal2);
     }
-    public SignalFactory getSignalFactory() {
-        return signalFactory;
+    public AbstractSignal getSignal(Class<?> name, List<Double> parameters) {
+        return signalFactory.getSignal(name, parameters);
+    }
+
+    public Class<AbstractSignal> getDefaultSignal() {
+        return signalFactory.getDefaultSignal();
+    }
+    public List<Class<? extends AbstractSignal>> getPossibleSignals() {
+        return signalFactory.getPossibleSignals();
     }
 }

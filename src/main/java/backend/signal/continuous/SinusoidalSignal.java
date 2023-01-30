@@ -5,8 +5,8 @@ import backend.signal.ContinuousSignal;
 public class SinusoidalSignal extends ContinuousSignal {
     private final double T;
 
-    public SinusoidalSignal(double A, double t1, double d, double T) {
-        super(A, t1, d);
+    public SinusoidalSignal(double A, double d, double t1, double T) {
+        super(A, d, t1);
         this.T = T;
         calculateAllPoints();
     }

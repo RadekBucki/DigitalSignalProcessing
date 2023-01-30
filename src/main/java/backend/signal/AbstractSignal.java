@@ -6,8 +6,8 @@ import java.util.Map;
 public abstract class AbstractSignal {
     protected static final double POINTS_DECIMAL_PLACES_DIVISION = 10000;
     protected Map<Double, Double> points = new LinkedHashMap<>();
-    protected double A;
     protected double d;
+    protected double A;
 
     protected AbstractSignal(double A, double d) {
         this.A = A;

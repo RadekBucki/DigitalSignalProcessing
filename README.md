@@ -16,6 +16,7 @@ package backend {
         + createUnitJump(): AbstractSignal
         + createContinuousSignal(): AbstractSignal
         + createDiscreteSignal(): AbstractSignal
+        + getSignal(Class,Double[]): AbstractSignal
     }
     
     package signal {
@@ -131,6 +132,9 @@ package backend {
         + multiply(AbstractSignal,AbstractSignal): AbstractSignal
         + divide(AbstractSignal,AbstractSignal): AbstractSignal
         + getSignalFactory(): SignalFactory
+        + getSignal(Class,Double[]): AbstractSignal
+        + getDefaultSignal(): AbstractSignal
+        + getPossibleSignals(): AbstractSignal[]
     }
     
     class SignalOperationFactory {
@@ -177,25 +181,41 @@ package frontend {
     class MainFormController
     package file {
         class FileChoose {
-            + saveChooser()
-            + openChooser()
-            - choose()
+            + {static} saveChooser()
+            + {static} openChooser()
+            - {static} choose()
         }
     }
     package chart {
         class ChartGenerator {
-            + generatePlot()
-            - formatAxis()
-            - changeVisibility()
+            + {static} generatePlot()
+            - {static} formatAxis()
+            - {static} changeVisibility()
         }
         class AmplitudeFromTimeChartGenerator
         class HistogramChartGenerator
+    }
+    package classes {
+        class ClassTranslator {
+            + {static} translatePascalCaseClassToText(Class): String
+        }
+    }
+    package fields {
+        class FieldReader {
+            + {static} getFieldNames(Class): String[]
+        }
+        class FieldMapper {
+            + {static} getFieldNames(String): String
+        }
     }
     
     MainApplication ..> MainFormController
     
     MainFormController ..> FileChoose
     MainFormController ..> ChartGenerator
+    MainFormController ..> ClassTranslator
+    MainFormController ..> FieldMapper
+    MainFormController ..> FieldReader
     
     ChartGenerator <|-- AmplitudeFromTimeChartGenerator
     ChartGenerator <|-- HistogramChartGenerator
