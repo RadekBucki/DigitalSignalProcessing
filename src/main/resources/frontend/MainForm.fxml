@@ -17,7 +17,8 @@
     <TitledPane animated="false" layoutX="14.0" layoutY="87.0" maxWidth="520.0" minWidth="520.0" prefWidth="520.0"
                 text="Parameters">
         <AnchorPane maxWidth="520.0" minWidth="520.0" prefWidth="520.0">
-            <VBox prefWidth="520.0">
+            <VBox prefWidth="520.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0"
+                  AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                 <children>
                     <GridPane fx:id="parametersGrid" maxWidth="500.0" minWidth="500.0" prefHeight="30.0"
                               prefWidth="500.0">
@@ -34,8 +35,8 @@
                             </Group>
                         </children>
                     </GridPane>
-                    <Button mnemonicParsing="false" onAction="#createSignalInstance" text="Generate"
-                            textAlignment="CENTER"/>
+                    <Button fx:id="generateButton" disable="true" mnemonicParsing="false"
+                            onAction="#createSignalInstance" text="Generate" textAlignment="CENTER"/>
                 </children>
             </VBox>
         </AnchorPane>
