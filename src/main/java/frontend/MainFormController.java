@@ -5,21 +5,16 @@ import backend.signal.AbstractSignal;
 import frontend.classes.ClassTranslator;
 import frontend.fields.FieldMapper;
 import frontend.fields.FieldReader;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
-import org.w3c.dom.Text;
 
 import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static java.util.stream.Collectors.toUnmodifiableList;
 
 public class MainFormController implements Initializable {
     public static final String MAIN_FORM_RESOURCE = "MainForm.fxml";
