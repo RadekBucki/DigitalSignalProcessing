@@ -1,8 +1,7 @@
 package frontend;
 
+import backend.SignalFacade;
 import backend.signal.AbstractSignal;
-import backend.signal.continuous.UnitJump;
-import frontend.classes.ClassesReader;
 import frontend.classes.ClassesTranslator;
 import frontend.fields.FieldsMapper;
 import frontend.fields.FieldsReader;
@@ -16,30 +15,30 @@ import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.GridPane;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class MainFormController implements Initializable {
     public static final String MAIN_FORM_RESOURCE = "MainForm.fxml";
     public static final String MAIN_FORM_TITLE = "Digital Signal Processing";
+    private final SignalFacade facade = new SignalFacade();
 
     public final List<TextField> list = new ArrayList<>();
+    AbstractSignal signal;
+    Class<?> selectedComboBoxKey;
     @FXML
     public GridPane parametersGrid;
     @FXML
     public ComboBox<String> signalTypes;
 
-    public MainFormController() {
-    }
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        createParametersTextFields(AbstractSignal.class);
-        Map<Class<?>, String> signals = ClassesReader.getChildClasses(
-                AbstractSignal.class,
-                ClassesTranslator::translatePascalCaseToText
+        createParametersTextFields(facade.getDefaultSignal());
+        Map<Class<?>, String> signals = facade.getPossibleSignals().stream().collect(
+                Collectors.toMap(
+                        key -> key,
+                        ClassesTranslator::translatePascalCaseClassToText
+                )
         );
         signalTypes.getItems().addAll(signals.values());
         signalTypes.setOnAction(event -> {
@@ -47,7 +46,7 @@ public class MainFormController implements Initializable {
             for (Map.Entry<Class<?>, String> entry : signals.entrySet()) {
                 if (selectedValue.equals(entry.getValue())) {
                     createParametersTextFields(entry.getKey());
-                    // TODO: Create instance
+                    selectedComboBoxKey = entry.getKey();
                     break;
                 }
             }
@@ -55,6 +54,7 @@ public class MainFormController implements Initializable {
     }
 
     public void createParametersTextFields(Class<?> classInstance) {
+        list.clear();
         List<String> names = FieldsReader.getFieldNames(classInstance);
         parametersGrid.getChildren().clear();
         for (int i = 0; i < names.size(); i++) {
@@ -79,5 +79,12 @@ public class MainFormController implements Initializable {
             parametersGrid.addRow(i, group);
             list.add(textField);
         }
+    }
+
+    public void createSignalInstance() {
+        List<Double> values = list.stream().map(
+                textField -> Double.parseDouble(textField.getText())
+        ).toList();
+        signal = facade.getSignal(selectedComboBoxKey, values);
     }
 }

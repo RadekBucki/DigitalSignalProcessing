@@ -3,6 +3,9 @@ package frontend.fields;
 import java.util.Map;
 
 public class FieldsMapper {
+    private FieldsMapper() {
+    }
+
     private static final Map<String, String> fieldsMap = Map.of(
             "A", "Amplitude",
             "d", "Duration",
