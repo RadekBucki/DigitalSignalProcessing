@@ -1,7 +1,7 @@
 package frontend.classes;
 
-public class ClassesTranslator {
-    private ClassesTranslator() {
+public class ClassTranslator {
+    private ClassTranslator() {
     }
     public static String translatePascalCaseClassToText(Class<?> input) {
         String text = input.getSimpleName().replaceAll("(\\p{Ll})(\\p{Lu})", "$1 $2");

@@ -2,9 +2,9 @@ package frontend;
 
 import backend.SignalFacade;
 import backend.signal.AbstractSignal;
-import frontend.classes.ClassesTranslator;
-import frontend.fields.FieldsMapper;
-import frontend.fields.FieldsReader;
+import frontend.classes.ClassTranslator;
+import frontend.fields.FieldMapper;
+import frontend.fields.FieldReader;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
@@ -34,7 +34,7 @@ public class MainFormController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         createParametersTextFields(facade.getDefaultSignal());
         Map<Class<?>, String> signals = facade.getPossibleSignals().stream().collect(
-                Collectors.toMap(key -> key, ClassesTranslator::translatePascalCaseClassToText)
+                Collectors.toMap(key -> key, ClassTranslator::translatePascalCaseClassToText)
         );
         signalTypes.getItems().addAll(signals.values());
         signalTypes.setOnAction(event -> {
@@ -53,12 +53,12 @@ public class MainFormController implements Initializable {
 
     public void createParametersTextFields(Class<?> classDefinition) {
         parametersTextFields.clear();
-        List<String> names = FieldsReader.getFieldNames(classDefinition);
+        List<String> names = FieldReader.getFieldNames(classDefinition);
         parametersGrid.getChildren().clear();
         for (int i = 0; i < names.size(); i++) {
             Group group = new Group();
             TextField textField = createGroupNumericalTextField();
-            Label label = createGroupLabel(FieldsMapper.map(names.get(i)), textField);
+            Label label = createGroupLabel(FieldMapper.map(names.get(i)), textField);
             group.getChildren().addAll(textField, label);
             parametersGrid.addRow(i, group);
             parametersTextFields.add(textField);

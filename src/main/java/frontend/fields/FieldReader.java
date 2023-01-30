@@ -5,8 +5,8 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FieldsReader {
-    private FieldsReader() {
+public class FieldReader {
+    private FieldReader() {
     }
     public static List<String> getFieldNames(Class<?> currentClass) {
         List<String> fieldNames = new ArrayList<>();

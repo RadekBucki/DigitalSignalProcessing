@@ -2,8 +2,8 @@ package frontend.fields;
 
 import java.util.Map;
 
-public class FieldsMapper {
-    private FieldsMapper() {
+public class FieldMapper {
+    private FieldMapper() {
     }
 
     private static final Map<String, String> fieldsMap = Map.of(
