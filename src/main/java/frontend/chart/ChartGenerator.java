@@ -19,8 +19,8 @@ public class ChartGenerator {
 
     public static JFreeChart generatePlot(Map<Double, Double> points) {
         XYSeries errorFunctionSeries = new XYSeries("Amplitude / time function");
-        for (Double key : points.keySet()) {
-            errorFunctionSeries.add(key, points.get(key));
+        for (Map.Entry<Double,Double> entry : points.entrySet()) {
+            errorFunctionSeries.add(entry.getKey(), entry.getValue());
         }
 
         XYSeriesCollection seriesCollection = new XYSeriesCollection();
@@ -30,6 +30,7 @@ public class ChartGenerator {
                 "Amplitude / time function", "Time", "Amplitude", seriesCollection,
                 PlotOrientation.VERTICAL, false, true, false
         );
+        chart.setBackgroundPaint(new Color(0xF4, 0xF4, 0xF4));
         XYPlot plot = (XYPlot) chart.getPlot();
         XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
 
@@ -39,6 +40,9 @@ public class ChartGenerator {
         Optional<Map.Entry<Double, Double>> minEntry = points.entrySet()
                 .stream()
                 .min(Map.Entry.comparingByValue());
+        if (maxEntry.isEmpty() || minEntry.isEmpty()) {
+            return chart;
+        }
         double chartMargin = Math.max(Math.abs(minEntry.get().getValue()), Math.abs(maxEntry.get().getValue())) / 10.0;
         plot.getRangeAxis().setRange(minEntry.get().getValue() - chartMargin,
                 maxEntry.get().getValue() + chartMargin);
