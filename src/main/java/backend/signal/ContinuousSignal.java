@@ -7,7 +7,7 @@ import java.util.Map;
 public class ContinuousSignal extends AbstractSignal {
     private final SimpsonIntegrator si = new SimpsonIntegrator();
     protected double t1;
-    private final double t2 = t1 + d;
+    private final Double t2 = t1 + d;
 
     public ContinuousSignal(double A, double d, double t1) {
         super(A, d);
@@ -28,23 +28,17 @@ public class ContinuousSignal extends AbstractSignal {
     }
 
     public double calculatePointValue(double x) {
-        return 0;
+        return points.get(Math.round(x * POINTS_DECIMAL_PLACES_DIVISION) / POINTS_DECIMAL_PLACES_DIVISION);
     }
 
     @Override
     public double getAverage() {
-        return (1 / (t2 - t1)) * si.integrate(Integer.MAX_VALUE, (x) -> {
-            double xRounded = Math.round(x * POINTS_DECIMAL_PLACES_DIVISION) / POINTS_DECIMAL_PLACES_DIVISION;
-            return points.get(xRounded);
-        }, t1, t2);
+        return (1 / (t2 - t1)) * si.integrate(Integer.MAX_VALUE, this::calculatePointValue, t1, t2);
     }
 
     @Override
     public double getAbsoluteAverage() {
-        return (1 / (t2 - t1)) * si.integrate(Integer.MAX_VALUE, (x) -> {
-            double xRounded = Math.round(x * POINTS_DECIMAL_PLACES_DIVISION) / POINTS_DECIMAL_PLACES_DIVISION;
-            return Math.abs(points.get(xRounded));
-        }, t1, t2);
+        return (1 / (t2 - t1)) * si.integrate(Integer.MAX_VALUE, (x) -> Math.abs(calculatePointValue(x)), t1, t2);
     }
 
     @Override
