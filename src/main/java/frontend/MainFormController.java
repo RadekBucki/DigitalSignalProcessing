@@ -25,7 +25,6 @@ import java.util.stream.Stream;
 
 public class MainFormController implements Initializable {
     public static final String MAIN_FORM_RESOURCE = "MainForm.fxml";
-    public static final String MAIN_FORM_TITLE = "Digital Signal Processing";
     private final SignalFacade facade = new SignalFacade();
     private AbstractSignal signal;
     private Class<?> selectedComboBoxKey;
@@ -87,7 +86,7 @@ public class MainFormController implements Initializable {
         textField.setLayoutX(334);
         textField.setTextFormatter(new TextFormatter<>(text -> {
             String newText = text.getControlNewText().replace(",", ".");
-            if (!newText.matches("-?([0-9]*[.])?[0-9]*")) {
+            if (!newText.matches("-?(\\d*[.])?\\d*")) {
                 textField.clear();
                 return null;
             }

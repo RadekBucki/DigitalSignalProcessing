@@ -25,6 +25,7 @@ import static frontend.SignalOperationFormController.SIGNAL_OPERATION_FORM_RESOU
 public class MainApplication extends Application {
     private static final int DEFAULT_CARD_NUMBER = 2;
     private static final String MAIN_APPLICATION_STYLE = "MainApplication.css";
+    public static final String TITLE = "Digital Signal Processing";
     private final TabPane tabPane = new TabPane();
     @Override
     public void start(Stage stage) throws IOException {
@@ -42,7 +43,7 @@ public class MainApplication extends Application {
                         Objects.requireNonNull(getClass().getResource(MAIN_APPLICATION_STYLE))
                                 .toExternalForm()
                 );
-        stage.setTitle(MAIN_FORM_TITLE);
+        stage.setTitle(TITLE);
         stage.setScene(scene);
         stage.show();
     }
@@ -88,7 +89,7 @@ public class MainApplication extends Application {
     }
 
     private Label createTitleLabel() {
-        Label label = new Label(MAIN_FORM_TITLE);
+        Label label = new Label(TITLE);
         label.setFont(new Font(24.0));
         return label;
     }
