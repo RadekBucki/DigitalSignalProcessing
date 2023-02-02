@@ -41,7 +41,10 @@ public class ContinuousSignal extends AbstractSignal {
 
     @Override
     public double getAbsoluteAverage() {
-        return 0;
+        return (1 / (t2 - t1)) * si.integrate(Integer.MAX_VALUE, (x) -> {
+            double xRounded = Math.round(x * POINTS_DECIMAL_PLACES_DIVISION) / POINTS_DECIMAL_PLACES_DIVISION;
+            return Math.abs(points.get(xRounded));
+        }, t1, t2);
     }
 
     @Override
