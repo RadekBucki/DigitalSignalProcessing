@@ -31,7 +31,6 @@ package backend {
             + {abstract} getMeanSpeed()
             + getAmplitudeFromTimeChartData()
             + getHistogramData()
-            + getPoints()
         }
         
         class ContinuousSignal {

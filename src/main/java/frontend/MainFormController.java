@@ -71,20 +71,15 @@ public class MainFormController implements Initializable {
         }
     }
 
-    public void createSignalInstance() {
+    public void createSignalInstance() throws IOException {
         List<Double> values = getParamsTextFieldsStream()
                 .map(textField -> Double.parseDouble(textField.getText()))
                 .toList();
         signal = facade.getSignal(selectedComboBoxKey, values);
-        try {
-            ChartUtilities.saveChartAsPNG(
-                    new File("chart.png"),
-                    ChartGenerator.generatePlot(signal.getPoints()), 400, 220);
-            FileInputStream input = new FileInputStream("chart.png");
-            amplitudeTimeChart.setImage(new Image(input));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        ChartUtilities.saveChartAsPNG(new File("chart.png"),
+                ChartGenerator.generatePlot(signal.getAmplitudeFromTimeChartData()), 400, 220);
+        FileInputStream input = new FileInputStream("chart.png");
+        amplitudeTimeChart.setImage(new Image(input));
     }
 
     private TextField createGroupNumericalTextField() {
