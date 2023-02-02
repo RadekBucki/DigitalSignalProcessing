@@ -39,7 +39,9 @@ public class ChartGenerator {
         Optional<Map.Entry<Double, Double>> minEntry = points.entrySet()
                 .stream()
                 .min(Map.Entry.comparingByValue());
-        plot.getRangeAxis().setRange(minEntry.get().getValue() - 0.1,maxEntry.get().getValue() + 0.1);
+        double chartMargin = Math.max(Math.abs(minEntry.get().getValue()), Math.abs(maxEntry.get().getValue())) / 10.0;
+        plot.getRangeAxis().setRange(minEntry.get().getValue() - chartMargin,
+                maxEntry.get().getValue() + chartMargin);
 
         ValueMarker yZeroMarker = new ValueMarker(0);
         yZeroMarker.setPaint(Color.darkGray);
