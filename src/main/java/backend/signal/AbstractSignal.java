@@ -27,4 +27,8 @@ public abstract class AbstractSignal {
         return points;
     }
     public abstract Map<Double, Double> getHistogramData();
+
+    public Map<Double, Double> getPoints() {
+        return points;
+    }
 }
