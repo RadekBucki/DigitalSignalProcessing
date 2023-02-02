@@ -9,22 +9,23 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 import java.awt.*;
+import java.util.Map;
 
 public class ChartGenerator {
     private ChartGenerator() {
     }
 
-    public static JFreeChart generatePlot(double[] x, double[] y) {
-        XYSeries errorFunctionSeries = new XYSeries("Error function");
-        for (int i = 0; i < x.length; i++) {
-            errorFunctionSeries.add(x[i], y[i]);
+    public static JFreeChart generatePlot(Map<Double, Double> points) {
+        XYSeries errorFunctionSeries = new XYSeries("Amplitude / time function");
+        for (Double key : points.keySet()) {
+            errorFunctionSeries.add(key, points.get(key));
         }
 
         XYSeriesCollection seriesCollection = new XYSeriesCollection();
         seriesCollection.addSeries(errorFunctionSeries);
 
         JFreeChart chart = ChartFactory.createXYLineChart(
-                "Error function", "Eras", "Error", seriesCollection,
+                "Amplitude / time function", "Time", "Amplitude", seriesCollection,
                 PlotOrientation.VERTICAL, false, true, false
         );
         XYPlot plot = (XYPlot) chart.getPlot();

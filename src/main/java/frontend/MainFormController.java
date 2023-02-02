@@ -2,6 +2,7 @@ package frontend;
 
 import backend.SignalFacade;
 import backend.signal.AbstractSignal;
+import frontend.chart.ChartGenerator;
 import frontend.classes.ClassTranslator;
 import frontend.fields.FieldMapper;
 import frontend.fields.FieldReader;
@@ -9,8 +10,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import org.jfree.chart.ChartUtilities;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -28,6 +35,8 @@ public class MainFormController implements Initializable {
     private ComboBox<String> signalTypes;
     @FXML
     private Button generateButton;
+    @FXML
+    private ImageView amplitudeTimeChart;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -67,6 +76,15 @@ public class MainFormController implements Initializable {
                 .map(textField -> Double.parseDouble(textField.getText()))
                 .toList();
         signal = facade.getSignal(selectedComboBoxKey, values);
+        try {
+            ChartUtilities.saveChartAsPNG(
+                    new File("chart.png"),
+                    ChartGenerator.generatePlot(signal.getPoints()), 400, 220);
+            FileInputStream input = new FileInputStream("chart.png");
+            amplitudeTimeChart.setImage(new Image(input));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private TextField createGroupNumericalTextField() {
