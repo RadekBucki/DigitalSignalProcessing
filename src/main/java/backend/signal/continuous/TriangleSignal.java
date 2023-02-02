@@ -19,6 +19,6 @@ public class TriangleSignal extends ContinuousSignal {
         if (x >= k * T + t1 && x < kw * T + k * T + t1) {
             return (A / (kw * T)) * (x - k * T - t1);
         }
-        return ((-A / T * (1 * kw)) * (x - k * T - t1)) + (A / (1 - kw));
+        return ((-A / (T * (1 - kw))) * (x - k * T - t1)) + (A / (1 - kw));
     }
 }
