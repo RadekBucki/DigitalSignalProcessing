@@ -10,7 +10,6 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 import java.awt.*;
-import java.util.Comparator;
 import java.util.Map;
 import java.util.Optional;
 
