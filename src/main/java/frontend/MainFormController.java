@@ -20,6 +20,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -36,6 +37,8 @@ public class MainFormController implements Initializable {
     private Button generateButton;
     @FXML
     private ImageView amplitudeTimeChart;
+    private BiConsumer<String, AbstractSignal> signalConsumer = null;
+    private String tabName;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -79,6 +82,7 @@ public class MainFormController implements Initializable {
                 ChartGenerator.generatePlot(signal.getAmplitudeFromTimeChartData()), 400, 220);
         FileInputStream input = new FileInputStream("chart.png");
         amplitudeTimeChart.setImage(new Image(input));
+        signalConsumer.accept(tabName, signal);
     }
 
     private TextField createGroupNumericalTextField() {
@@ -119,5 +123,13 @@ public class MainFormController implements Initializable {
             }
         }
         return false;
+    }
+
+    public void setSignalConsumer(BiConsumer<String, AbstractSignal> signalConsumer) {
+        this.signalConsumer = signalConsumer;
+    }
+
+    public void setTabName(String name) {
+        this.tabName = name;
     }
 }

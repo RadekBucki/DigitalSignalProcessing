@@ -22,11 +22,12 @@ import static frontend.SignalOperationFormController.SIGNAL_OPERATION_FORM_RESOU
  * =========================================================
  */
 
-public class MainApplication extends Application {
+public class MainApplication extends Application{
     private static final int DEFAULT_CARD_NUMBER = 2;
     private static final String MAIN_APPLICATION_STYLE = "MainApplication.css";
     public static final String TITLE = "Digital Signal Processing";
     private final TabPane tabPane = new TabPane();
+    private SignalOperationFormController signalOperationFormController = null;
     @Override
     public void start(Stage stage) throws IOException {
         tabPane.getTabs().add(createSignalOperationTab());
@@ -50,10 +51,14 @@ public class MainApplication extends Application {
 
     private Tab createTab(int count) throws IOException {
         Tab tab = new Tab();
-        tab.setText("Signal " + count);
+        String tabName = "Signal " + count;
+        tab.setText(tabName);
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(MAIN_FORM_RESOURCE));
         tab.setContent(fxmlLoader.load());
         tab.setClosable(true);
+        MainFormController mainFormController = fxmlLoader.getController();
+        mainFormController.setSignalConsumer(signalOperationFormController::addOrUpdateSignal);
+        mainFormController.setTabName(tabName);
         return tab;
     }
 
@@ -85,6 +90,7 @@ public class MainApplication extends Application {
         tab.getStyleClass().add("highlighting-tab");
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(SIGNAL_OPERATION_FORM_RESOURCE));
         tab.setContent(fxmlLoader.load());
+        signalOperationFormController = fxmlLoader.getController();
         return tab;
     }
 
