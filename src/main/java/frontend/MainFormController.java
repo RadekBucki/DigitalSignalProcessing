@@ -2,6 +2,7 @@ package frontend;
 
 import backend.SignalFacade;
 import backend.signal.AbstractSignal;
+import backend.signal.DiscreteSignal;
 import frontend.chart.ChartGenerator;
 import frontend.classes.ClassTranslator;
 import frontend.fields.FieldMapper;
@@ -77,7 +78,7 @@ public class MainFormController implements Initializable {
                 .toList();
         signal = facade.getSignal(selectedComboBoxKey, values);
         boolean isDiscrete = false;
-        if (selectedComboBoxKey.getPackageName().endsWith(".discrete")) {
+        if (signal instanceof DiscreteSignal) {
             isDiscrete = true;
         }
         ChartUtilities.saveChartAsPNG(new File("chart.png"),

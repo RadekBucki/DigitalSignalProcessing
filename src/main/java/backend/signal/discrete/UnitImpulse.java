@@ -6,7 +6,7 @@ public class UnitImpulse extends DiscreteSignal {
     private final int ns;
     private final int n1;
 
-    public UnitImpulse(double A, double d, double f, int ns, int n1) {
+    public UnitImpulse(double A, double d, double f, int n1, int ns) {
         super(A, d, f);
         this.ns = ns;
         this.n1 = n1;
