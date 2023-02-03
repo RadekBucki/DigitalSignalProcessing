@@ -21,12 +21,12 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class MainFormController implements Initializable {
-    public static final String MAIN_FORM_RESOURCE = "MainForm.fxml";
-    public static final String MAIN_FORM_TITLE = "Digital Signal Processing";
+public class SignalTabController implements Initializable {
+    public static final String RESOURCE = "SignalTab.fxml";
     private final SignalFacade facade = new SignalFacade();
     private AbstractSignal signal;
     private Class<?> selectedComboBoxKey;
@@ -38,6 +38,8 @@ public class MainFormController implements Initializable {
     private Button generateButton;
     @FXML
     private ImageView amplitudeTimeChart;
+    private BiConsumer<String, AbstractSignal> signalConsumer = null;
+    private String tabName;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -60,7 +62,7 @@ public class MainFormController implements Initializable {
         });
     }
 
-    public void createParametersTextFields(Class<?> classDefinition) {
+    private void createParametersTextFields(Class<?> classDefinition) {
         List<String> names = FieldReader.getFieldNames(classDefinition);
         parametersGrid.getChildren().clear();
         for (int i = 0; i < names.size(); i++) {
@@ -82,6 +84,7 @@ public class MainFormController implements Initializable {
                 400, 220);
         FileInputStream input = new FileInputStream("chart.png");
         amplitudeTimeChart.setImage(new Image(input));
+        signalConsumer.accept(tabName, signal);
     }
 
     private TextField createGroupNumericalTextField() {
@@ -89,7 +92,7 @@ public class MainFormController implements Initializable {
         textField.setLayoutX(334);
         textField.setTextFormatter(new TextFormatter<>(text -> {
             String newText = text.getControlNewText().replace(",", ".");
-            if (!newText.matches("-?([0-9]*[.])?[0-9]*")) {
+            if (!newText.matches("-?(\\d*[.])?\\d*")) {
                 textField.clear();
                 return null;
             }
@@ -122,5 +125,13 @@ public class MainFormController implements Initializable {
             }
         }
         return false;
+    }
+
+    public void setSignalConsumer(BiConsumer<String, AbstractSignal> signalConsumer) {
+        this.signalConsumer = signalConsumer;
+    }
+
+    public void setTabName(String name) {
+        this.tabName = name;
     }
 }

@@ -177,8 +177,22 @@ package backend {
 }
 
 package frontend {
-    class MainApplication
-    class MainFormController
+    class MainApplication {
+        - createSignalTab()
+        - createAddTabButton()
+        - createSignalOperationTab()
+        - createTitleLabel()
+    }
+    class SignalTabController {
+        - createGroupLabel()
+        - shouldGenerateButtonBeDisabled()
+        - parametersTextFields()
+        + createSignalInstance()
+    }
+    class SignalOperationTabController {
+        + addOrUpdateSignal()
+        + applyOperation()
+    }
     package file {
         class FileChoose {
             + {static} saveChooser()
@@ -209,16 +223,18 @@ package frontend {
         }
     }
     
-    MainApplication ..> MainFormController
+    MainApplication o---> SignalTabController
+    MainApplication o--> SignalOperationTabController
     
-    MainFormController ..> FileChoose
-    MainFormController ..> ChartGenerator
-    MainFormController ..> ClassTranslator
-    MainFormController ..> FieldMapper
-    MainFormController ..> FieldReader
+    SignalTabController ..> FileChoose
+    SignalTabController ..> ChartGenerator
+    SignalTabController ..> ClassTranslator
+    SignalTabController ..> FieldMapper
+    SignalTabController ..> FieldReader
     
     ChartGenerator <|-- AmplitudeFromTimeChartGenerator
     ChartGenerator <|-- HistogramChartGenerator
 }
-MainFormController ....> SignalFacade
+SignalTabController ....> SignalFacade
+SignalOperationTabController ....> SignalFacade
 ```
