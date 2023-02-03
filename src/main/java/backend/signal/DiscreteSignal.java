@@ -4,6 +4,8 @@ import java.util.Map;
 
 public class DiscreteSignal extends AbstractSignal {
     protected double f;
+    protected Integer n1;
+    protected Integer n2;
 
     public DiscreteSignal(double A, double d, double f) {
         super(A, d);
