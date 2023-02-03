@@ -8,7 +8,7 @@ public class ImpulseNoise extends DiscreteSignal {
     private final double t1;
     private final double p;
 
-    public ImpulseNoise(double A, double d, double f, double t1, double p) {
+    public ImpulseNoise(double A, double d, double f, double p, double t1) {
         super(A, d, f);
         this.t1 = t1;
         this.p = p;

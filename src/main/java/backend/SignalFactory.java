@@ -68,11 +68,11 @@ public class SignalFactory {
     }
 
     public AbstractSignal createImpulseNoise(double A, double d, double f, double p, double t1) {
-        return new ImpulseNoise(A, d, f, t1, p);
+        return new ImpulseNoise(A, d, f, p, t1);
     }
 
     public AbstractSignal createUnitImpulse(double A, double d, double f, int n1, int ns) {
-        return new UnitImpulse(A, d, f, ns, n1);
+        return new UnitImpulse(A, d, f, n1, ns);
     }
 
     public AbstractSignal createContinuousSignal(Map<Double, Double> points) {
