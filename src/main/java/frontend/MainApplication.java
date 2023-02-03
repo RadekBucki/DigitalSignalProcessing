@@ -12,9 +12,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Objects;
 
-import static frontend.MainFormController.*;
-import static frontend.SignalOperationFormController.SIGNAL_OPERATION_FORM_RESOURCE;
-
 /**
  * =========================================================
  * CPS (2023)
@@ -27,7 +24,7 @@ public class MainApplication extends Application{
     private static final String MAIN_APPLICATION_STYLE = "MainApplication.css";
     public static final String TITLE = "Digital Signal Processing";
     private final TabPane tabPane = new TabPane();
-    private SignalOperationFormController signalOperationFormController = null;
+    private SignalOperationTabController signalOperationTabController = null;
     @Override
     public void start(Stage stage) throws IOException {
         tabPane.getTabs().add(createSignalOperationTab());
@@ -53,12 +50,12 @@ public class MainApplication extends Application{
         Tab tab = new Tab();
         String tabName = "Signal " + count;
         tab.setText(tabName);
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(MAIN_FORM_RESOURCE));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(SignalTabController.RESOURCE));
         tab.setContent(fxmlLoader.load());
         tab.setClosable(true);
-        MainFormController mainFormController = fxmlLoader.getController();
-        mainFormController.setSignalConsumer(signalOperationFormController::addOrUpdateSignal);
-        mainFormController.setTabName(tabName);
+        SignalTabController signalTabController = fxmlLoader.getController();
+        signalTabController.setSignalConsumer(signalOperationTabController::addOrUpdateSignal);
+        signalTabController.setTabName(tabName);
         return tab;
     }
 
@@ -88,9 +85,9 @@ public class MainApplication extends Application{
         tab.setText("Signal Operation");
         tab.setClosable(false);
         tab.getStyleClass().add("highlighting-tab");
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(SIGNAL_OPERATION_FORM_RESOURCE));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(SignalOperationTabController.RESOURCE));
         tab.setContent(fxmlLoader.load());
-        signalOperationFormController = fxmlLoader.getController();
+        signalOperationTabController = fxmlLoader.getController();
         return tab;
     }
 

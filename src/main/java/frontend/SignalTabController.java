@@ -24,8 +24,8 @@ import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class MainFormController implements Initializable {
-    public static final String MAIN_FORM_RESOURCE = "MainForm.fxml";
+public class SignalTabController implements Initializable {
+    public static final String RESOURCE = "SignalTab.fxml";
     private final SignalFacade facade = new SignalFacade();
     private AbstractSignal signal;
     private Class<?> selectedComboBoxKey;

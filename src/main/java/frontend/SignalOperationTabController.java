@@ -12,8 +12,8 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.function.BiFunction;
 
-public class SignalOperationFormController implements Initializable {
-    public static final String SIGNAL_OPERATION_FORM_RESOURCE = "SignalOperationForm.fxml";
+public class SignalOperationTabController implements Initializable {
+    public static final String RESOURCE = "SignalOperationTab.fxml";
     @FXML
     private ComboBox<String> signalOperationComboBox;
     @FXML
