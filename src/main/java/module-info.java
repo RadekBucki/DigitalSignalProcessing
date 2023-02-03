@@ -2,6 +2,7 @@ module cps {
     requires javafx.controls;
     requires javafx.fxml;
     requires jfreechart;
+    requires commons.math3;
     requires java.datatransfer;
     requires java.desktop;
 

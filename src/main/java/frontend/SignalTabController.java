@@ -2,6 +2,7 @@ package frontend;
 
 import backend.SignalFacade;
 import backend.signal.AbstractSignal;
+import backend.signal.DiscreteSignal;
 import frontend.chart.ChartGenerator;
 import frontend.classes.ClassTranslator;
 import frontend.fields.FieldMapper;
@@ -79,7 +80,8 @@ public class SignalTabController implements Initializable {
                 .toList();
         signal = facade.getSignal(selectedComboBoxKey, values);
         ChartUtilities.saveChartAsPNG(new File("chart.png"),
-                ChartGenerator.generatePlot(signal.getAmplitudeFromTimeChartData()), 400, 220);
+                ChartGenerator.generatePlot(signal.getAmplitudeFromTimeChartData(), signal instanceof DiscreteSignal),
+                400, 220);
         FileInputStream input = new FileInputStream("chart.png");
         amplitudeTimeChart.setImage(new Image(input));
         signalConsumer.accept(tabName, signal);
