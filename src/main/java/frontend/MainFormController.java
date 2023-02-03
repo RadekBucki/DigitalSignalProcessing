@@ -77,12 +77,9 @@ public class MainFormController implements Initializable {
                 .map(textField -> Double.parseDouble(textField.getText()))
                 .toList();
         signal = facade.getSignal(selectedComboBoxKey, values);
-        boolean isDiscrete = false;
-        if (signal instanceof DiscreteSignal) {
-            isDiscrete = true;
-        }
         ChartUtilities.saveChartAsPNG(new File("chart.png"),
-                ChartGenerator.generatePlot(signal.getAmplitudeFromTimeChartData(), isDiscrete), 400, 220);
+                ChartGenerator.generatePlot(signal.getAmplitudeFromTimeChartData(), signal instanceof DiscreteSignal),
+                400, 220);
         FileInputStream input = new FileInputStream("chart.png");
         amplitudeTimeChart.setImage(new Image(input));
     }
