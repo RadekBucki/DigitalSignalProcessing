@@ -50,7 +50,7 @@ public class ContinuousSignal extends AbstractSignal {
     @Override
     public double getVariance() {
         return (1 / (t2 - t1)) * si.integrate(Integer.MAX_VALUE,
-                (x) -> Math.abs(calculatePointValue(x) - getAverage()), t1, t2);
+                (x) -> (calculatePointValue(x) - getAverage()) * (calculatePointValue(x) - getAverage()), t1, t2);
     }
 
     @Override
