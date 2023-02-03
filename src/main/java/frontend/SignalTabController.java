@@ -61,7 +61,7 @@ public class SignalTabController implements Initializable {
         });
     }
 
-    public void createParametersTextFields(Class<?> classDefinition) {
+    private void createParametersTextFields(Class<?> classDefinition) {
         List<String> names = FieldReader.getFieldNames(classDefinition);
         parametersGrid.getChildren().clear();
         for (int i = 0; i < names.size(); i++) {

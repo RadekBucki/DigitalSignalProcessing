@@ -29,7 +29,7 @@ public class MainApplication extends Application{
     public void start(Stage stage) throws IOException {
         tabPane.getTabs().add(createSignalOperationTab());
         for (int i = 0; i < DEFAULT_CARD_NUMBER; i++) {
-            Tab tab = createTab(i + 1);
+            Tab tab = createSignalTab(i + 1);
             tabPane.getTabs().add(tab);
         }
         tabPane.getTabs().add(createAddTabButton());
@@ -46,7 +46,7 @@ public class MainApplication extends Application{
         stage.show();
     }
 
-    private Tab createTab(int count) throws IOException {
+    private Tab createSignalTab(int count) throws IOException {
         Tab tab = new Tab();
         String tabName = "Signal " + count;
         tab.setText(tabName);
@@ -70,7 +70,7 @@ public class MainApplication extends Application{
             }
             Tab tab;
             try {
-                tab = createTab(tabPane.getTabs().size() - 1);
+                tab = createSignalTab(tabPane.getTabs().size() - 1);
             } catch (IOException e) {
                 return;
             }
