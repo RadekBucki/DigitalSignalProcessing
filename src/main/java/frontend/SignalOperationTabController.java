@@ -16,7 +16,7 @@ import java.util.function.BiFunction;
 public class SignalOperationTabController implements Initializable {
     public static final String RESOURCE = "SignalOperationTab.fxml";
     @FXML
-    private Button applyOperationButton;
+    private Button applyOperationButton; // TODO: Disable button if data is not relevant
     @FXML
     private ComboBox<String> signalOperationComboBox;
     @FXML

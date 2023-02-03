@@ -10,7 +10,6 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 import java.awt.*;
-import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 
@@ -41,12 +40,11 @@ public class ChartGenerator {
         Optional<Map.Entry<Double, Double>> minEntry = points.entrySet()
                 .stream()
                 .min(Map.Entry.comparingByValue());
-        if (maxEntry.isEmpty() || minEntry.isEmpty()) {
-            return chart;
+        if (maxEntry.isPresent() && minEntry.isPresent()) {
+            double chartMargin = Math.max(Math.abs(minEntry.get().getValue()), Math.abs(maxEntry.get().getValue())) / 10.0;
+            plot.getRangeAxis().setRange(minEntry.get().getValue() - chartMargin,
+                    maxEntry.get().getValue() + chartMargin);
         }
-        double chartMargin = Math.max(Math.abs(minEntry.get().getValue()), Math.abs(maxEntry.get().getValue())) / 10.0;
-        plot.getRangeAxis().setRange(minEntry.get().getValue() - chartMargin,
-                maxEntry.get().getValue() + chartMargin);
 
         ValueMarker yZeroMarker = new ValueMarker(0);
         yZeroMarker.setPaint(Color.darkGray);
