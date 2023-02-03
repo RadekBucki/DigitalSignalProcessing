@@ -42,18 +42,21 @@ public class ContinuousSignal extends AbstractSignal {
     }
 
     @Override
-    public double getEffectiveValue() {
-        return 0;
+    public double getAveragePower() {
+        return (1 / (t2 - t1)) * si.integrate(Integer.MAX_VALUE,
+                (x) -> calculatePointValue(x) * calculatePointValue(x), t1, t2);
     }
 
     @Override
     public double getVariance() {
-        return 0;
+        return (1 / (t2 - t1)) * si.integrate(Integer.MAX_VALUE,
+                (x) -> Math.abs(calculatePointValue(x) - getAverage()), t1, t2);
     }
 
     @Override
-    public double getMeanSpeed() {
-        return 0;
+    public double getEffectiveValue() {
+        return Math.sqrt((1 / (t2 - t1)) * si.integrate(Integer.MAX_VALUE,
+                (x) -> calculatePointValue(x) * calculatePointValue(x), t1, t2));
     }
 
     @Override
