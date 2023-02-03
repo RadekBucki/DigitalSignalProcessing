@@ -3,6 +3,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Button?>
 <Pane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity"
       prefHeight="500.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="frontend.SignalOperationTabController">
@@ -15,4 +16,6 @@
     <Label layoutX="10.0" layoutY="82.0" text="Signal 2"/>
     <ComboBox fx:id="signal2ComboBox" layoutX="100.0" layoutY="82.0" prefHeight="25.0" prefWidth="440.0"
               promptText="Choose signal"/>
+    <Button fx:id="applyOperationButton" layoutX="10.0" layoutY="118.0" onAction="#applyOperation"
+            mnemonicParsing="false" text="Apply operation" textAlignment="CENTER"/>
 </Pane>
