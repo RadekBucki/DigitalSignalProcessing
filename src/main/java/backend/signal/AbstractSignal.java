@@ -20,9 +20,9 @@ public abstract class AbstractSignal {
 
     public abstract double getAverage();
     public abstract double getAbsoluteAverage();
-    public abstract double getEffectiveValue();
+    public abstract double getAveragePower();
     public abstract double getVariance();
-    public abstract double getMeanSpeed();
+    public abstract double getEffectiveValue();
     public Map<Double, Double> getAmplitudeFromTimeChartData() {
         return points;
     }
