@@ -67,11 +67,11 @@ public class SignalFactory {
         return new UnitJump(A, d, t1, ts);
     }
 
-    public AbstractSignal createImpulseNoise(double A, double d, double f, double t1, double p) {
+    public AbstractSignal createImpulseNoise(double A, double d, double f, double p, double t1) {
         return new ImpulseNoise(A, d, f, t1, p);
     }
 
-    public AbstractSignal createUnitImpulse(double A, double d, double f, int ns, int n1) {
+    public AbstractSignal createUnitImpulse(double A, double d, double f, int n1, int ns) {
         return new UnitImpulse(A, d, f, ns, n1);
     }
 

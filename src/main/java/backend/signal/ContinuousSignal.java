@@ -38,7 +38,7 @@ public class ContinuousSignal extends AbstractSignal {
     }
 
     @Override
-    public double getEffectiveValue() {
+    public double getAveragePower() {
         return 0;
     }
 
@@ -48,7 +48,7 @@ public class ContinuousSignal extends AbstractSignal {
     }
 
     @Override
-    public double getMeanSpeed() {
+    public double getEffectiveValue() {
         return 0;
     }
 

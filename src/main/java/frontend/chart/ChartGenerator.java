@@ -10,6 +10,7 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 import java.awt.*;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 
@@ -17,7 +18,7 @@ public class ChartGenerator {
     private ChartGenerator() {
     }
 
-    public static JFreeChart generatePlot(Map<Double, Double> points) {
+    public static JFreeChart generatePlot(Map<Double, Double> points, boolean isDiscrete) {
         XYSeries errorFunctionSeries = new XYSeries("Amplitude / time function");
         for (Double key : points.keySet()) {
             errorFunctionSeries.add(key, points.get(key));
@@ -48,10 +49,9 @@ public class ChartGenerator {
         yZeroMarker.setAlpha(0.5F);
         plot.addRangeMarker(yZeroMarker);
 
-        changeVisibility(renderer, 0, true);
-        changeVisibility(renderer, 1, true);
+        changeVisibility(renderer, 0, !isDiscrete);
+        formatAxis(renderer, 1);
         formatAxis(renderer, 2);
-        formatAxis(renderer, 3);
 
         plot.setRenderer(renderer);
 
