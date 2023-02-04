@@ -64,7 +64,7 @@ package backend {
             class UniformlyDistributedNoise {
                 + calculatePointValue()
             }
-            class Noise {
+            class ContinuousNoise {
                 + getAverage()
                 + getAbsoluteAverage()
                 + getAveragePower()
@@ -126,10 +126,10 @@ package backend {
         ContinuousSignal <|-- SymmetricalRectangularSignal
         ContinuousSignal <|-- TriangleSignal
         ContinuousSignal <|-- UnitJump
-        ContinuousSignal <|-- Noise
+        ContinuousSignal <|-- ContinuousNoise
         
-        Noise <|-- GaussianNoise
-        Noise <|-- UniformlyDistributedNoise
+        ContinuousNoise <|-- GaussianNoise
+        ContinuousNoise <|-- UniformlyDistributedNoise
         
         DiscreteSignal <|-- UnitImpulse
         DiscreteSignal <|-- ImpulseNoise

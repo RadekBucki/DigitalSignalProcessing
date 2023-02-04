@@ -2,8 +2,8 @@ package backend.signal.continuous;
 
 import backend.signal.ContinuousSignal;
 
-public class Noise extends ContinuousSignal {
-    public Noise(double A, double d, double t1) {
+public class ContinuousNoise extends ContinuousSignal {
+    public ContinuousNoise(double A, double d, double t1) {
         super(A, d, t1);
     }
 
