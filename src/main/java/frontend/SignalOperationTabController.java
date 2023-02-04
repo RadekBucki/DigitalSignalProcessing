@@ -12,6 +12,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 
 public class SignalOperationTabController implements Initializable {
     public static final String RESOURCE = "SignalOperationTab.fxml";
@@ -33,6 +34,8 @@ public class SignalOperationTabController implements Initializable {
     );
     private final Map<String, AbstractSignal> signals = new LinkedHashMap<>();
 
+    private Consumer<AbstractSignal> createSignalTab = null;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         signalOperationComboBox.getItems().addAll(signalOperations.keySet());
@@ -49,7 +52,7 @@ public class SignalOperationTabController implements Initializable {
             signals.get(signal1ComboBox.getValue()),
             signals.get(signal2ComboBox.getValue())
         );
-        // TODO: Create new tab and set signal
+        createSignalTab.accept(signal);
     }
 
     public void onUpdateComboBox() {
@@ -58,5 +61,9 @@ public class SignalOperationTabController implements Initializable {
                 signal1ComboBox.getValue() == null ||
                 signal2ComboBox.getValue() == null
         );
+    }
+
+    public void setCreateSignalTab(Consumer<AbstractSignal> createSignalTab) {
+        this.createSignalTab = createSignalTab;
     }
 }
