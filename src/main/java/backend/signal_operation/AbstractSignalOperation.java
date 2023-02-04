@@ -18,26 +18,24 @@ public abstract class AbstractSignalOperation {
     public AbstractSignal execute(AbstractSignal signal1, AbstractSignal signal2) {
         LinkedHashMap<Double, Double> resultPoints = new LinkedHashMap<>();
         Iterator<Map.Entry<Double, Double>> signal1Iterator = signal1.getAmplitudeFromTimeChartData().entrySet().iterator();
-        Iterator<Map.Entry<Double, Double>> signal2Iterator = signal2.getAmplitudeFromTimeChartData().entrySet().iterator();
+        Map<Double, Double> signal2Points = signal2.getAmplitudeFromTimeChartData();
         while (signal1Iterator.hasNext()) {
             Map.Entry<Double, Double> signal1Entry = signal1Iterator.next();
-            Map.Entry<Double, Double> signal2Entry = signal2Iterator.next();
-            if (signal1Entry.getKey().equals(signal2Entry.getKey())) {
+            Double signal1EntryKey = signal1Entry.getKey();
+            if (signal2Points.containsKey(signal1EntryKey)) {
                 resultPoints.put(
-                        signal1Entry.getKey(),
-                        operation(signal1Entry.getValue(), signal2Entry.getValue())
+                        signal1EntryKey,
+                        operation(signal1Entry.getValue(), signal2Points.get(signal1EntryKey))
                 );
+                signal2Points.remove(signal1EntryKey);
             } else {
                 resultPoints.put(
                         signal1Entry.getKey(),
                         signal1Entry.getValue()
                 );
-                resultPoints.put(
-                        signal2Entry.getKey(),
-                        signal2Entry.getValue()
-                );
             }
         }
+        resultPoints.putAll(signal2Points);
 
         if (signal1 instanceof DiscreteSignal && signal2 instanceof DiscreteSignal) {
             return signalFactory.createDiscreteSignal(resultPoints);
