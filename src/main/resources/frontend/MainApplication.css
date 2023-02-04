@@ -1,0 +1,5 @@
+.highlighting-tab {
+    -fx-background-color: lightgray;
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+}
