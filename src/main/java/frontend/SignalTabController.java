@@ -172,4 +172,31 @@ public class SignalTabController implements Initializable {
             row++;
         }
     }
+
+    public void setSignal(AbstractSignal signal) throws IOException {
+        this.signal = signal;
+        ChartUtilities.saveChartAsPNG(
+                new File("chart.png"),
+                ChartGenerator.generatePlot(
+                        signal.getAmplitudeFromTimeChartData(),
+                        signal instanceof DiscreteSignal
+                ),
+                400,
+                220
+        );
+        FileInputStream input = new FileInputStream("chart.png");
+        amplitudeTimeChart.setImage(new Image(input));
+
+//        createStatistics(Map.of(
+//                "Average", signal::getAverage,
+//                "Absolute Average", signal::getAbsoluteAverage,
+//                "Average Power", signal::getAveragePower,
+//                "Variance", signal::getVariance,
+//                "Effective value", signal::getEffectiveValue
+//        ));
+
+        rightPanel.setVisible(true);
+
+        signalConsumer.accept(tabName, signal);
+    }
 }
