@@ -2,6 +2,7 @@ package backend.signal;
 
 import org.apache.commons.math3.analysis.integration.SimpsonIntegrator;
 
+import java.util.Collections;
 import java.util.Map;
 
 public class ContinuousSignal extends AbstractSignal {
@@ -17,6 +18,8 @@ public class ContinuousSignal extends AbstractSignal {
 
     public ContinuousSignal(Map<Double, Double> points) {
         super(points);
+        this.t1 = Collections.min(points.keySet());
+        this.t2 = Collections.max(points.keySet());
     }
 
     public void calculateAllPoints() {
