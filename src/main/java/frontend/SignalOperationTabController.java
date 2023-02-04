@@ -16,7 +16,7 @@ import java.util.function.BiFunction;
 public class SignalOperationTabController implements Initializable {
     public static final String RESOURCE = "SignalOperationTab.fxml";
     @FXML
-    private Button applyOperationButton; // TODO: Disable button if data is not relevant
+    private Button applyOperationButton;
     @FXML
     private ComboBox<String> signalOperationComboBox;
     @FXML
@@ -50,5 +50,13 @@ public class SignalOperationTabController implements Initializable {
             signals.get(signal2ComboBox.getValue())
         );
         // TODO: Create new tab and set signal
+    }
+
+    public void onUpdateComboBox() {
+        applyOperationButton.setDisable(
+                signalOperationComboBox.getValue() == null ||
+                signal1ComboBox.getValue() == null ||
+                signal2ComboBox.getValue() == null
+        );
     }
 }
