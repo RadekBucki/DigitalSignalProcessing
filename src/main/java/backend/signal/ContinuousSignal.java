@@ -7,7 +7,7 @@ import java.util.Map;
 public class ContinuousSignal extends AbstractSignal {
     private final SimpsonIntegrator si = new SimpsonIntegrator();
     protected double t1;
-    private Double t2;
+    protected Double t2;
 
     public ContinuousSignal(double A, double d, double t1) {
         super(A, d);
