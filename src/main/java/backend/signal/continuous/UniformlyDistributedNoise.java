@@ -1,8 +1,6 @@
 package backend.signal.continuous;
 
-import backend.signal.ContinuousSignal;
-
-public class UniformlyDistributedNoise extends ContinuousSignal {
+public class UniformlyDistributedNoise extends ContinuousNoise {
     public UniformlyDistributedNoise(double A, double d, double t1) {
         super(A, d, t1);
         calculateAllPoints();
