@@ -22,10 +22,21 @@ public abstract class AbstractSignalOperation {
         while (signal1Iterator.hasNext()) {
             Map.Entry<Double, Double> signal1Entry = signal1Iterator.next();
             Map.Entry<Double, Double> signal2Entry = signal2Iterator.next();
-            resultPoints.put(
-                    signal1Entry.getKey(),
-                    operation(signal1Entry.getValue(), signal2Entry.getValue())
-            );
+            if (signal1Entry.getKey().equals(signal2Entry.getKey())) {
+                resultPoints.put(
+                        signal1Entry.getKey(),
+                        operation(signal1Entry.getValue(), signal2Entry.getValue())
+                );
+            } else {
+                resultPoints.put(
+                        signal1Entry.getKey(),
+                        signal1Entry.getValue()
+                );
+                resultPoints.put(
+                        signal2Entry.getKey(),
+                        signal2Entry.getValue()
+                );
+            }
         }
 
         if (signal1 instanceof DiscreteSignal && signal2 instanceof DiscreteSignal) {
