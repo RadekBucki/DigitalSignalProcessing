@@ -187,13 +187,13 @@ public class SignalTabController implements Initializable {
         FileInputStream input = new FileInputStream("chart.png");
         amplitudeTimeChart.setImage(new Image(input));
 
-//        createStatistics(Map.of(
-//                "Average", signal::getAverage,
-//                "Absolute Average", signal::getAbsoluteAverage,
-//                "Average Power", signal::getAveragePower,
-//                "Variance", signal::getVariance,
-//                "Effective value", signal::getEffectiveValue
-//        ));
+        createStatistics(Map.of(
+                "Average", signal::getAverage,
+                "Absolute Average", signal::getAbsoluteAverage,
+                "Average Power", signal::getAveragePower,
+                "Variance", signal::getVariance,
+                "Effective value", signal::getEffectiveValue
+        ));
 
         rightPanel.setVisible(true);
 

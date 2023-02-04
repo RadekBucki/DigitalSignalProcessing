@@ -1,5 +1,6 @@
 package backend.signal;
 
+import java.util.Collections;
 import java.util.Map;
 
 public class DiscreteSignal extends AbstractSignal {
@@ -14,6 +15,8 @@ public class DiscreteSignal extends AbstractSignal {
 
     public DiscreteSignal(Map<Double, Double> points) {
         super(points);
+        this.n1 = (int) Math.round(Collections.min(points.keySet()));
+        this.n2 = (int) Math.round(Collections.max(points.keySet()));
     }
 
     @Override
