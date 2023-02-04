@@ -14,6 +14,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import org.jfree.chart.ChartUtilities;
 
 import java.io.File;
@@ -34,15 +35,17 @@ public class SignalTabController implements Initializable {
     @FXML
     private GridPane parametersGrid;
     @FXML
-    public GridPane statisticsGrid;
-    @FXML
     private ComboBox<String> signalTypes;
     @FXML
     private Button generateButton;
     @FXML
+    public VBox rightPanel;
+    @FXML
     private ImageView amplitudeTimeChart;
     @FXML
     private ImageView histogram; // TODO: Create histogram
+    @FXML
+    public GridPane statisticsGrid;
     private BiConsumer<String, AbstractSignal> signalConsumer = null;
     private String tabName;
 
@@ -81,6 +84,7 @@ public class SignalTabController implements Initializable {
     }
 
     public void createSignalInstance() throws IOException {
+        rightPanel.setVisible(false);
         List<Double> values = getParamsTextFieldsStream()
                 .map(textField -> Double.parseDouble(textField.getText()))
                 .toList();
@@ -99,6 +103,8 @@ public class SignalTabController implements Initializable {
                 "Variance", signal::getVariance,
                 "Effective value", signal::getEffectiveValue
         ));
+
+        rightPanel.setVisible(true);
 
         signalConsumer.accept(tabName, signal);
     }

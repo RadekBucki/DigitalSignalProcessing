@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.Line?>
 <Pane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity"
-      prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
+      prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="frontend.SignalTabController">
     <ComboBox fx:id="signalTypes" layoutX="90.0" layoutY="10.0" prefHeight="25.0" prefWidth="440.0"
               promptText="Choose signal type"/>
@@ -33,21 +33,24 @@
             </VBox>
         </AnchorPane>
     </TitledPane>
-    <ImageView fx:id="amplitudeTimeChart" fitHeight="220.0" fitWidth="400.0" layoutX="540.0" layoutY="10.0"
-               pickOnBounds="true" preserveRatio="true"/>
-    <ImageView fx:id="histogram" fitHeight="220.0" fitWidth="400.0" layoutX="540.0" layoutY="240.0" pickOnBounds="true"
-               preserveRatio="true"/>
-    <GridPane fx:id="statisticsGrid" layoutX="540.0" layoutY="470.0" prefHeight="30.0" prefWidth="450.0">
-        <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-        </columnConstraints>
-        <rowConstraints>
-            <RowConstraints maxHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-        </rowConstraints>
-        <Group>
-            <Label layoutY="4.0" prefHeight="17.0" prefWidth="300.0" text="param1"/>
-            <Label layoutX="300.0" prefHeight="17.0" prefWidth="300.0" text="value1"/>
-        </Group>
-    </GridPane>
-    <Line endY="600.0" layoutX="535.0" stroke="#c4c4c4"/>
+    <Line endY="650.0" layoutX="535.0" stroke="#c4c4c4"/>
+    <VBox fx:id="rightPanel" layoutX="540.0" visible="false">
+        <Label layoutX="10.0" layoutY="14.0" text="Charts" style="-fx-font-size: 20pt;"/>
+        <ImageView fx:id="amplitudeTimeChart" fitHeight="220.0" fitWidth="400.0" pickOnBounds="true"
+                   preserveRatio="true"/>
+        <ImageView fx:id="histogram" fitHeight="220.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true"/>
+        <Label layoutX="10.0" layoutY="14.0" text="Statistics" style="-fx-font-size: 20pt;"/>
+        <GridPane fx:id="statisticsGrid" layoutX="540.0" layoutY="470.0" prefHeight="30.0" prefWidth="450.0">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints maxHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            </rowConstraints>
+            <Group>
+                <Label layoutY="4.0" prefHeight="17.0" prefWidth="300.0" text="param1"/>
+                <Label layoutX="300.0" prefHeight="17.0" prefWidth="300.0" text="value1"/>
+            </Group>
+        </GridPane>
+    </VBox>
 </Pane>
