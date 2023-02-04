@@ -85,11 +85,6 @@ public class SignalTabController implements Initializable {
         FileInputStream input = new FileInputStream("chart.png");
         amplitudeTimeChart.setImage(new Image(input));
         signalConsumer.accept(tabName, signal);
-        System.out.println(signal.getAverage());
-        System.out.println(signal.getAbsoluteAverage());
-        System.out.println(signal.getAveragePower());
-        System.out.println(signal.getVariance());
-        System.out.println(signal.getEffectiveValue());
     }
 
     private TextField createGroupNumericalTextField() {
