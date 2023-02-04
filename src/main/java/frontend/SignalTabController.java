@@ -156,12 +156,12 @@ public class SignalTabController implements Initializable {
     }
 
     private void createStatistics(Map<String, Supplier<Double>> statistics) {
+        statisticsGrid.getChildren().clear();
         int row = 0;
         for (Map.Entry<String, Supplier<Double>> statistic: statistics.entrySet()) {
             statisticsGrid.addRow(row, new Group(
                     createGroupLabel(statistic.getKey(), null),
-//                    createGroupLabel(String.valueOf(statistic.getValue().get()), null, 300)
-                    createGroupLabel("temp", null, 300)
+                    createGroupLabel(String.valueOf(statistic.getValue().get()), null, 300)
             ));
             row++;
         }
