@@ -16,10 +16,11 @@ public class ImpulseNoise extends DiscreteSignal {
         super.n1 = (int) Math.floor(t1 * f);
         super.n2 = (int) (n1 + Math.floor(d * f));
         for (int i = n1; i <= n2; i++) {
+            double time = i / f;
             if (random.nextDouble(0,1) <= p) {
-                points.put((double) i, A);
+                points.put(time, A);
             } else {
-                points.put((double) i, 0.0);
+                points.put(time, 0.0);
             }
         }
     }

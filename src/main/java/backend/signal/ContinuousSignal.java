@@ -20,6 +20,8 @@ public class ContinuousSignal extends AbstractSignal {
         super(points);
         this.t1 = Collections.min(points.keySet());
         this.t2 = Collections.max(points.keySet());
+        this.A = Collections.max(points.values());
+        this.d = t2 - t1;
     }
 
     public void calculateAllPoints() {
