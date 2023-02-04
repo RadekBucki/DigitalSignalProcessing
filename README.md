@@ -40,9 +40,9 @@ package backend {
             + calculateAllPoints()
             + getAverage()
             + getAbsoluteAverage()
-            + getEffectiveValue()
+            + getAveragePower()
             + getVariance()
-            + getMeanSpeed()
+            + getEffectiveValue()
             + getAmplitudeFromTimeChartData()
             + getHistogramData()
         }
@@ -50,9 +50,9 @@ package backend {
             # f: double
             + getAverage()
             + getAbsoluteAverage()
-            + getEffectiveValue()
+            + getAveragePower()
             + getVariance()
-            + getMeanSpeed()
+            + getEffectiveValue()
             + getAmplitudeFromTimeChartData()
             + getHistogramData()
         }
@@ -63,6 +63,13 @@ package backend {
         package continuous {
             class UniformlyDistributedNoise {
                 + calculatePointValue()
+            }
+            class Noise {
+                + getAverage()
+                + getAbsoluteAverage()
+                + getAveragePower()
+                + getVariance()
+                + getEffectiveValue()
             }
             class GaussianNoise {
                 + calculatePointValue()
@@ -112,8 +119,6 @@ package backend {
             }
         }
         
-        ContinuousSignal <|-- UniformlyDistributedNoise
-        ContinuousSignal <|-- GaussianNoise
         ContinuousSignal <|-- SinusoidalSignal
         ContinuousSignal <|-- OneHalfRectifiedSinusoidalSignal
         ContinuousSignal <|-- TwoHalfRectifiedSinusoidalSignal
@@ -121,6 +126,10 @@ package backend {
         ContinuousSignal <|-- SymmetricalRectangularSignal
         ContinuousSignal <|-- TriangleSignal
         ContinuousSignal <|-- UnitJump
+        ContinuousSignal <|-- Noise
+        
+        Noise <|-- GaussianNoise
+        Noise <|-- UniformlyDistributedNoise
         
         DiscreteSignal <|-- UnitImpulse
         DiscreteSignal <|-- ImpulseNoise
