@@ -24,7 +24,7 @@ public abstract class AbstractSignal {
     public abstract double getVariance();
     public abstract double getEffectiveValue();
     public Map<Double, Double> getAmplitudeFromTimeChartData() {
-        return points;
+        return new LinkedHashMap<>(points);
     }
     public abstract Map<Double, Double> getHistogramData();
 }
