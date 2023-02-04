@@ -27,4 +27,12 @@ public abstract class AbstractSignal {
         return new LinkedHashMap<>(points);
     }
     public abstract Map<Double, Double> getHistogramData();
+
+    public double getD() {
+        return d;
+    }
+
+    public double getA() {
+        return A;
+    }
 }

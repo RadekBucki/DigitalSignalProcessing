@@ -20,6 +20,7 @@ import org.jfree.chart.ChartUtilities;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.*;
 import java.util.function.BiConsumer;
@@ -72,11 +73,32 @@ public class SignalTabController implements Initializable {
     }
 
     private void createParametersTextFields(Class<?> classDefinition) {
+        createParametersTextFields(classDefinition, null);
+    }
+
+    private void createParametersTextFields(AbstractSignal signal) {
+        createParametersTextFields(signal.getClass(), signal);
+    }
+    private void createParametersTextFields(Class<?> classDefinition, AbstractSignal signal) {
         List<String> names = FieldReader.getFieldNames(classDefinition);
         parametersGrid.getChildren().clear();
         for (int i = 0; i < names.size(); i++) {
             Group group = new Group();
             TextField textField = createGroupNumericalTextField();
+            if (signal != null) {
+                try {
+                    textField.setText(
+                            String.valueOf(
+                                classDefinition.getMethod(
+                                    "get"
+                                            + names.get(i).substring(0, 1).toUpperCase()
+                                            + names.get(i).substring(1)
+                                ).invoke(signal)
+                            )
+                    );
+                } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ignored) {
+                }
+            }
             Label label = createGroupLabel(FieldMapper.map(names.get(i)), textField);
             group.getChildren().addAll(textField, label);
             parametersGrid.addRow(i, group);
@@ -90,23 +112,7 @@ public class SignalTabController implements Initializable {
                 .toList();
         signal = facade.getSignal(selectedComboBoxKey, values);
 
-        ChartUtilities.saveChartAsPNG(new File("chart.png"),
-                ChartGenerator.generatePlot(signal.getAmplitudeFromTimeChartData(), signal instanceof DiscreteSignal),
-                400, 220);
-        FileInputStream input = new FileInputStream("chart.png");
-        amplitudeTimeChart.setImage(new Image(input));
-
-        createStatistics(Map.of(
-                "Average", signal::getAverage,
-                "Absolute Average", signal::getAbsoluteAverage,
-                "Average Power", signal::getAveragePower,
-                "Variance", signal::getVariance,
-                "Effective value", signal::getEffectiveValue
-        ));
-
-        rightPanel.setVisible(true);
-
-        signalConsumer.accept(tabName, signal);
+        createRightPanel(signal);
     }
 
     private TextField createGroupNumericalTextField() {
@@ -175,6 +181,14 @@ public class SignalTabController implements Initializable {
 
     public void setSignal(AbstractSignal signal) throws IOException {
         this.signal = signal;
+        signalTypes.getSelectionModel().select(ClassTranslator.translatePascalCaseClassToText(signal.getClass()));
+        createParametersTextFields(signal);
+        signalTypes.setDisable(true);
+        parametersGrid.setDisable(true);
+        createRightPanel(signal);
+    }
+
+    private void createRightPanel(AbstractSignal signal) throws IOException {
         ChartUtilities.saveChartAsPNG(
                 new File("chart.png"),
                 ChartGenerator.generatePlot(
@@ -187,13 +201,13 @@ public class SignalTabController implements Initializable {
         FileInputStream input = new FileInputStream("chart.png");
         amplitudeTimeChart.setImage(new Image(input));
 
-//        createStatistics(Map.of(
-//                "Average", signal::getAverage,
-//                "Absolute Average", signal::getAbsoluteAverage,
-//                "Average Power", signal::getAveragePower,
-//                "Variance", signal::getVariance,
-//                "Effective value", signal::getEffectiveValue
-//        ));
+        createStatistics(Map.of(
+                "Average", signal::getAverage,
+                "Absolute Average", signal::getAbsoluteAverage,
+                "Average Power", signal::getAveragePower,
+                "Variance", signal::getVariance,
+                "Effective value", signal::getEffectiveValue
+        ));
 
         rightPanel.setVisible(true);
 

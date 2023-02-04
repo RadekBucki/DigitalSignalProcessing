@@ -69,4 +69,12 @@ public class ContinuousSignal extends AbstractSignal {
     public Map<Double, Double> getHistogramData() {
         return null;
     }
+
+    public double getT1() {
+        return t1;
+    }
+
+    public Double getT2() {
+        return t2;
+    }
 }

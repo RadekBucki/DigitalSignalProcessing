@@ -53,4 +53,16 @@ public class DiscreteSignal extends AbstractSignal {
     public Map<Double, Double> getHistogramData() {
         return null;
     }
+
+    public double getF() {
+        return f;
+    }
+
+    public Integer getN1() {
+        return n1;
+    }
+
+    public Integer getN2() {
+        return n2;
+    }
 }
