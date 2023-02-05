@@ -24,8 +24,9 @@ public class ContinuousNoise extends ContinuousSignal {
 
     @Override
     public double getVariance() {
+        double average = getAverage();
         return (1 / (t2 - t1)) * points.values().stream()
-                .mapToDouble(value -> (value - getAverage()) * (value - getAverage())).sum();
+                .mapToDouble(value -> (value - average) * (value - average)).sum();
     }
 
     @Override
