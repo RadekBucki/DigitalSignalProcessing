@@ -5,8 +5,8 @@ import java.util.Map;
 
 public class DiscreteSignal extends AbstractSignal {
     protected double f;
-    protected int n1;
-    protected int n2;
+    protected Integer n1;
+    protected Integer n2;
 
     public DiscreteSignal(double A, double d, double f) {
         super(A, d);
@@ -58,11 +58,11 @@ public class DiscreteSignal extends AbstractSignal {
         return f;
     }
 
-    public int getN1() {
+    public Integer getN1() {
         return n1;
     }
 
-    public int getN2() {
+    public Integer getN2() {
         return n2;
     }
 }
