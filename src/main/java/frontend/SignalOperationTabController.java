@@ -15,7 +15,6 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
 public class SignalOperationTabController implements Initializable {
-    public static final String RESOURCE = "SignalOperationTab.fxml";
     @FXML
     private Button applyOperationButton;
     @FXML

@@ -201,10 +201,10 @@ package backend {
 
 package frontend {
     class MainApplication {
+    }
+    class MainApplicationController {
         - createSignalTab()
-        - createAddTabButton()
-        - createSignalOperationTab()
-        - createTitleLabel()
+        - createSignalTabFromAbstractSignal()
     }
     class SignalTabController {
         - createGroupLabel()
@@ -249,8 +249,9 @@ package frontend {
         }
     }
     
-    MainApplication o---> SignalTabController
-    MainApplication o--> SignalOperationTabController
+    MainApplicationController o---> SignalTabController
+    MainApplicationController o--> SignalOperationTabController
+    MainApplication o--> MainApplicationController
     
     SignalTabController ..> FileChoose
     SignalTabController ..> ChartGenerator
