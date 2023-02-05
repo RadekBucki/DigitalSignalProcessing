@@ -7,6 +7,8 @@ import frontend.chart.ChartGenerator;
 import frontend.classes.ClassTranslator;
 import frontend.fields.FieldMapper;
 import frontend.fields.FieldReader;
+import frontend.file.FileChoose;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
@@ -33,6 +35,10 @@ public class SignalTabController implements Initializable {
     private final SignalFacade facade = new SignalFacade();
     private AbstractSignal signal;
     private Class<?> selectedComboBoxKey;
+    @FXML
+    public Button load;
+    @FXML
+    public Button save;
     @FXML
     private GridPane parametersGrid;
     @FXML
@@ -115,6 +121,8 @@ public class SignalTabController implements Initializable {
         createRightPanel(signal);
 
         signalConsumer.accept(tabName, signal);
+        save.setDisable(false);
+        load.setDisable(true);
     }
 
     private TextField createGroupNumericalTextField() {
@@ -189,6 +197,8 @@ public class SignalTabController implements Initializable {
         parametersGrid.setDisable(true);
         createRightPanel(signal);
         signalConsumer.accept(tabName, signal);
+        save.setDisable(false);
+        load.setDisable(true);
     }
 
     private void createRightPanel(AbstractSignal signal) throws IOException {
@@ -213,5 +223,28 @@ public class SignalTabController implements Initializable {
         ));
 
         rightPanel.setVisible(true);
+    }
+
+    public void load(ActionEvent actionEvent)
+            throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, IOException {
+        String path = FileChoose.openChooser("Choose file", actionEvent);
+        if (path.isEmpty()) {
+            return;
+        }
+        AbstractSignal signal = facade.readSignal(path);
+        if (signal == null) {
+            return;
+        }
+        setSignal(signal);
+        load.setDisable(true);
+    }
+
+    public void save(ActionEvent actionEvent)
+            throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+        String path = FileChoose.saveChooser("Choose file", actionEvent);
+        if (path.isEmpty()) {
+            return;
+        }
+        facade.writeSignal(signal, path);
     }
 }

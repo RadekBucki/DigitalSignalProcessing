@@ -1,6 +1,6 @@
 package backend.signal;
 
-import org.apache.commons.math3.analysis.integration.SimpsonIntegrator;
+import backend.simpson.SimpsonIntegrator;
 
 import java.util.Collections;
 import java.util.Map;

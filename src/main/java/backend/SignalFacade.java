@@ -1,6 +1,7 @@
 package backend;
 
 import backend.signal.AbstractSignal;
+import backend.signal.serialize.SignalSerializer;
 
 import java.util.List;
 
@@ -32,5 +33,11 @@ public class SignalFacade {
     }
     public List<Class<? extends AbstractSignal>> getPossibleSignals() {
         return signalFactory.getPossibleSignals();
+    }
+    public AbstractSignal readSignal(String filePath) {
+        return SignalSerializer.read(filePath);
+    }
+    public void writeSignal(AbstractSignal signal, String filePath) {
+        SignalSerializer.write(signal, filePath);
     }
 }

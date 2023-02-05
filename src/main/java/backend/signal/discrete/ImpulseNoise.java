@@ -24,4 +24,12 @@ public class ImpulseNoise extends DiscreteSignal {
             }
         }
     }
+
+    public double getT1() {
+        return t1;
+    }
+
+    public double getP() {
+        return p;
+    }
 }
