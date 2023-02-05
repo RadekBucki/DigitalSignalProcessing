@@ -21,4 +21,12 @@ public class RectangularSignal extends ContinuousSignal {
         }
         return 0;
     }
+
+    public double getKw() {
+        return kw;
+    }
+
+    public double getT() {
+        return T;
+    }
 }

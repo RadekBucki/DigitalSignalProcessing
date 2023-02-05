@@ -21,4 +21,8 @@ public class UnitJump extends ContinuousSignal {
         }
         return A / 2;
     }
+
+    public double getTs() {
+        return ts;
+    }
 }

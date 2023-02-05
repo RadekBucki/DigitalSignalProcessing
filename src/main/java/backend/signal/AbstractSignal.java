@@ -1,9 +1,10 @@
 package backend.signal;
 
+import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public abstract class AbstractSignal {
+public abstract class AbstractSignal implements Serializable {
     protected static final double POINTS_DECIMAL_PLACES_DIVISION = 10000;
     protected Map<Double, Double> points = new LinkedHashMap<>();
     protected double d;
@@ -24,7 +25,15 @@ public abstract class AbstractSignal {
     public abstract double getVariance();
     public abstract double getEffectiveValue();
     public Map<Double, Double> getAmplitudeFromTimeChartData() {
-        return points;
+        return new LinkedHashMap<>(points);
     }
     public abstract Map<Double, Double> getHistogramData();
+
+    public double getD() {
+        return d;
+    }
+
+    public double getA() {
+        return A;
+    }
 }

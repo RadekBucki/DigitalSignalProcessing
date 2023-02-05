@@ -15,8 +15,13 @@ public class DiscreteSignal extends AbstractSignal {
 
     public DiscreteSignal(Map<Double, Double> points) {
         super(points);
-        this.n1 = (int) Math.round(Collections.min(points.keySet()));
-        this.n2 = (int) Math.round(Collections.max(points.keySet()));
+        double t1 = Collections.min(points.keySet());
+        double t2 = Collections.max(points.keySet());
+        this.A = Collections.max(points.values());
+        this.d = t2 - t1;
+        this.f = (points.size() - 1) / d;
+        this.n1 = (int) Math.round(f * t1);
+        this.n2 = (int) Math.round(f * t2);
     }
 
     @Override
@@ -47,5 +52,17 @@ public class DiscreteSignal extends AbstractSignal {
     @Override
     public Map<Double, Double> getHistogramData() {
         return null;
+    }
+
+    public double getF() {
+        return f;
+    }
+
+    public Integer getN1() {
+        return n1;
+    }
+
+    public Integer getN2() {
+        return n2;
     }
 }

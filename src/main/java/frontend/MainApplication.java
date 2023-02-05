@@ -1,4 +1,5 @@
 package frontend;
+import backend.signal.AbstractSignal;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -25,6 +26,9 @@ public class MainApplication extends Application{
     public static final String TITLE = "Digital Signal Processing";
     private final TabPane tabPane = new TabPane();
     private SignalOperationTabController signalOperationTabController = null;
+    public static void main(String[] args) {
+        launch();
+    }
     @Override
     public void start(Stage stage) throws IOException {
         tabPane.getTabs().add(createSignalOperationTab());
@@ -88,6 +92,7 @@ public class MainApplication extends Application{
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(SignalOperationTabController.RESOURCE));
         tab.setContent(fxmlLoader.load());
         signalOperationTabController = fxmlLoader.getController();
+        signalOperationTabController.setCreateSignalTab(this::createSignalTabFromAbstractSignal);
         return tab;
     }
 
@@ -96,7 +101,23 @@ public class MainApplication extends Application{
         label.setFont(new Font(24.0));
         return label;
     }
-    public static void main(String[] args) {
-        launch();
+
+    private void createSignalTabFromAbstractSignal(AbstractSignal signal) {
+        try {
+            Tab tab = new Tab();
+            String tabName = "Signal " + (tabPane.getTabs().size() - 1);
+            tab.setText(tabName);
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(SignalTabController.RESOURCE));
+            tab.setClosable(true);
+            tab.setContent(fxmlLoader.load());
+            SignalTabController signalTabController = fxmlLoader.getController();
+            signalTabController.setSignalConsumer(signalOperationTabController::addOrUpdateSignal);
+            signalTabController.setTabName(tabName);
+            signalTabController.setSignal(signal);
+            tabPane.getTabs().add(tabPane.getTabs().size() - 1, tab);
+            tabPane.getSelectionModel().select(tab);
+        } catch (IOException ignored) {
+            // ignored
+        }
     }
 }
