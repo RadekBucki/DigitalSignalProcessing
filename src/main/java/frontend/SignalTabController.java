@@ -85,7 +85,7 @@ public class SignalTabController implements Initializable {
             try {
                 FileInputStream input = new FileInputStream("histogram" + (int) binNumberSlider.getValue() + ".png");
                 histogram.setImage(new Image(input));
-            } catch (FileNotFoundException e) {
+            } catch (FileNotFoundException ignored) {
                 //ignored
             }
         });
