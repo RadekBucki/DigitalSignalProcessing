@@ -113,6 +113,8 @@ public class SignalTabController implements Initializable {
         signal = facade.getSignal(selectedComboBoxKey, values);
 
         createRightPanel(signal);
+
+        signalConsumer.accept(tabName, signal);
     }
 
     private TextField createGroupNumericalTextField() {
@@ -186,6 +188,7 @@ public class SignalTabController implements Initializable {
         signalTypes.setDisable(true);
         parametersGrid.setDisable(true);
         createRightPanel(signal);
+        signalConsumer.accept(tabName, signal);
     }
 
     private void createRightPanel(AbstractSignal signal) throws IOException {
@@ -210,7 +213,5 @@ public class SignalTabController implements Initializable {
         ));
 
         rightPanel.setVisible(true);
-
-        signalConsumer.accept(tabName, signal);
     }
 }
