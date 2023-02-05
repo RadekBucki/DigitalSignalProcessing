@@ -50,11 +50,6 @@ public class DiscreteSignal extends AbstractSignal {
         return Math.sqrt((1.0 / (n2 - n1 + 1)) * points.values().stream().mapToDouble(v -> v * v).sum());
     }
 
-    @Override
-    public Map<Double, Double> getHistogramData() {
-        return null;
-    }
-
     public double getF() {
         return f;
     }

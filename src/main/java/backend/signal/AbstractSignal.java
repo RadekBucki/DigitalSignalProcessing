@@ -24,10 +24,9 @@ public abstract class AbstractSignal implements Serializable {
     public abstract double getAveragePower();
     public abstract double getVariance();
     public abstract double getEffectiveValue();
-    public Map<Double, Double> getAmplitudeFromTimeChartData() {
+    public Map<Double, Double> getPoints() {
         return new LinkedHashMap<>(points);
     }
-    public abstract Map<Double, Double> getHistogramData();
 
     public double getD() {
         return d;

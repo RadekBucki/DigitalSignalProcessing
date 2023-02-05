@@ -30,7 +30,7 @@ package backend {
             + {abstract} getEffectiveValue()
             + {abstract} getVariance()
             + {abstract} getMeanSpeed()
-            + getAmplitudeFromTimeChartData()
+            + getPoints()
             + getHistogramData()
             + getD()
             + getA()
@@ -46,8 +46,6 @@ package backend {
             + getAveragePower()
             + getVariance()
             + getEffectiveValue()
-            + getAmplitudeFromTimeChartData()
-            + getHistogramData()
             + getT1()
             + getT2()
         }
@@ -60,8 +58,6 @@ package backend {
             + getAveragePower()
             + getVariance()
             + getEffectiveValue()
-            + getAmplitudeFromTimeChartData()
-            + getHistogramData()
             + getN1()
             + getN2()
         }
@@ -229,12 +225,11 @@ package frontend {
     }
     package chart {
         class ChartGenerator {
-            + {static} generatePlot()
+            + {static} generateAmplitudeTimeChart()
+            + {static} generateHistogram()
             - {static} formatAxis()
             - {static} changeVisibility()
         }
-        class AmplitudeFromTimeChartGenerator
-        class HistogramChartGenerator
     }
     package classes {
         class ClassTranslator {
@@ -258,9 +253,6 @@ package frontend {
     SignalTabController ..> ClassTranslator
     SignalTabController ..> FieldMapper
     SignalTabController ..> FieldReader
-    
-    ChartGenerator <|-- AmplitudeFromTimeChartGenerator
-    ChartGenerator <|-- HistogramChartGenerator
 }
 SignalTabController ....> SignalFacade
 SignalOperationTabController ....> SignalFacade

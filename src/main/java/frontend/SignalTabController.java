@@ -8,6 +8,8 @@ import frontend.classes.ClassTranslator;
 import frontend.fields.FieldMapper;
 import frontend.fields.FieldReader;
 import frontend.file.FileChoose;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -21,6 +23,7 @@ import org.jfree.chart.ChartUtilities;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
@@ -50,7 +53,9 @@ public class SignalTabController implements Initializable {
     @FXML
     private ImageView amplitudeTimeChart;
     @FXML
-    private ImageView histogram; // TODO: Create histogram
+    private ImageView histogram;
+    @FXML
+    private Slider binNumberSlider;
     @FXML
     public GridPane statisticsGrid;
     private BiConsumer<String, AbstractSignal> signalConsumer = null;
@@ -76,6 +81,14 @@ public class SignalTabController implements Initializable {
             selectedComboBoxKey = selectedKey;
         });
         statisticsGrid.getChildren().clear();
+        binNumberSlider.valueProperty().addListener((observableValue, oldValue, newValue) -> {
+            try {
+                FileInputStream input = new FileInputStream("histogram" + (int) binNumberSlider.getValue() + ".png");
+                histogram.setImage(new Image(input));
+            } catch (FileNotFoundException ignored) {
+                //ignored
+            }
+        });
     }
 
     private void createParametersTextFields(Class<?> classDefinition) {
@@ -204,8 +217,8 @@ public class SignalTabController implements Initializable {
     private void createRightPanel(AbstractSignal signal) throws IOException {
         ChartUtilities.saveChartAsPNG(
                 new File("chart.png"),
-                ChartGenerator.generatePlot(
-                        signal.getAmplitudeFromTimeChartData(),
+                ChartGenerator.generateAmplitudeTimeChart(
+                        signal.getPoints(),
                         signal instanceof DiscreteSignal
                 ),
                 400,
@@ -213,6 +226,19 @@ public class SignalTabController implements Initializable {
         );
         FileInputStream input = new FileInputStream("chart.png");
         amplitudeTimeChart.setImage(new Image(input));
+
+        for (int i = 5; i <= 20; i++) {
+            ChartUtilities.saveChartAsPNG(
+                    new File("histogram" + i + ".png"),
+                    ChartGenerator.generateHistogram(
+                            signal.getPoints(), i
+                    ),
+                    400,
+                    220
+            );
+        }
+        input = new FileInputStream("histogram" + (int) binNumberSlider.getValue() + ".png");
+        histogram.setImage(new Image(input));
 
         createStatistics(Map.of(
                 "Average", signal::getAverage,

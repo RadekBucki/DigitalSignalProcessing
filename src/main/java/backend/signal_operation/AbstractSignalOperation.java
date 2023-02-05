@@ -17,8 +17,8 @@ public abstract class AbstractSignalOperation {
 
     public AbstractSignal execute(AbstractSignal signal1, AbstractSignal signal2) {
         LinkedHashMap<Double, Double> resultPoints = new LinkedHashMap<>();
-        Iterator<Map.Entry<Double, Double>> signal1Iterator = signal1.getAmplitudeFromTimeChartData().entrySet().iterator();
-        Map<Double, Double> signal2Points = signal2.getAmplitudeFromTimeChartData();
+        Iterator<Map.Entry<Double, Double>> signal1Iterator = signal1.getPoints().entrySet().iterator();
+        Map<Double, Double> signal2Points = signal2.getPoints();
         while (signal1Iterator.hasNext()) {
             Map.Entry<Double, Double> signal1Entry = signal1Iterator.next();
             Double signal1EntryKey = signal1Entry.getKey();

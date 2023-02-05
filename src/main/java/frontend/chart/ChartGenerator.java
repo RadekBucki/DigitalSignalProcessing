@@ -2,14 +2,18 @@ package frontend.chart;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.ValueMarker;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+import org.jfree.data.statistics.HistogramDataset;
+import org.jfree.data.statistics.HistogramType;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 import java.awt.*;
+import java.text.NumberFormat;
 import java.util.Map;
 import java.util.Optional;
 
@@ -17,9 +21,9 @@ public class ChartGenerator {
     private ChartGenerator() {
     }
 
-    public static JFreeChart generatePlot(Map<Double, Double> points, boolean isDiscrete) {
+    public static JFreeChart generateAmplitudeTimeChart(Map<Double, Double> points, boolean isDiscrete) {
         XYSeries errorFunctionSeries = new XYSeries("Amplitude / time function");
-        for (Map.Entry<Double,Double> entry : points.entrySet()) {
+        for (Map.Entry<Double, Double> entry : points.entrySet()) {
             errorFunctionSeries.add(entry.getKey(), entry.getValue());
         }
 
@@ -58,6 +62,23 @@ public class ChartGenerator {
         plot.setRenderer(renderer);
 
         return chart;
+    }
+
+    public static JFreeChart generateHistogram(Map<Double, Double> points, int binsNumber) {
+
+        double[] values = points.values().stream().mapToDouble(Double::doubleValue).toArray();
+
+        HistogramDataset dataset = new HistogramDataset();
+        dataset.addSeries("key", values, binsNumber);
+        dataset.setType(HistogramType.RELATIVE_FREQUENCY);
+
+        JFreeChart histogram = ChartFactory.createHistogram("Histogram", "Value",
+                "Frequency", dataset, PlotOrientation.VERTICAL, false, false, false);
+
+        NumberAxis axis = (NumberAxis) histogram.getXYPlot().getRangeAxis();
+        axis.setNumberFormatOverride(NumberFormat.getPercentInstance());
+
+        return histogram;
     }
 
     private static void formatAxis(XYLineAndShapeRenderer renderer, int series) {

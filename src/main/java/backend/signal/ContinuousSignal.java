@@ -66,11 +66,6 @@ public class ContinuousSignal extends AbstractSignal {
                 x -> calculatePointValue(x) * calculatePointValue(x), t1, t2));
     }
 
-    @Override
-    public Map<Double, Double> getHistogramData() {
-        return null;
-    }
-
     public double getT1() {
         return t1;
     }
