@@ -62,19 +62,14 @@ public class SignalTabController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         createParametersTextFields(facade.getDefaultSignal());
-        Map<Class<?>, String> signals = facade.getPossibleSignals().stream().collect(
-                Collectors.toMap(key -> key, ClassTranslator::translatePascalCaseClassToText)
+        Map<String, Class<?>> signals = facade.getPossibleSignals().stream().collect(
+                Collectors.toMap(ClassTranslator::translatePascalCaseClassToText, value -> value)
         );
-        signalTypes.getItems().addAll(signals.values());
+        signalTypes.getItems().addAll(signals.keySet());
         signalTypes.setOnAction(event -> {
             generateButton.setDisable(true);
             signal = null;
-            Class<?> selectedKey = signals.entrySet()
-                    .stream()
-                    .filter(entry -> entry.getValue().equals(signalTypes.getValue()))
-                    .map(Map.Entry::getKey)
-                    .findFirst()
-                    .orElse(null);
+            Class<?> selectedKey = signals.get(signalTypes.getValue());
             createParametersTextFields(selectedKey);
             selectedComboBoxKey = selectedKey;
         });
