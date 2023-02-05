@@ -211,6 +211,10 @@ package frontend {
         - shouldGenerateButtonBeDisabled()
         - parametersTextFields()
         + createSignalInstance()
+        + saveSignal()
+        + loadSignal()
+        + setSignal()
+        + onUpdateComboBox()
     }
     class SignalOperationTabController {
         + addOrUpdateSignal()

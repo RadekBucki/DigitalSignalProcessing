@@ -8,8 +8,6 @@ import frontend.classes.ClassTranslator;
 import frontend.fields.FieldMapper;
 import frontend.fields.FieldReader;
 import frontend.file.FileChoose;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -83,7 +81,7 @@ public class SignalTabController implements Initializable {
         statisticsGrid.getChildren().clear();
         binNumberSlider.valueProperty().addListener((observableValue, oldValue, newValue) -> {
             try {
-                FileInputStream input = new FileInputStream("histogram" + (int) binNumberSlider.getValue() + ".png");
+                FileInputStream input = new FileInputStream(getHistogramFileName((int) binNumberSlider.getValue()));
                 histogram.setImage(new Image(input));
             } catch (FileNotFoundException ignored) {
                 //ignored
@@ -116,6 +114,7 @@ public class SignalTabController implements Initializable {
                             )
                     );
                 } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException ignored) {
+                    //ignored
                 }
             }
             Label label = createGroupLabel(FieldMapper.map(names.get(i)), textField);
@@ -229,7 +228,7 @@ public class SignalTabController implements Initializable {
 
         for (int i = 5; i <= 20; i++) {
             ChartUtilities.saveChartAsPNG(
-                    new File("histogram" + i + ".png"),
+                    new File(getHistogramFileName(i)),
                     ChartGenerator.generateHistogram(
                             signal.getPoints(), i
                     ),
@@ -237,7 +236,7 @@ public class SignalTabController implements Initializable {
                     220
             );
         }
-        input = new FileInputStream("histogram" + (int) binNumberSlider.getValue() + ".png");
+        input = new FileInputStream(getHistogramFileName((int) binNumberSlider.getValue()));
         histogram.setImage(new Image(input));
 
         createStatistics(Map.of(
@@ -251,26 +250,30 @@ public class SignalTabController implements Initializable {
         rightPanel.setVisible(true);
     }
 
-    public void load(ActionEvent actionEvent)
+    public void loadSignal(ActionEvent actionEvent)
             throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, IOException {
         String path = FileChoose.openChooser("Choose file", actionEvent);
         if (path.isEmpty()) {
             return;
         }
-        AbstractSignal signal = facade.readSignal(path);
-        if (signal == null) {
+        AbstractSignal loadedSignal = facade.readSignal(path);
+        if (loadedSignal == null) {
             return;
         }
-        setSignal(signal);
+        setSignal(loadedSignal);
         load.setDisable(true);
     }
 
-    public void save(ActionEvent actionEvent)
+    public void saveSignal(ActionEvent actionEvent)
             throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         String path = FileChoose.saveChooser("Choose file", actionEvent);
         if (path.isEmpty()) {
             return;
         }
         facade.writeSignal(signal, path);
+    }
+
+    private String getHistogramFileName(int number) {
+        return "histogram" + number + ".png";
     }
 }

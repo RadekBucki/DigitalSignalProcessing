@@ -1,12 +1,12 @@
 package backend.signal;
 
-import backend.simpson.SimpsonIntegrator;
+import backend.simpson.DSPSimpsonIntegrator;
 
 import java.util.Collections;
 import java.util.Map;
 
 public class ContinuousSignal extends AbstractSignal {
-    private final SimpsonIntegrator si = new SimpsonIntegrator();
+    private final DSPSimpsonIntegrator si = new DSPSimpsonIntegrator();
     protected double t1;
     protected Double t2;
 
@@ -44,7 +44,7 @@ public class ContinuousSignal extends AbstractSignal {
 
     @Override
     public double getAbsoluteAverage() {
-        return (1 / (t2 - t1)) * si.integrate(Integer.MAX_VALUE, (x) -> Math.abs(calculatePointValue(x)), t1, t2);
+        return (1 / (t2 - t1)) * si.integrate(Integer.MAX_VALUE, x -> Math.abs(calculatePointValue(x)), t1, t2);
     }
 
     @Override

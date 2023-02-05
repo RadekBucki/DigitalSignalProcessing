@@ -20,9 +20,9 @@
 <Pane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity"
       prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="frontend.SignalTabController">
-    <Button fx:id="load" layoutX="10" layoutY="10" mnemonicParsing="false" onAction="#load" text="Load"
+    <Button fx:id="load" layoutX="10" layoutY="10" mnemonicParsing="false" onAction="#loadSignal" text="Load"
             textAlignment="CENTER"/>
-    <Button fx:id="save" disable="true" layoutX="60" layoutY="10" mnemonicParsing="false" onAction="#save" text="Save"
+    <Button fx:id="save" disable="true" layoutX="60" layoutY="10" mnemonicParsing="false" onAction="#saveSignal" text="Save"
             textAlignment="CENTER"/>
     <ComboBox fx:id="signalTypes" layoutX="90.0" layoutY="40" prefHeight="25.0" prefWidth="440.0"
               promptText="Choose signal type"/>
@@ -55,13 +55,11 @@
         <ImageView fx:id="amplitudeTimeChart" fitHeight="220.0" fitWidth="400.0" pickOnBounds="true"
                    preserveRatio="true"/>
         <HBox prefHeight="100.0" prefWidth="200.0">
-            <children>
-                <ImageView fx:id="histogram" fitHeight="220.0" fitWidth="400.0" pickOnBounds="true"
-                           preserveRatio="true"/>
-                <Slider fx:id="binNumberSlider" majorTickUnit="5.0" max="20.0" min="5.0" minorTickCount="1"
-                        orientation="VERTICAL" prefHeight="190.0" prefWidth="14.0" showTickLabels="true"
-                        showTickMarks="true" value="10.0"/>
-            </children>
+            <ImageView fx:id="histogram" fitHeight="220.0" fitWidth="400.0" pickOnBounds="true"
+                       preserveRatio="true"/>
+            <Slider fx:id="binNumberSlider" majorTickUnit="5.0" max="20.0" min="5.0" minorTickCount="1"
+                    orientation="VERTICAL" prefHeight="190.0" prefWidth="14.0" showTickLabels="true"
+                    showTickMarks="true" value="10.0"/>
         </HBox>
         <Label layoutX="10.0" layoutY="14.0" style="-fx-font-size: 20pt;" text="Statistics"/>
         <GridPane fx:id="statisticsGrid" layoutX="540.0" layoutY="470.0" prefHeight="30.0" prefWidth="450.0">
