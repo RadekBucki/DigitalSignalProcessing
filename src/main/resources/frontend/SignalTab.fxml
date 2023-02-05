@@ -11,6 +11,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
@@ -53,7 +54,15 @@
         <Label layoutX="10.0" layoutY="14.0" style="-fx-font-size: 20pt;" text="Charts"/>
         <ImageView fx:id="amplitudeTimeChart" fitHeight="220.0" fitWidth="400.0" pickOnBounds="true"
                    preserveRatio="true"/>
-        <ImageView fx:id="histogram" fitHeight="220.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true"/>
+        <HBox prefHeight="100.0" prefWidth="200.0">
+            <children>
+                <ImageView fx:id="histogram" fitHeight="220.0" fitWidth="400.0" pickOnBounds="true"
+                           preserveRatio="true"/>
+                <Slider fx:id="binNumberSlider" majorTickUnit="5.0" max="20.0" min="5.0" minorTickCount="1"
+                        orientation="VERTICAL" prefHeight="190.0" prefWidth="14.0" showTickLabels="true"
+                        showTickMarks="true" value="10.0" visible="false"/>
+            </children>
+        </HBox>
         <Label layoutX="10.0" layoutY="14.0" style="-fx-font-size: 20pt;" text="Statistics"/>
         <GridPane fx:id="statisticsGrid" layoutX="540.0" layoutY="470.0" prefHeight="30.0" prefWidth="450.0">
             <columnConstraints>
@@ -68,7 +77,4 @@
             </Group>
         </GridPane>
     </VBox>
-    <Slider fx:id="binNumberSlider" layoutX="956.0" layoutY="275.0" majorTickUnit="5.0" max="20.0" min="5.0"
-            minorTickCount="1" orientation="VERTICAL" prefHeight="190.0" prefWidth="14.0" showTickLabels="true"
-            showTickMarks="true" value="10.0" visible="false"/>
 </Pane>

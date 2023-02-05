@@ -225,7 +225,8 @@ package frontend {
     }
     package chart {
         class ChartGenerator {
-            + {static} generatePlot()
+            + {static} generateAmplitudeTimeChart()
+            + {static} generateHistogram()
             - {static} formatAxis()
             - {static} changeVisibility()
         }

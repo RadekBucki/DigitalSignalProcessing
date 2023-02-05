@@ -126,7 +126,6 @@ public class SignalTabController implements Initializable {
 
     public void createSignalInstance() throws IOException {
         rightPanel.setVisible(false);
-        binNumberSlider.setVisible(false);
         List<Double> values = getParamsTextFieldsStream()
                 .map(textField -> Double.parseDouble(textField.getText()))
                 .toList();
@@ -250,7 +249,6 @@ public class SignalTabController implements Initializable {
         ));
 
         rightPanel.setVisible(true);
-        binNumberSlider.setVisible(true);
     }
 
     public void load(ActionEvent actionEvent)
