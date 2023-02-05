@@ -50,23 +50,31 @@ public class ContinuousSignal extends AbstractSignal {
     @Override
     public double getAveragePower() {
         return (1 / (t2 - t1)) * si.integrate(Integer.MAX_VALUE,
-                (x) -> calculatePointValue(x) * calculatePointValue(x), t1, t2);
+                x -> calculatePointValue(x) * calculatePointValue(x), t1, t2);
     }
 
     @Override
     public double getVariance() {
         return (1 / (t2 - t1)) * si.integrate(Integer.MAX_VALUE,
-                (x) -> (calculatePointValue(x) - getAverage()) * (calculatePointValue(x) - getAverage()), t1, t2);
+                x -> (calculatePointValue(x) - getAverage()) * (calculatePointValue(x) - getAverage()), t1, t2);
     }
 
     @Override
     public double getEffectiveValue() {
         return Math.sqrt((1 / (t2 - t1)) * si.integrate(Integer.MAX_VALUE,
-                (x) -> calculatePointValue(x) * calculatePointValue(x), t1, t2));
+                x -> calculatePointValue(x) * calculatePointValue(x), t1, t2));
     }
 
     @Override
     public Map<Double, Double> getHistogramData() {
         return null;
+    }
+
+    public double getT1() {
+        return t1;
+    }
+
+    public Double getT2() {
+        return t2;
     }
 }

@@ -24,6 +24,7 @@ package backend {
         abstract class AbstractSignal {
             # points: double[][]
             # A: double
+            # d: double
             + {abstract} getAverage()
             + {abstract} getAbsoluteAverage()
             + {abstract} getEffectiveValue()
@@ -31,11 +32,13 @@ package backend {
             + {abstract} getMeanSpeed()
             + getAmplitudeFromTimeChartData()
             + getHistogramData()
+            + getD()
+            + getA()
         }
         
         class ContinuousSignal {
             # t1: double
-            # d: double
+            # t2: double
             + {abstract} calculatePointValue()
             + calculateAllPoints()
             + getAverage()
@@ -45,9 +48,13 @@ package backend {
             + getEffectiveValue()
             + getAmplitudeFromTimeChartData()
             + getHistogramData()
+            + getT1()
+            + getT2()
         }
         class DiscreteSignal {
             # f: double
+            # n1: int
+            # n2: int
             + getAverage()
             + getAbsoluteAverage()
             + getAveragePower()
@@ -55,6 +62,8 @@ package backend {
             + getEffectiveValue()
             + getAmplitudeFromTimeChartData()
             + getHistogramData()
+            + getN1()
+            + getN2()
         }
         
         AbstractSignal <|-- ContinuousSignal
@@ -114,7 +123,6 @@ package backend {
             }
             class ImpulseNoise {
                 # t1: double
-                # d: double
                 # p: double
             }
         }
