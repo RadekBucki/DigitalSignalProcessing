@@ -2,15 +2,18 @@ package frontend.chart;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.ValueMarker;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.statistics.HistogramDataset;
+import org.jfree.data.statistics.HistogramType;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 import java.awt.*;
+import java.text.NumberFormat;
 import java.util.Map;
 import java.util.Optional;
 
@@ -67,9 +70,15 @@ public class ChartGenerator {
 
         HistogramDataset dataset = new HistogramDataset();
         dataset.addSeries("key", values, binsNumber);
+        dataset.setType(HistogramType.RELATIVE_FREQUENCY);
 
-        return ChartFactory.createHistogram("JFreeChart Histogram", "Data",
+        JFreeChart histogram = ChartFactory.createHistogram("Histogram", "Value",
                 "Frequency", dataset, PlotOrientation.VERTICAL, false, false, false);
+
+        NumberAxis axis = (NumberAxis) histogram.getXYPlot().getRangeAxis();
+        axis.setNumberFormatOverride(NumberFormat.getPercentInstance());
+
+        return histogram;
     }
 
     private static void formatAxis(XYLineAndShapeRenderer renderer, int series) {
