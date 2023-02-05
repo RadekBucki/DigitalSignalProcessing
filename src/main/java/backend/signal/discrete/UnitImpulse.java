@@ -19,4 +19,8 @@ public class UnitImpulse extends DiscreteSignal {
             }
         }
     }
+
+    public int getNs() {
+        return ns;
+    }
 }

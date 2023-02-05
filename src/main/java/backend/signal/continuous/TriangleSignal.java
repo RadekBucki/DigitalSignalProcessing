@@ -21,4 +21,12 @@ public class TriangleSignal extends ContinuousSignal {
         }
         return ((-A / (T * (1 - kw))) * (x - k * T - t1)) + (A / (1 - kw));
     }
+
+    public double getKw() {
+        return kw;
+    }
+
+    public double getT() {
+        return T;
+    }
 }

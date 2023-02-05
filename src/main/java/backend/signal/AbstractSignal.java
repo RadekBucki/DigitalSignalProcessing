@@ -1,9 +1,10 @@
 package backend.signal;
 
+import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public abstract class AbstractSignal {
+public abstract class AbstractSignal implements Serializable {
     protected static final double POINTS_DECIMAL_PLACES_DIVISION = 10000;
     protected Map<Double, Double> points = new LinkedHashMap<>();
     protected double d;

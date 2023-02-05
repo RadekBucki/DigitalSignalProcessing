@@ -15,4 +15,8 @@ public class SinusoidalSignal extends ContinuousSignal {
     public double calculatePointValue(double x) {
         return A * Math.sin(2 * Math.PI * (x - t1) / T);
     }
+
+    public double getT() {
+        return T;
+    }
 }

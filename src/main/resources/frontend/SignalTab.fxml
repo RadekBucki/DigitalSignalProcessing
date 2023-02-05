@@ -8,10 +8,14 @@
 <Pane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity"
       prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="frontend.SignalTabController">
-    <ComboBox fx:id="signalTypes" layoutX="90.0" layoutY="10.0" prefHeight="25.0" prefWidth="440.0"
+    <Button fx:id="load" mnemonicParsing="false" onAction="#load" text="Load" textAlignment="CENTER"
+        layoutX="10" layoutY="10"/>
+    <Button fx:id="save" mnemonicParsing="false" onAction="#save" text="Save" textAlignment="CENTER" disable="true"
+        layoutX="60" layoutY="10"/>
+    <ComboBox fx:id="signalTypes" layoutX="90.0" layoutY="40" prefHeight="25.0" prefWidth="440.0"
               promptText="Choose signal type"/>
-    <Label layoutX="10.0" layoutY="14.0" text="Signal type"/>
-    <TitledPane animated="false" layoutX="10.0" layoutY="46.0" maxWidth="520.0" minWidth="520.0" prefWidth="520.0"
+    <Label layoutX="10.0" layoutY="44.0" text="Signal type"/>
+    <TitledPane animated="false" layoutX="10.0" layoutY="76.0" maxWidth="520.0" minWidth="520.0" prefWidth="520.0"
                 text="Parameters">
         <AnchorPane maxWidth="520.0" minWidth="520.0" prefWidth="520.0">
             <VBox prefWidth="520.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0"
