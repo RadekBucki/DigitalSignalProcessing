@@ -30,7 +30,7 @@ package backend {
             + {abstract} getEffectiveValue()
             + {abstract} getVariance()
             + {abstract} getMeanSpeed()
-            + getAmplitudeFromTimeChartData()
+            + getPoints()
             + getHistogramData()
             + getD()
             + getA()
@@ -46,8 +46,6 @@ package backend {
             + getAveragePower()
             + getVariance()
             + getEffectiveValue()
-            + getAmplitudeFromTimeChartData()
-            + getHistogramData()
             + getT1()
             + getT2()
         }
@@ -60,8 +58,6 @@ package backend {
             + getAveragePower()
             + getVariance()
             + getEffectiveValue()
-            + getAmplitudeFromTimeChartData()
-            + getHistogramData()
             + getN1()
             + getN2()
         }

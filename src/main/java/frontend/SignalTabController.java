@@ -50,7 +50,7 @@ public class SignalTabController implements Initializable {
     @FXML
     private ImageView amplitudeTimeChart;
     @FXML
-    private ImageView histogram; // TODO: Create histogram
+    private ImageView histogram;
     @FXML
     public GridPane statisticsGrid;
     private BiConsumer<String, AbstractSignal> signalConsumer = null;
@@ -204,8 +204,8 @@ public class SignalTabController implements Initializable {
     private void createRightPanel(AbstractSignal signal) throws IOException {
         ChartUtilities.saveChartAsPNG(
                 new File("chart.png"),
-                ChartGenerator.generatePlot(
-                        signal.getAmplitudeFromTimeChartData(),
+                ChartGenerator.generateAmplitudeTimeChart(
+                        signal.getPoints(),
                         signal instanceof DiscreteSignal
                 ),
                 400,
@@ -213,6 +213,18 @@ public class SignalTabController implements Initializable {
         );
         FileInputStream input = new FileInputStream("chart.png");
         amplitudeTimeChart.setImage(new Image(input));
+
+        ChartUtilities.saveChartAsPNG(
+                new File("histogram.png"),
+                ChartGenerator.generateHistogram(
+                        signal.getPoints(),
+                        20
+                ),
+                400,
+                220
+        );
+        FileInputStream input2 = new FileInputStream("histogram.png");
+        histogram.setImage(new Image(input2));
 
         createStatistics(Map.of(
                 "Average", signal::getAverage,
