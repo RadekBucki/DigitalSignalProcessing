@@ -152,6 +152,8 @@ package backend {
         + getSignal(Class,Double[]): AbstractSignal
         + getDefaultSignal(): AbstractSignal
         + getPossibleSignals(): AbstractSignal[]
+        + writeSignal(AbstractSignal, String)
+        + readSignal(String): AbstractSignal
     }
     
     class SignalOperationFactory {
@@ -191,6 +193,14 @@ package backend {
     AbstractSignalOperation ---> SignalFactory
     
     SignalOperationFactory ..> AbstractSignalOperation
+    
+    package serialize {
+        class SignalSerializer {
+            + {static} write(AbstractSignal, String)
+            + {static} read(String): AbstractSignal
+        }
+    }
+    SignalFacade ...> SignalSerializer
 }
 
 package frontend {
