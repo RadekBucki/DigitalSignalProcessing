@@ -8,6 +8,8 @@ import frontend.classes.ClassTranslator;
 import frontend.fields.FieldMapper;
 import frontend.fields.FieldReader;
 import frontend.file.FileChoose;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -21,6 +23,7 @@ import org.jfree.chart.ChartUtilities;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
@@ -52,6 +55,8 @@ public class SignalTabController implements Initializable {
     @FXML
     private ImageView histogram;
     @FXML
+    private Slider binNumberSlider;
+    @FXML
     public GridPane statisticsGrid;
     private BiConsumer<String, AbstractSignal> signalConsumer = null;
     private String tabName;
@@ -76,6 +81,14 @@ public class SignalTabController implements Initializable {
             selectedComboBoxKey = selectedKey;
         });
         statisticsGrid.getChildren().clear();
+        binNumberSlider.valueProperty().addListener((observableValue, oldValue, newValue) -> {
+            try {
+                FileInputStream input = new FileInputStream("histogram" + (int) binNumberSlider.getValue() + ".png");
+                histogram.setImage(new Image(input));
+            } catch (FileNotFoundException e) {
+                //ignored
+            }
+        });
     }
 
     private void createParametersTextFields(Class<?> classDefinition) {
@@ -113,6 +126,7 @@ public class SignalTabController implements Initializable {
 
     public void createSignalInstance() throws IOException {
         rightPanel.setVisible(false);
+        binNumberSlider.setVisible(false);
         List<Double> values = getParamsTextFieldsStream()
                 .map(textField -> Double.parseDouble(textField.getText()))
                 .toList();
@@ -214,17 +228,18 @@ public class SignalTabController implements Initializable {
         FileInputStream input = new FileInputStream("chart.png");
         amplitudeTimeChart.setImage(new Image(input));
 
-        ChartUtilities.saveChartAsPNG(
-                new File("histogram.png"),
-                ChartGenerator.generateHistogram(
-                        signal.getPoints(),
-                        20
-                ),
-                400,
-                220
-        );
-        FileInputStream input2 = new FileInputStream("histogram.png");
-        histogram.setImage(new Image(input2));
+        for (int i = 5; i <= 20; i++) {
+            ChartUtilities.saveChartAsPNG(
+                    new File("histogram" + i + ".png"),
+                    ChartGenerator.generateHistogram(
+                            signal.getPoints(), i
+                    ),
+                    400,
+                    220
+            );
+        }
+        input = new FileInputStream("histogram" + (int) binNumberSlider.getValue() + ".png");
+        histogram.setImage(new Image(input));
 
         createStatistics(Map.of(
                 "Average", signal::getAverage,
@@ -235,6 +250,7 @@ public class SignalTabController implements Initializable {
         ));
 
         rightPanel.setVisible(true);
+        binNumberSlider.setVisible(true);
     }
 
     public void load(ActionEvent actionEvent)
