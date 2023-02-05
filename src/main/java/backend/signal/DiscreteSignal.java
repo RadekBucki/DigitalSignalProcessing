@@ -41,7 +41,8 @@ public class DiscreteSignal extends AbstractSignal {
 
     @Override
     public double getVariance() {
-        return (1.0 / (n2 - n1 + 1)) * points.values().stream().mapToDouble(v -> (v - getAverage()) * (v - getAverage())).sum();
+        double average = getAverage();
+        return (1.0 / (n2 - n1 + 1)) * points.values().stream().mapToDouble(v -> (v - average) * (v - average)).sum();
     }
 
     @Override
