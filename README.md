@@ -230,8 +230,6 @@ package frontend {
             - {static} formatAxis()
             - {static} changeVisibility()
         }
-        class AmplitudeFromTimeChartGenerator
-        class HistogramChartGenerator
     }
     package classes {
         class ClassTranslator {
@@ -255,9 +253,6 @@ package frontend {
     SignalTabController ..> ClassTranslator
     SignalTabController ..> FieldMapper
     SignalTabController ..> FieldReader
-    
-    ChartGenerator <|-- AmplitudeFromTimeChartGenerator
-    ChartGenerator <|-- HistogramChartGenerator
 }
 SignalTabController ....> SignalFacade
 SignalOperationTabController ....> SignalFacade
