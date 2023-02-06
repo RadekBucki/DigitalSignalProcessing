@@ -12,8 +12,11 @@ public class FirstOrderHold implements ReconstructMethod {
                 .filter(x -> x.getKey() < (time + 1/frequency))
                 .filter(x -> x.getKey() > (time - 1/frequency))
                 .toList();
-        return nearestSamples.get(0).getValue() * Math.abs(time - nearestSamples.get(1).getKey()) +
-                nearestSamples.get(1).getValue() * Math.abs(time - nearestSamples.get(0).getKey()) /
-                        (nearestSamples.get(0).getKey() - nearestSamples.get(1).getKey());
+        if (nearestSamples.size() == 1 || nearestSamples.size() == 3) {
+            return nearestSamples.get(0).getValue();
+        }
+        return (nearestSamples.get(0).getValue() * Math.abs(time - nearestSamples.get(1).getKey()) +
+                nearestSamples.get(1).getValue() * Math.abs(time - nearestSamples.get(0).getKey())) /
+                        Math.abs(nearestSamples.get(0).getKey() - nearestSamples.get(1).getKey());
     }
 }

@@ -3,7 +3,6 @@ package frontend;
 import backend.SignalFacade;
 import backend.signal.AbstractSignal;
 import backend.signal.DiscreteSignal;
-import backend.signal_operation.signal_reconstruction.FirstOrderHold;
 import frontend.chart.ChartGenerator;
 import frontend.classes.ClassTranslator;
 import frontend.fields.FieldMapper;
@@ -131,10 +130,6 @@ public class SignalTabController implements Initializable {
         signalConsumer.accept(tabName, signal);
         save.setDisable(false);
         load.setDisable(true);
-
-        FirstOrderHold firstOrderHold = new FirstOrderHold();
-        firstOrderHold.reconstruct((DiscreteSignal) signal, 4.5 ,1);
-        firstOrderHold.reconstruct((DiscreteSignal) signal, 4.25 ,1);
     }
 
     private TextField createGroupNumericalTextField() {

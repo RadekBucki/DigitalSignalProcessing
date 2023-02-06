@@ -12,6 +12,7 @@ import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 
 public class Dac {
+    protected static final double POINTS_DECIMAL_PLACES_DIVISION = 10000;
     private final ReconstructMethodFactory reconstructMethodFactory;
     private final SignalFactory signalFactory;
 
@@ -37,8 +38,9 @@ public class Dac {
         double t1 = discreteSignal.getN1() / discreteSignal.getF();
         double t2 = discreteSignal.getN2() / discreteSignal.getF();
         Map<Double, Double> points = new LinkedHashMap<>();
-        for (double i = t1; i <= t2; i+= (1 / f) / 100) {
-            points.put(i, reconstructMethod.reconstruct(discreteSignal, i, f));
+        for (double i = t1; i <= t2; i += 1.0 / POINTS_DECIMAL_PLACES_DIVISION) {
+            double iRounded = Math.round(i * POINTS_DECIMAL_PLACES_DIVISION) / POINTS_DECIMAL_PLACES_DIVISION;
+            points.put(iRounded, reconstructMethod.reconstruct(discreteSignal, iRounded, f));
         }
         return (ContinuousSignal) signalFactory.createContinuousSignal(points);
     }
