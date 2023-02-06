@@ -4,12 +4,10 @@ import backend.SignalFacade;
 import backend.signal.AbstractSignal;
 import backend.signal.ContinuousSignal;
 import backend.signal.DiscreteSignal;
+import frontend.alert.AlertBox;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 
 import java.net.URL;
@@ -18,6 +16,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public class SignalOperationTabController implements Initializable {
     @FXML
@@ -147,11 +146,24 @@ public class SignalOperationTabController implements Initializable {
         createSignalTab.accept(signal);
     }
     public void reconstructOperation() {
-        AbstractSignal signal = reconstructionTypes.get(reconstructionTypeComboBox.getValue())
+        ContinuousSignal signal = reconstructionTypes.get(reconstructionTypeComboBox.getValue())
                 .apply(
                         (DiscreteSignal) signals.get(signalACDCComboBox.getValue()),
                         Integer.valueOf(numOfSamples.getText())
                 );
+        if (!reconstructionSourceSignalComboBox.getValue().isEmpty()) {
+            AlertBox.show(
+                    "Signal mapping statistics",
+                    signalFacade.calculateDacStats(
+                            signal,
+                            (ContinuousSignal) signals.get(reconstructionSourceSignalComboBox.getValue())
+                    ).entrySet()
+                            .stream()
+                            .map(entry -> entry.getKey() + ": " + entry.getValue())
+                            .collect(Collectors.joining("\n")),
+                    Alert.AlertType.INFORMATION
+            );
+        }
         createSignalTab.accept(signal);
     }
 
