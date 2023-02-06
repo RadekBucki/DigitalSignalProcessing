@@ -7,7 +7,6 @@ import backend.signal.DiscreteSignal;
 import backend.signal_operation.signal_quantization.QuantizationMethod;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 
@@ -43,7 +42,7 @@ public class Adc {
         List<Double> levels = IntStream.range(0, numOfLevels)
                 .mapToDouble(i -> -discreteSignal.getA() + i * 2 * discreteSignal.getA() / (numOfLevels - 1))
                 .boxed()
-                .collect(Collectors.toList());
+                .toList();
         AbstractSignal discreteQuantizedSignal = signalFactory.createDiscreteSignal(discreteSignal.getA(),
                 discreteSignal.getD(), discreteSignal.getF(), discreteSignal.getN1() / discreteSignal.getF());
         discreteSignal.getPoints().entrySet().stream()

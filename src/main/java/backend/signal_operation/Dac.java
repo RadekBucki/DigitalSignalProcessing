@@ -7,9 +7,6 @@ import backend.signal_operation.signal_reconstruction.ReconstructMethod;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.DoubleStream;
-import java.util.stream.IntStream;
 
 public class Dac {
     protected static final double POINTS_DECIMAL_PLACES_DIVISION = 10000;

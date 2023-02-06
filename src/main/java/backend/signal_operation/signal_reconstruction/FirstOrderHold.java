@@ -9,8 +9,8 @@ public class FirstOrderHold implements ReconstructMethod {
     @Override
     public double reconstruct(DiscreteSignal signal, double time, double frequency) {
         List<Map.Entry<Double, Double>> nearestSamples = signal.getPoints().entrySet().stream()
-                .filter(x -> x.getKey() < (time + 1/frequency))
-                .filter(x -> x.getKey() > (time - 1/frequency))
+                .filter(x -> x.getKey() < (time + 1 / frequency))
+                .filter(x -> x.getKey() > (time - 1 / frequency))
                 .toList();
         if (nearestSamples.size() == 1 || nearestSamples.size() == 3) {
             return nearestSamples.get(0).getValue();
