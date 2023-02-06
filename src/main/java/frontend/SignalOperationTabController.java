@@ -4,7 +4,6 @@ import backend.SignalFacade;
 import backend.signal.AbstractSignal;
 import backend.signal.ContinuousSignal;
 import backend.signal.DiscreteSignal;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -18,8 +17,11 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class SignalOperationTabController implements Initializable {
+    @FXML
+    private ComboBox<String> reconstructionTypeComboBox;
     @FXML
     private Button applyOperationButton;
     @FXML
@@ -56,6 +58,12 @@ public class SignalOperationTabController implements Initializable {
             "With Truncation", signalFacade::quantizationWithTruncate,
             "With Rounding", signalFacade::quantizationWithRounding
     );
+
+    private final Map<String, Function<DiscreteSignal, ContinuousSignal>> reconstructionTypes = Map.of(
+            "Zero Order Hold", signalFacade::reconstructZeroOrderHold,
+            "First Order Hold", signalFacade::reconstructFirstMethodHold,
+            "Sinc", signalFacade::reconstructSinc
+    );
     private final Map<String, AbstractSignal> signals = new LinkedHashMap<>();
 
     private Consumer<AbstractSignal> createSignalTab = null;
@@ -82,6 +90,7 @@ public class SignalOperationTabController implements Initializable {
             quantizationOperationButton.setDisable(shouldQuantizationButtonBeDisabled());
             return text;
         }));
+        reconstructionTypeComboBox.getItems().addAll(reconstructionTypes.keySet());
     }
 
     public void addOrUpdateSignal(String name, AbstractSignal signal) {
@@ -138,6 +147,8 @@ public class SignalOperationTabController implements Initializable {
     }
 
     public void reconstructOperation() {
-        //TODO: Implement reconstruct
+        AbstractSignal signal = reconstructionTypes.get(reconstructionTypeComboBox.getValue())
+                .apply((DiscreteSignal) signals.get(signalACDCComboBox.getValue()));
+        createSignalTab.accept(signal);
     }
 }

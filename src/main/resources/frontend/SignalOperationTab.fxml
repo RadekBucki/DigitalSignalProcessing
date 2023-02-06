@@ -14,105 +14,95 @@
       prefHeight="500.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="frontend.SignalOperationTabController">
     <VBox layoutX="10.0" layoutY="10.0" prefHeight="480.0" prefWidth="980.0">
-        <children>
-            <Label prefHeight="37.0" prefWidth="222.0" text="Math operations">
-                <font>
-                    <Font name="System Bold" size="18.0"/>
-                </font>
-                <padding>
-                    <Insets left="10.0" top="10.0"/>
-                </padding>
-            </Label>
-            <HBox prefHeight="35.0" prefWidth="1000.0">
-                <children>
-                    <Label prefHeight="25.0" prefWidth="100.0" text="Signal operation"/>
-                    <ComboBox fx:id="signalOperationComboBox" onAction="#onUpdateComboBox" prefHeight="25.0"
-                              prefWidth="440.0" promptText="Choose signal operation"/>
-                </children>
-            </HBox>
-            <HBox prefHeight="35.0" prefWidth="1000.0">
-                <children>
-                    <Label prefHeight="25.0" prefWidth="100.0" text="Signal 1"/>
-                    <ComboBox fx:id="signal1ComboBox" onAction="#onUpdateComboBox" prefHeight="25.0" prefWidth="440.0"
-                              promptText="Choose signal"/>
-                </children>
-            </HBox>
-            <HBox prefHeight="35.0" prefWidth="200.0">
-                <children>
-                    <Label prefHeight="25.0" prefWidth="100.0" text="Signal 2"/>
-                    <ComboBox fx:id="signal2ComboBox" onAction="#onUpdateComboBox" prefHeight="25.0" prefWidth="440.0"
-                              promptText="Choose signal"/>
-                </children>
-            </HBox>
-            <Button fx:id="applyOperationButton" disable="true" mnemonicParsing="false" onAction="#applyOperation"
-                    text="Apply operation" textAlignment="CENTER"/>
-            <Label prefHeight="37.0" prefWidth="220.0" text="A/D &amp; D/A">
-                <font>
-                    <Font name="System Bold" size="18.0"/>
-                </font>
-                <padding>
-                    <Insets left="10.0" top="20.0"/>
-                </padding>
-            </Label>
-            <HBox prefHeight="35.0" prefWidth="1000.0">
-                <children>
-                    <Label prefHeight="25.0" prefWidth="100.0" text="Signal"/>
-                    <ComboBox fx:id="signalACDCComboBox" prefHeight="25.0" prefWidth="440.0"
-                              promptText="Choose signal"/>
-                </children>
-            </HBox>
-            <Label prefHeight="25.0" prefWidth="100.0" text="Sampling" textAlignment="CENTER" underline="true">
-                <font>
-                    <Font size="15.0"/>
-                </font>
-            </Label>
-            <HBox prefHeight="35.0" prefWidth="980.0">
-                <children>
-                    <Label prefHeight="25.0" prefWidth="100.0" text="Frequency [Hz]"/>
-                    <TextField fx:id="samplingFrequency"/>
-                    <Button fx:id="samplingOperationButton" disable="true" mnemonicParsing="false"
-                            onAction="#samplingOperation" prefHeight="25.0" prefWidth="100.0" text="Sampling"
-                            textAlignment="CENTER">
-                        <HBox.margin>
-                            <Insets left="10.0"/>
-                        </HBox.margin>
-                    </Button>
-                </children>
-            </HBox>
-            <Label prefHeight="25.0" prefWidth="100.0" text="Quantization" textAlignment="CENTER" underline="true">
-                <font>
-                    <Font size="15.0"/>
-                </font>
-            </Label>
-            <HBox prefHeight="35.0" prefWidth="980.0">
-                <children>
-                    <Label prefHeight="25.0" prefWidth="100.0" text="Number of levels"/>
-                    <TextField fx:id="numOfLevelsQuantization"/>
-                    <ComboBox fx:id="quantizationTypeComboBox" prefHeight="25.0" prefWidth="210.0"
-                              promptText="Choose quantization type">
-                        <HBox.margin>
-                            <Insets left="10.0"/>
-                        </HBox.margin>
-                    </ComboBox>
-                    <Button fx:id="quantizationOperationButton" disable="true" mnemonicParsing="false"
-                            onAction="#quantizationOperation" prefHeight="25.0" prefWidth="100.0" text="Quantization">
-                        <HBox.margin>
-                            <Insets left="10.0"/>
-                        </HBox.margin>
-                    </Button>
-                </children>
-            </HBox>
-            <Label prefHeight="25.0" prefWidth="100.0" text="Reconstruct" textAlignment="CENTER" underline="true">
-                <font>
-                    <Font size="15.0"/>
-                </font>
-            </Label>
-            <HBox prefHeight="35.0" prefWidth="980.0">
-                <children>
-                    <Button fx:id="reconstructOperationButton" disable="true" mnemonicParsing="false"
-                            onAction="#reconstructOperation" prefHeight="25.0" prefWidth="150.0" text="Reconstruct"/>
-                </children>
-            </HBox>
-        </children>
+        <Label prefHeight="37.0" prefWidth="222.0" text="Math operations">
+            <font>
+                <Font name="System Bold" size="18.0"/>
+            </font>
+            <padding>
+                <Insets left="10.0" top="10.0"/>
+            </padding>
+        </Label>
+        <HBox prefHeight="35.0" prefWidth="1000.0">
+            <Label prefHeight="25.0" prefWidth="100.0" text="Signal operation"/>
+            <ComboBox fx:id="signalOperationComboBox" onAction="#onUpdateComboBox" prefHeight="25.0"
+                      prefWidth="440.0" promptText="Choose signal operation"/>
+        </HBox>
+        <HBox prefHeight="35.0" prefWidth="1000.0">
+            <Label prefHeight="25.0" prefWidth="100.0" text="Signal 1"/>
+            <ComboBox fx:id="signal1ComboBox" onAction="#onUpdateComboBox" prefHeight="25.0" prefWidth="440.0"
+                      promptText="Choose signal"/>
+        </HBox>
+        <HBox prefHeight="35.0" prefWidth="200.0">
+            <Label prefHeight="25.0" prefWidth="100.0" text="Signal 2"/>
+            <ComboBox fx:id="signal2ComboBox" onAction="#onUpdateComboBox" prefHeight="25.0" prefWidth="440.0"
+                      promptText="Choose signal"/>
+        </HBox>
+        <Button fx:id="applyOperationButton" disable="true" mnemonicParsing="false" onAction="#applyOperation"
+                text="Apply operation" textAlignment="CENTER"/>
+        <Label prefHeight="37.0" prefWidth="220.0" text="A/D &amp; D/A">
+            <font>
+                <Font name="System Bold" size="18.0"/>
+            </font>
+            <padding>
+                <Insets left="10.0" top="20.0"/>
+            </padding>
+        </Label>
+        <HBox prefHeight="35.0" prefWidth="1000.0">
+            <Label prefHeight="25.0" prefWidth="100.0" text="Signal"/>
+            <ComboBox fx:id="signalACDCComboBox" prefHeight="25.0" prefWidth="440.0"
+                      promptText="Choose signal"/>
+        </HBox>
+        <Label prefHeight="25.0" prefWidth="100.0" text="Sampling" textAlignment="CENTER" underline="true">
+            <font>
+                <Font size="15.0"/>
+            </font>
+        </Label>
+        <HBox prefHeight="35.0" prefWidth="980.0">
+            <Label prefHeight="25.0" prefWidth="100.0" text="Frequency [Hz]"/>
+            <TextField fx:id="samplingFrequency"/>
+            <Button fx:id="samplingOperationButton" disable="true" mnemonicParsing="false"
+                    onAction="#samplingOperation" prefHeight="25.0" prefWidth="100.0" text="Sampling"
+                    textAlignment="CENTER">
+                <HBox.margin>
+                    <Insets left="10.0"/>
+                </HBox.margin>
+            </Button>
+        </HBox>
+        <Label prefHeight="25.0" prefWidth="100.0" text="Quantization" textAlignment="CENTER" underline="true">
+            <font>
+                <Font size="15.0"/>
+            </font>
+        </Label>
+        <HBox prefHeight="35.0" prefWidth="980.0">
+            <Label prefHeight="25.0" prefWidth="100.0" text="Number of levels"/>
+            <TextField fx:id="numOfLevelsQuantization"/>
+            <ComboBox fx:id="quantizationTypeComboBox" prefHeight="25.0" prefWidth="210.0"
+                      promptText="Choose quantization type">
+                <HBox.margin>
+                    <Insets left="10.0"/>
+                </HBox.margin>
+            </ComboBox>
+            <Button fx:id="quantizationOperationButton" disable="true" mnemonicParsing="false"
+                    onAction="#quantizationOperation" prefHeight="25.0" prefWidth="100.0" text="Quantization">
+                <HBox.margin>
+                    <Insets left="10.0"/>
+                </HBox.margin>
+            </Button>
+        </HBox>
+        <Label prefHeight="25.0" prefWidth="100.0" text="Reconstruct" textAlignment="CENTER" underline="true">
+            <font>
+                <Font size="15.0"/>
+            </font>
+        </Label>
+        <HBox prefHeight="35.0" prefWidth="980.0">
+            <ComboBox fx:id="reconstructionTypeComboBox" prefHeight="25.0" prefWidth="210.0"
+                      promptText="Choose reconstruction type">
+                <HBox.margin>
+                    <Insets right="10.0"/>
+                </HBox.margin>
+            </ComboBox>
+            <Button fx:id="reconstructOperationButton" mnemonicParsing="false"
+                    onAction="#reconstructOperation" prefHeight="25.0" prefWidth="150.0" text="Reconstruct"/>
+        </HBox>
     </VBox>
 </Pane>
