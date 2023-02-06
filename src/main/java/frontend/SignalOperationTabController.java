@@ -53,8 +53,8 @@ public class SignalOperationTabController implements Initializable {
     );
 
     private final Map<String, BiFunction<DiscreteSignal, Integer, AbstractSignal>>  quantizationTypes = Map.of(
-            "QuantizationWithTruncation", signalFacade::quantizationWithTruncate,
-            "QuantizationWithRounding", signalFacade::quantizationWithRounding
+            "With Truncation", signalFacade::quantizationWithTruncate,
+            "With Rounding", signalFacade::quantizationWithRounding
     );
     private final Map<String, AbstractSignal> signals = new LinkedHashMap<>();
 
