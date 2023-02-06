@@ -79,6 +79,9 @@ public class SignalFactory {
         return new ContinuousSignal(points);
     }
 
+    public AbstractSignal createDiscreteSignal(double A, double d, double f) {
+        return new DiscreteSignal(A, d, f);
+    }
     public AbstractSignal createDiscreteSignal(Map<Double, Double> points) {
         return new DiscreteSignal(points);
     }
