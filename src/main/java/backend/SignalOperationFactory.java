@@ -4,6 +4,12 @@ import backend.signal_operation.*;
 
 public class SignalOperationFactory {
     private final QuantizationMethodFactory quantizationMethodFactory = new QuantizationMethodFactory();
+    private final SignalFactory signalFactory;
+
+    public SignalOperationFactory(SignalFactory signalFactory) {
+        this.signalFactory = signalFactory;
+    }
+
     public SignalAdd createSignalAdd(SignalFactory signalFactory) {
         return new SignalAdd(signalFactory);
     }
@@ -16,10 +22,10 @@ public class SignalOperationFactory {
     public SignalDivide createSignalDivide(SignalFactory signalFactory) {
         return new SignalDivide(signalFactory);
     }
-    public Adc createAdc(SignalFactory signalFactory) {
+    public Adc createAdc() {
         return new Adc(quantizationMethodFactory, signalFactory);
     }
-    public Adc createDac(SignalFactory signalFactory) {
+    public Adc createDac() {
         return null;
     }
 }
