@@ -27,6 +27,6 @@ public class SignalOperationFactory {
         return new Adc(quantizationMethodFactory, signalFactory);
     }
     public Dac createDac() {
-        return new Dac(reconstructMethodFactory);
+        return new Dac(reconstructMethodFactory, signalFactory);
     }
 }

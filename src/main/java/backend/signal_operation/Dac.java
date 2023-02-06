@@ -1,5 +1,6 @@
 package backend.signal_operation;
 
+import backend.SignalFactory;
 import backend.signal.ContinuousSignal;
 import backend.signal.DiscreteSignal;
 import backend.signal_operation.signal_reconstruction.ReconstructMethod;
@@ -9,10 +10,12 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Dac {
-    ReconstructMethodFactory reconstructMethodFactory;
+    private final ReconstructMethodFactory reconstructMethodFactory;
+    private final SignalFactory signalFactory;
 
-    public Dac(ReconstructMethodFactory reconstructMethodFactory) {
+    public Dac(ReconstructMethodFactory reconstructMethodFactory, SignalFactory signalFactory) {
         this.reconstructMethodFactory = reconstructMethodFactory;
+        this.signalFactory = signalFactory;
     }
 
     public ContinuousSignal reconstructZeroOrderHold(DiscreteSignal discreteSignal) {
@@ -28,7 +31,7 @@ public class Dac {
     }
 
     private ContinuousSignal reconstruct(DiscreteSignal discreteSignal, ReconstructMethod reconstructMethod) {
-        return new ContinuousSignal(
+        return (ContinuousSignal) signalFactory.createContinuousSignal(
                 IntStream.range(discreteSignal.getN1(), discreteSignal.getN2())
                         .mapToDouble(i -> discreteSignal.getD() * i)
                         .boxed()
