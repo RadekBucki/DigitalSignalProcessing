@@ -1,12 +1,16 @@
 package backend;
 
 import backend.signal.AbstractSignal;
+import backend.signal.ContinuousSignal;
+import backend.signal.DiscreteSignal;
 import backend.signal.serialize.SignalSerializer;
+import backend.signal_operation.SignalConverterFactory;
 
 import java.util.List;
 
 public class SignalFacade {
     private final SignalOperationFactory signalOperationFactory = new SignalOperationFactory();
+    private final SignalConverterFactory signalConverterFactory = new SignalConverterFactory();
     private final SignalFactory signalFactory = new SignalFactory();
 
     public AbstractSignal add(AbstractSignal signal1, AbstractSignal signal2) {
@@ -39,5 +43,14 @@ public class SignalFacade {
     }
     public void writeSignal(AbstractSignal signal, String filePath) {
         SignalSerializer.write(signal, filePath);
+    }
+    public DiscreteSignal sampling(ContinuousSignal continuousSignal, double samplingFrequency) {
+        return signalConverterFactory.createAdc().sampling(continuousSignal, samplingFrequency);
+    }
+    public DiscreteSignal quantizationWithTruncate(DiscreteSignal continuousSignal, int numOfLevels) {
+        return signalConverterFactory.createAdc().quantizationWithTruncation(continuousSignal, numOfLevels);
+    }
+    public DiscreteSignal quantizationWithRounding(DiscreteSignal continuousSignal, int numOfLevels) {
+        return signalConverterFactory.createAdc().quantizationWithRounding(continuousSignal, numOfLevels);
     }
 }
