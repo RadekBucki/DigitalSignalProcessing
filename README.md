@@ -150,9 +150,9 @@ package backend {
         + getPossibleSignals(): AbstractSignal[]
         + writeSignal(AbstractSignal, String)
         + readSignal(String): AbstractSignal
-        + sampling(ContinuousSignal, double): DiscreteSignal
-        + quantizationWithTruncation(DiscreteSignal, int): DiscreteSignal
-        + quantizationWithRounding(DiscreteSignal, int): DiscreteSignal
+        + sampling(ContinuousSignal, double): AbstractSignal
+        + quantizationWithTruncation(DiscreteSignal, int): AbstractSignal
+        + quantizationWithRounding(DiscreteSignal, int): AbstractSignal
         + reconstruct(DiscreteSignal): ContinuousSignal
         + calculateDacStats(ContinuousSignal, ContinuousSignal): double[]
     }
@@ -216,9 +216,9 @@ package backend {
         }
         
         class Adc {
-            + sampling(ContinuousSignal, double): DiscreteSignal
-            + quantizationWithTruncation(DiscreteSignal, int): DiscreteSignal
-            + quantizationWithRounding(DiscreteSignal, int): DiscreteSignal
+            + sampling(ContinuousSignal, double): AbstractSignal
+            + quantizationWithTruncation(DiscreteSignal, int): AbstractSignal
+            + quantizationWithRounding(DiscreteSignal, int): AbstractSignal
         }
     
         class QuantizationMethodFactory {
