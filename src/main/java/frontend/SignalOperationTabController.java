@@ -9,6 +9,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 
 import java.net.URL;
 import java.util.LinkedHashMap;
@@ -31,7 +33,11 @@ public class SignalOperationTabController implements Initializable {
     @FXML
     private Button samplingOperationButton;
     @FXML
+    private TextField samplingFrequency;
+    @FXML
     private Button quantizationOperationButton;
+    @FXML
+    private TextField numOfLevelsQuantization;
     @FXML
     private Button reconstructOperationButton;
 
@@ -50,6 +56,24 @@ public class SignalOperationTabController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         signalOperationComboBox.getItems().addAll(signalOperations.keySet());
+        samplingFrequency.setTextFormatter(new TextFormatter<>(text -> {
+            String newText = text.getControlNewText().replace(",", ".");
+            if (!newText.matches("-?(\\d*[.])?\\d*")) {
+                samplingFrequency.clear();
+                return null;
+            }
+            samplingOperationButton.setDisable(shouldSamplingButtonBeDisabled());
+            return text;
+        }));
+        numOfLevelsQuantization.setTextFormatter(new TextFormatter<>(text -> {
+            String newText = text.getControlNewText().replace(",", ".");
+            if (!newText.matches("\\d*")) {
+                samplingFrequency.clear();
+                return null;
+            }
+            quantizationOperationButton.setDisable(shouldQuantizationButtonBeDisabled());
+            return text;
+        }));
     }
 
     public void addOrUpdateSignal(String name, AbstractSignal signal) {
@@ -75,31 +99,30 @@ public class SignalOperationTabController implements Initializable {
         );
     }
 
-    public void onUpdateComboBoxAcDc() {
-        if (signals.get(signalACDCComboBox.getValue()) instanceof DiscreteSignal) {
-            samplingOperationButton.setDisable(true);
-            quantizationOperationButton.setDisable(false);
-            reconstructOperationButton.setDisable(false);
-        } else {
-            samplingOperationButton.setDisable(false);
-            quantizationOperationButton.setDisable(true);
-            reconstructOperationButton.setDisable(true);
-        }
-    }
-
     public void setCreateSignalTab(Consumer<AbstractSignal> createSignalTab) {
         this.createSignalTab = createSignalTab;
     }
 
     public void samplingOperation() {
-        AbstractSignal signal = signalFacade.sampling((ContinuousSignal) signals.get(signalACDCComboBox.getValue()), 10);
+        AbstractSignal signal = signalFacade.sampling((ContinuousSignal) signals.get(signalACDCComboBox.getValue()),
+                Double.parseDouble(samplingFrequency.getText()));
         samplingOperationButton.setDisable(true);
         quantizationOperationButton.setDisable(true);
         reconstructOperationButton.setDisable(true);
         createSignalTab.accept(signal);
     }
 
+    public boolean shouldSamplingButtonBeDisabled() {
+        return !(signals.get(signalACDCComboBox.getValue()) instanceof ContinuousSignal) ||
+                samplingFrequency.getText().isEmpty();
+    }
+
     public void quantizationOperation() {
+    }
+
+    public boolean shouldQuantizationButtonBeDisabled() {
+        return !(signals.get(signalACDCComboBox.getValue()) instanceof DiscreteSignal) ||
+                numOfLevelsQuantization.getText().isEmpty();
     }
 
     public void reconstructOperation() {
