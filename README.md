@@ -194,13 +194,13 @@ package backend {
             - calculateMD(ContinuousSignal, ContinuousSignal): double
         }
         class ReconstructMethodFactory {
-            + createZeroOrderHold(): AbstractReconstructMethod
-            + createFirstOrderHold(): AbstractReconstructMethod
-            + createSinc(): AbstractReconstructMethod
+            + createZeroOrderHold(): ReconstructMethod
+            + createFirstOrderHold(): ReconstructMethod
+            + createSinc(): ReconstructMethod
         }
     
         package signal_reconstruction {
-            interface AbstractReconstructMethod {
+            interface ReconstructMethod {
                 + {abstract} reconstruct(DiscreteSignal): ContinuousSignal
             }
             class ZeroOrderHold {
@@ -220,12 +220,12 @@ package backend {
         }
     
         class QuantizationMethodFactory {
-            + createQuantizationWithTruncation(): AbstractQuantizationMethod
-            + createQuantizationWithRounding(): AbstractQuantizationMethod
+            + createQuantizationWithTruncation(): QuantizationMethod
+            + createQuantizationWithRounding(): QuantizationMethod
         }
         
         package signal_quantization {
-            interface AbstractQuantizationMethod {
+            interface QuantizationMethod {
                 + {abstract} sample(ContinuousSignal): DiscreteSignal
             }
             class QuantizationWithTruncation {
@@ -246,14 +246,14 @@ package backend {
     
     SignalOperationFactory ..> AbstractSignalOperation
     
-    AbstractQuantizationMethod <|-- QuantizationWithTruncation
-    AbstractQuantizationMethod <|-- QuantizationWithRounding
+    QuantizationMethod <|-- QuantizationWithTruncation
+    QuantizationMethod <|-- QuantizationWithRounding
     Adc ---> QuantizationMethodFactory
-    QuantizationMethodFactory ..> AbstractQuantizationMethod
+    QuantizationMethodFactory ..> QuantizationMethod
     
-    AbstractReconstructMethod <|-- ZeroOrderHold
-    AbstractReconstructMethod <|-- FirstOrderHold
-    AbstractReconstructMethod <|-- Sinc
+    ReconstructMethod <|-- ZeroOrderHold
+    ReconstructMethod <|-- FirstOrderHold
+    ReconstructMethod <|-- Sinc
     
     SignalFacade ---> SignalOperationFactory
     SignalFacade ---> SignalFactory
@@ -261,7 +261,7 @@ package backend {
     SignalConverterFactory ..> Dac
     SignalConverterFactory ..> Adc
     Dac ---> ReconstructMethodFactory
-    ReconstructMethodFactory ..> AbstractReconstructMethod
+    ReconstructMethodFactory ..> ReconstructMethod
     
     package serialize {
         class SignalSerializer {
