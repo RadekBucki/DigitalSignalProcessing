@@ -152,7 +152,9 @@ package backend {
         + readSignal(String): AbstractSignal
         + sampling(ContinuousSignal): DiscreteSignal
         + quantization(DiscreteSignal): DiscreteSignal
-        + reconstruct(DiscreteSignal): ContinuousSignal
+        + reconstructZeroOrderHold((DiscreteSignal): ContinuousSignal
+        + reconstructFirstOrderHold((DiscreteSignal): ContinuousSignal
+        + reconstructSinc((DiscreteSignal): ContinuousSignal
         + calculateDacStats(ContinuousSignal, ContinuousSignal): double[]
     }
     
@@ -183,8 +185,11 @@ package backend {
             # operation(double, double): double
         }
         class Dac {
-            + reconstruct(DiscreteSignal): ContinuousSignal
             + calculateStats(ContinuousSignal, ContinuousSignal): double[]
+            + reconstructZeroOrderHold((DiscreteSignal): ContinuousSignal
+            + reconstructFirstOrderHold((DiscreteSignal): ContinuousSignal
+            + reconstructSinc((DiscreteSignal): ContinuousSignal
+            - reconstruct(DiscreteSignal, ReconstructMethod): ContinuousSignal
             - calculateMSE(ContinuousSignal, ContinuousSignal): double
             - calculateSNR(ContinuousSignal, ContinuousSignal): double
             - calculatePSNR(ContinuousSignal, ContinuousSignal): double
