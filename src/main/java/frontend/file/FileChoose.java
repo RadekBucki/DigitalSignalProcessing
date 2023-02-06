@@ -1,4 +1,4 @@
-package frontend;
+package frontend.file;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
@@ -20,13 +20,14 @@ public class FileChoose {
      * @param actionEvent ActionEvent
      * @return String
      * @throws NoSuchMethodException exception
+     * @throws InvocationTargetException exception
      * @throws IllegalAccessException exception
      */
-    public static String saveChooser(String windowTitle,Boolean password, ActionEvent actionEvent)
-            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    public static String saveChooser(String windowTitle, ActionEvent actionEvent)
+            throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         return choose(
                 windowTitle, actionEvent,
-                FileChooser.class.getMethod("showSaveDialog", Window.class),password
+                FileChooser.class.getMethod("showSaveDialog", Window.class)
         );
     }
 
@@ -36,13 +37,14 @@ public class FileChoose {
      * @param actionEvent ActionEvent
      * @return String
      * @throws NoSuchMethodException exception
+     * @throws InvocationTargetException exception
      * @throws IllegalAccessException exception
      */
-    public static String openChooser(String windowTitle,Boolean password, ActionEvent actionEvent)
-            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    public static String openChooser(String windowTitle, ActionEvent actionEvent)
+            throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         return choose(
                 windowTitle, actionEvent,
-                FileChooser.class.getMethod("showOpenDialog", Window.class),password
+                FileChooser.class.getMethod("showOpenDialog", Window.class)
         );
     }
 
@@ -51,21 +53,17 @@ public class FileChoose {
      * @param windowTitle String
      * @param actionEvent ActionEvent
      * @return String
-     * @throws IllegalAccessException exception
-     * @throws InvocationTargetException exception
      */
-    private static String choose(String windowTitle, ActionEvent actionEvent, Method showDialog, Boolean password)
-            throws IllegalAccessException, InvocationTargetException {
+    private static String choose(String windowTitle, ActionEvent actionEvent, Method showDialog)
+            throws InvocationTargetException, IllegalAccessException {
         FileChooser chooser = new FileChooser();
         chooser.setTitle(windowTitle);
-        if (Boolean.TRUE.equals(password)) {
-            chooser.getExtensionFilters().add(
-                    new FileChooser.ExtensionFilter("Password text file (*.txt)", "*.txt")
-            );
-        }
         if (!lastUsedDir.isEmpty()) {
             chooser.setInitialDirectory(new File(lastUsedDir));
         }
+        chooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Signal (*.bin)", "*.bin")
+        );
         File chosenFile = (File) showDialog.invoke(
                 chooser,
                 ((Button) actionEvent.getSource())
@@ -79,3 +77,4 @@ public class FileChoose {
         return chosenFile.getAbsolutePath();
     }
 }
+
