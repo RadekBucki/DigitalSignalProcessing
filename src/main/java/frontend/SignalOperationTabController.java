@@ -149,9 +149,9 @@ public class SignalOperationTabController implements Initializable {
         ContinuousSignal signal = reconstructionTypes.get(reconstructionTypeComboBox.getValue())
                 .apply(
                         (DiscreteSignal) signals.get(signalACDCComboBox.getValue()),
-                        Integer.valueOf(numOfSamples.getText())
+                        numOfSamples.getText().isEmpty() ? 0 : Integer.parseInt(numOfSamples.getText())
                 );
-        if (!reconstructionSourceSignalComboBox.getValue().isEmpty()) {
+        if (reconstructionSourceSignalComboBox.getValue() != null) {
             AlertBox.show(
                     "Signal mapping statistics",
                     signalFacade.calculateDacStats(
@@ -164,6 +164,7 @@ public class SignalOperationTabController implements Initializable {
                     Alert.AlertType.INFORMATION
             );
         }
+        numOfSamples.clear();
         createSignalTab.accept(signal);
     }
 
@@ -191,9 +192,9 @@ public class SignalOperationTabController implements Initializable {
     }
 
     private boolean shouldReconstructButtonBeDisabled() {
-        return !(signals.get(signalACDCComboBox.getValue()) instanceof DiscreteSignal) ||
-                numOfSamples.getText().isEmpty() ||
-                reconstructionTypeComboBox.getValue() == null;
+        return !(signals.get(signalACDCComboBox.getValue()) instanceof DiscreteSignal)  ||
+                reconstructionTypeComboBox.getValue() == null ||
+                (numOfSamples.getText().isEmpty() && reconstructionTypeComboBox.getValue().equals("Sinc"));
     }
 
     public void onUpdateSignalACDCComboBox() {
@@ -205,5 +206,6 @@ public class SignalOperationTabController implements Initializable {
 
     public void onUpdateReconstructionTypeComboBox() {
         numOfSamples.setDisable(!reconstructionTypeComboBox.getValue().equals("Sinc"));
+        reconstructOperationButton.setDisable(shouldReconstructButtonBeDisabled());
     }
 }

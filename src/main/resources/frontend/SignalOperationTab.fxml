@@ -95,7 +95,7 @@
             </font>
         </Label>
         <HBox prefHeight="35.0" prefWidth="980.0" fx:id="reconstructionOperationHBox" disable="true">
-            <Label prefHeight="25.0" prefWidth="100.0" text="Signal"/>
+            <Label prefHeight="25.0" prefWidth="100.0" text="Source signal"/>
             <ComboBox fx:id="reconstructionSourceSignalComboBox" prefHeight="25.0" prefWidth="210.0"
                       promptText="Choose signal"/>
             <ComboBox fx:id="reconstructionTypeComboBox" prefHeight="25.0" prefWidth="210.0"
