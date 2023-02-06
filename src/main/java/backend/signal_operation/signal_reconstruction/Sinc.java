@@ -5,9 +5,13 @@ import backend.signal.DiscreteSignal;
 public class Sinc implements ReconstructMethod {
     @Override
     public double reconstruct(DiscreteSignal signal, double time, double frequency) {
+        int numOfSamples = 0;
+        int currentN = (int) Math.floor(time * frequency);
         return signal.getPoints().entrySet().stream()
+                .filter(entry -> Math.floor(entry.getKey() * frequency) <= currentN + numOfSamples)
+                .filter(entry -> Math.floor(entry.getKey() * frequency) >= currentN - numOfSamples)
                 .mapToDouble(entry -> entry.getValue() *
-                        sinc(time / (1 / frequency - Math.floor(entry.getKey() * frequency))))
+                        sinc(time / (1 / frequency) - Math.floor(entry.getKey() * frequency)))
                 .sum();
     }
 
