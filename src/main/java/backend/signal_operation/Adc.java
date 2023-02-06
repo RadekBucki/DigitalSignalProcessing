@@ -21,9 +21,9 @@ public class Adc {
 
     public AbstractSignal sampling(ContinuousSignal continuousSignal, double samplingFrequency) {
         AbstractSignal discreteSignal = signalFactory.createDiscreteSignal(continuousSignal.getA(),
-                continuousSignal.getD(), samplingFrequency);
+                continuousSignal.getD(), samplingFrequency, continuousSignal.getT1());
         DoubleStream.iterate(continuousSignal.getT1(), d -> d + (1 / samplingFrequency))
-                .limit((long) continuousSignal.getT2().doubleValue())
+                .limit((long) (continuousSignal.getT2() * samplingFrequency - continuousSignal.getT1() * samplingFrequency + 1))
                 .forEach(d -> discreteSignal.addPoint(d, continuousSignal.calculatePointValue(d)));
         return discreteSignal;
     }
@@ -45,7 +45,7 @@ public class Adc {
                 .boxed()
                 .collect(Collectors.toList());
         AbstractSignal discreteQuantizedSignal = signalFactory.createDiscreteSignal(discreteSignal.getA(),
-                discreteSignal.getD(), discreteSignal.getF());
+                discreteSignal.getD(), discreteSignal.getF(), discreteSignal.getN1() / discreteSignal.getF());
         discreteSignal.getPoints().entrySet().stream()
                 .peek(entry -> entry.setValue(method.quantize(levels, entry.getValue())))
                 .forEach(entryQuantized ->
