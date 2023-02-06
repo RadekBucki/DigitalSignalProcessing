@@ -10,6 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
+import javafx.scene.layout.HBox;
 
 import java.net.URL;
 import java.util.LinkedHashMap;
@@ -17,11 +18,18 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 public class SignalOperationTabController implements Initializable {
     @FXML
-    public TextField numOfSamples;
+    private HBox reconstructionOperationHBox;
+    @FXML
+    private HBox quantizationOperationHBox;
+    @FXML
+    private HBox samplingOperationHBox;
+    @FXML
+    private TextField numOfSamples;
+    @FXML
+    private ComboBox<String> reconstructionSourceSignalComboBox;
     @FXML
     private ComboBox<String> reconstructionTypeComboBox;
     @FXML
@@ -109,6 +117,13 @@ public class SignalOperationTabController implements Initializable {
         signal1ComboBox.getItems().setAll(signals.keySet());
         signal2ComboBox.getItems().setAll(signals.keySet());
         signalACDCComboBox.getItems().setAll(signals.keySet());
+        reconstructionSourceSignalComboBox.getItems().setAll(
+                signals.entrySet()
+                        .stream()
+                        .filter(entry -> entry.getValue() instanceof ContinuousSignal)
+                        .map(Map.Entry::getKey)
+                        .toList()
+        );
     }
 
     public void applyOperation() {
@@ -116,6 +131,27 @@ public class SignalOperationTabController implements Initializable {
             signals.get(signal1ComboBox.getValue()),
             signals.get(signal2ComboBox.getValue())
         );
+        createSignalTab.accept(signal);
+    }
+    public void samplingOperation() {
+        AbstractSignal signal = signalFacade.sampling((ContinuousSignal) signals.get(signalACDCComboBox.getValue()),
+                Double.parseDouble(samplingFrequency.getText()));
+        samplingFrequency.clear();
+        createSignalTab.accept(signal);
+    }
+    public void quantizationOperation() {
+        AbstractSignal signal = quantizationTypes.get(quantizationTypeComboBox.getValue())
+                .apply((DiscreteSignal) signals.get(signalACDCComboBox.getValue()),
+                        Integer.valueOf(numOfLevelsQuantization.getText()));
+        numOfLevelsQuantization.clear();
+        createSignalTab.accept(signal);
+    }
+    public void reconstructOperation() {
+        AbstractSignal signal = reconstructionTypes.get(reconstructionTypeComboBox.getValue())
+                .apply(
+                        (DiscreteSignal) signals.get(signalACDCComboBox.getValue()),
+                        Integer.valueOf(numOfSamples.getText())
+                );
         createSignalTab.accept(signal);
     }
 
@@ -131,24 +167,9 @@ public class SignalOperationTabController implements Initializable {
         this.createSignalTab = createSignalTab;
     }
 
-    public void samplingOperation() {
-        AbstractSignal signal = signalFacade.sampling((ContinuousSignal) signals.get(signalACDCComboBox.getValue()),
-                Double.parseDouble(samplingFrequency.getText()));
-        samplingFrequency.clear();
-        createSignalTab.accept(signal);
-    }
-
     public boolean shouldSamplingButtonBeDisabled() {
         return !(signals.get(signalACDCComboBox.getValue()) instanceof ContinuousSignal) ||
                 samplingFrequency.getText().isEmpty();
-    }
-
-    public void quantizationOperation() {
-        AbstractSignal signal = quantizationTypes.get(quantizationTypeComboBox.getValue())
-                .apply((DiscreteSignal) signals.get(signalACDCComboBox.getValue()),
-                        Integer.valueOf(numOfLevelsQuantization.getText()));
-        numOfLevelsQuantization.clear();
-        createSignalTab.accept(signal);
     }
 
     public boolean shouldQuantizationButtonBeDisabled() {
@@ -163,12 +184,14 @@ public class SignalOperationTabController implements Initializable {
                 reconstructionTypeComboBox.getValue() == null;
     }
 
-    public void reconstructOperation() {
-        AbstractSignal signal = reconstructionTypes.get(reconstructionTypeComboBox.getValue())
-                .apply(
-                        (DiscreteSignal) signals.get(signalACDCComboBox.getValue()),
-                        Integer.valueOf(numOfSamples.getText())
-                );
-        createSignalTab.accept(signal);
+    public void onUpdateSignalACDCComboBox() {
+        AbstractSignal signal = signals.get(signalACDCComboBox.getValue());
+        samplingOperationHBox.setDisable(!(signal instanceof ContinuousSignal));
+        quantizationOperationHBox.setDisable(!(signal instanceof DiscreteSignal));
+        reconstructionOperationHBox.setDisable(!(signal instanceof DiscreteSignal));
+    }
+
+    public void onUpdateReconstructionTypeComboBox() {
+        numOfSamples.setDisable(!reconstructionTypeComboBox.getValue().equals("Sinc"));
     }
 }
