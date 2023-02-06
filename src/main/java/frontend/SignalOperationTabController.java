@@ -39,6 +39,8 @@ public class SignalOperationTabController implements Initializable {
     @FXML
     private TextField numOfLevelsQuantization;
     @FXML
+    private ComboBox<String> quantizationTypeComboBox;
+    @FXML
     private Button reconstructOperationButton;
 
     private final SignalFacade signalFacade = new SignalFacade();
@@ -49,6 +51,11 @@ public class SignalOperationTabController implements Initializable {
             "Multiply", signalFacade::multiply,
             "Divide", signalFacade::divide
     );
+
+    private final Map<String, BiFunction<DiscreteSignal, Integer, AbstractSignal>>  quantizationTypes = Map.of(
+            "QuantizationWithTruncation", signalFacade::quantizationWithTruncate,
+            "QuantizationWithRounding", signalFacade::quantizationWithRounding
+    );
     private final Map<String, AbstractSignal> signals = new LinkedHashMap<>();
 
     private Consumer<AbstractSignal> createSignalTab = null;
@@ -56,6 +63,7 @@ public class SignalOperationTabController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         signalOperationComboBox.getItems().addAll(signalOperations.keySet());
+        quantizationTypeComboBox.getItems().addAll(quantizationTypes.keySet());
         samplingFrequency.setTextFormatter(new TextFormatter<>(text -> {
             String newText = text.getControlNewText().replace(",", ".");
             if (!newText.matches("-?(\\d*[.])?\\d*")) {
@@ -106,9 +114,7 @@ public class SignalOperationTabController implements Initializable {
     public void samplingOperation() {
         AbstractSignal signal = signalFacade.sampling((ContinuousSignal) signals.get(signalACDCComboBox.getValue()),
                 Double.parseDouble(samplingFrequency.getText()));
-        samplingOperationButton.setDisable(true);
-        quantizationOperationButton.setDisable(true);
-        reconstructOperationButton.setDisable(true);
+        samplingFrequency.clear();
         createSignalTab.accept(signal);
     }
 
@@ -118,13 +124,20 @@ public class SignalOperationTabController implements Initializable {
     }
 
     public void quantizationOperation() {
+        AbstractSignal signal = quantizationTypes.get(quantizationTypeComboBox.getValue())
+                .apply((DiscreteSignal) signals.get(signalACDCComboBox.getValue()),
+                        Integer.valueOf(numOfLevelsQuantization.getText()));
+        numOfLevelsQuantization.clear();
+        createSignalTab.accept(signal);
     }
 
     public boolean shouldQuantizationButtonBeDisabled() {
         return !(signals.get(signalACDCComboBox.getValue()) instanceof DiscreteSignal) ||
-                numOfLevelsQuantization.getText().isEmpty();
+                numOfLevelsQuantization.getText().isEmpty() ||
+                quantizationTypeComboBox.getValue() == null;
     }
 
     public void reconstructOperation() {
+        //TODO: Implement reconstruct
     }
 }

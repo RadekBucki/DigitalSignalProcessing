@@ -40,8 +40,8 @@ public class Adc {
 
     private AbstractSignal quantization(QuantizationMethod method, DiscreteSignal discreteSignal,
                                         int numOfLevels) {
-        List<Double> levels = IntStream.rangeClosed(0, numOfLevels)
-                .mapToDouble(i -> -discreteSignal.getA() + i * 2 * discreteSignal.getA() / numOfLevels)
+        List<Double> levels = IntStream.range(0, numOfLevels)
+                .mapToDouble(i -> -discreteSignal.getA() + i * 2 * discreteSignal.getA() / (numOfLevels - 1))
                 .boxed()
                 .collect(Collectors.toList());
         AbstractSignal discreteQuantizedSignal = signalFactory.createDiscreteSignal(discreteSignal.getA(),

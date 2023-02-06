@@ -46,7 +46,7 @@
             </HBox>
             <Button fx:id="applyOperationButton" disable="true" mnemonicParsing="false" onAction="#applyOperation"
                     text="Apply operation" textAlignment="CENTER"/>
-            <Label prefHeight="37.0" prefWidth="220.0" text="A/C &amp; D/A">
+            <Label prefHeight="37.0" prefWidth="220.0" text="A/D &amp; D/A">
                 <font>
                     <Font name="System Bold" size="18.0"/>
                 </font>
@@ -88,6 +88,12 @@
                 <children>
                     <Label prefHeight="25.0" prefWidth="100.0" text="Number of levels"/>
                     <TextField fx:id="numOfLevelsQuantization"/>
+                    <ComboBox fx:id="quantizationTypeComboBox" prefHeight="25.0" prefWidth="210.0"
+                              promptText="Choose quantization type">
+                        <HBox.margin>
+                            <Insets left="10.0"/>
+                        </HBox.margin>
+                    </ComboBox>
                     <Button fx:id="quantizationOperationButton" disable="true" mnemonicParsing="false"
                             onAction="#quantizationOperation" prefHeight="25.0" prefWidth="100.0" text="Quantization">
                         <HBox.margin>
