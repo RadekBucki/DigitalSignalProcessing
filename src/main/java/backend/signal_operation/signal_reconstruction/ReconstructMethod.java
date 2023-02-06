@@ -1,8 +1,9 @@
 package backend.signal_operation.signal_reconstruction;
 
-import backend.signal.ContinuousSignal;
 import backend.signal.DiscreteSignal;
 
+import java.util.Map;
+
 public interface ReconstructMethod {
-    public ContinuousSignal reconstruct(DiscreteSignal discreteSignal);
+    double reconstruct(DiscreteSignal signal, double time);
 }

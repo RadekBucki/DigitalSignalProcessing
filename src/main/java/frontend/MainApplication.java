@@ -1,9 +1,17 @@
 package frontend;
+import backend.SignalFacade;
+import backend.signal.ContinuousSignal;
+import backend.signal.DiscreteSignal;
+import backend.signal.discrete.ImpulseNoise;
+import backend.signal.discrete.UnitImpulse;
+import frontend.chart.ChartGenerator;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.jfree.chart.ChartUtilities;
 
+import java.io.File;
 import java.io.IOException;
 
 /**
