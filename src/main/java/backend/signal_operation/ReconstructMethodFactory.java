@@ -12,7 +12,7 @@ public class ReconstructMethodFactory {
     public ReconstructMethod createFirstOrderHold() {
         return new FirstOrderHold();
     }
-    public ReconstructMethod createSinc() {
-        return new Sinc();
+    public ReconstructMethod createSinc(int numOfSamples) {
+        return new Sinc(numOfSamples);
     }
 }

@@ -29,8 +29,8 @@ public class Dac {
         return reconstruct(discreteSignal, reconstructMethodFactory.createFirstOrderHold());
     }
 
-    public ContinuousSignal reconstructSinc(DiscreteSignal discreteSignal) {
-        return reconstruct(discreteSignal, reconstructMethodFactory.createSinc());
+    public ContinuousSignal reconstructSinc(DiscreteSignal discreteSignal, int numOfSamples) {
+        return reconstruct(discreteSignal, reconstructMethodFactory.createSinc(numOfSamples));
     }
 
     private ContinuousSignal reconstruct(DiscreteSignal discreteSignal, ReconstructMethod reconstructMethod) {
