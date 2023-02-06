@@ -95,14 +95,20 @@
             </font>
         </Label>
         <HBox prefHeight="35.0" prefWidth="980.0">
+            <Label prefHeight="25.0" prefWidth="125.0" text="Number of samples"/>
+            <TextField fx:id="numOfSamples"/>
             <ComboBox fx:id="reconstructionTypeComboBox" prefHeight="25.0" prefWidth="210.0"
                       promptText="Choose reconstruction type">
                 <HBox.margin>
-                    <Insets right="10.0"/>
+                    <Insets left="10.0"/>
                 </HBox.margin>
             </ComboBox>
-            <Button fx:id="reconstructOperationButton" mnemonicParsing="false"
-                    onAction="#reconstructOperation" prefHeight="25.0" prefWidth="150.0" text="Reconstruct"/>
+            <Button fx:id="reconstructOperationButton" mnemonicParsing="false" disable="true"
+                    onAction="#reconstructOperation" prefHeight="25.0" prefWidth="150.0" text="Reconstruct">
+                <HBox.margin>
+                    <Insets left="10.0"/>
+                </HBox.margin>
+            </Button>
         </HBox>
     </VBox>
 </Pane>

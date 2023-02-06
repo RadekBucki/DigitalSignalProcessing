@@ -21,6 +21,8 @@ import java.util.function.Function;
 
 public class SignalOperationTabController implements Initializable {
     @FXML
+    public TextField numOfSamples;
+    @FXML
     private ComboBox<String> reconstructionTypeComboBox;
     @FXML
     private Button applyOperationButton;
@@ -59,7 +61,7 @@ public class SignalOperationTabController implements Initializable {
             "With Rounding", signalFacade::quantizationWithRounding
     );
 
-    private final Map<String, Function<DiscreteSignal, ContinuousSignal>> reconstructionTypes = Map.of(
+    private final Map<String, BiFunction<DiscreteSignal, Integer, ContinuousSignal>> reconstructionTypes = Map.of(
             "Zero Order Hold", signalFacade::reconstructZeroOrderHold,
             "First Order Hold", signalFacade::reconstructFirstMethodHold,
             "Sinc", signalFacade::reconstructSinc
@@ -88,6 +90,15 @@ public class SignalOperationTabController implements Initializable {
                 return null;
             }
             quantizationOperationButton.setDisable(shouldQuantizationButtonBeDisabled());
+            return text;
+        }));
+        numOfSamples.setTextFormatter(new TextFormatter<>(text -> {
+            String newText = text.getControlNewText().replace(",", ".");
+            if (!newText.matches("\\d*")) {
+                numOfSamples.clear();
+                return null;
+            }
+            reconstructOperationButton.setDisable(shouldReconstructButtonBeDisabled());
             return text;
         }));
         reconstructionTypeComboBox.getItems().addAll(reconstructionTypes.keySet());
@@ -146,9 +157,18 @@ public class SignalOperationTabController implements Initializable {
                 quantizationTypeComboBox.getValue() == null;
     }
 
+    private boolean shouldReconstructButtonBeDisabled() {
+        return !(signals.get(signalACDCComboBox.getValue()) instanceof DiscreteSignal) ||
+                numOfSamples.getText().isEmpty() ||
+                reconstructionTypeComboBox.getValue() == null;
+    }
+
     public void reconstructOperation() {
         AbstractSignal signal = reconstructionTypes.get(reconstructionTypeComboBox.getValue())
-                .apply((DiscreteSignal) signals.get(signalACDCComboBox.getValue()));
+                .apply(
+                        (DiscreteSignal) signals.get(signalACDCComboBox.getValue()),
+                        Integer.valueOf(numOfSamples.getText())
+                );
         createSignalTab.accept(signal);
     }
 }

@@ -30,14 +30,14 @@ public class SignalFacade {
     public AbstractSignal getSignal(Class<?> name, List<Double> parameters) {
         return signalFactory.getSignal(name, parameters);
     }
-    public ContinuousSignal reconstructZeroOrderHold(DiscreteSignal discreteSignal) {
+    public ContinuousSignal reconstructZeroOrderHold(DiscreteSignal discreteSignal, Integer numberOfSamples) {
         return signalOperationFactory.createDac().reconstructZeroOrderHold(discreteSignal);
     }
-    public ContinuousSignal reconstructFirstMethodHold(DiscreteSignal discreteSignal) {
+    public ContinuousSignal reconstructFirstMethodHold(DiscreteSignal discreteSignal, Integer numberOfSamples) {
         return signalOperationFactory.createDac().reconstructFirstOrderHold(discreteSignal);
     }
-    public ContinuousSignal reconstructSinc(DiscreteSignal discreteSignal) {
-        return signalOperationFactory.createDac().reconstructSinc(discreteSignal);
+    public ContinuousSignal reconstructSinc(DiscreteSignal discreteSignal, Integer numberOfSamples) {
+        return signalOperationFactory.createDac().reconstructSinc(discreteSignal, numberOfSamples);
     }
     public Map<String, Double> calculateDacStats(ContinuousSignal continuousSignal1, ContinuousSignal continuousSignal2) {
         return signalOperationFactory.createDac().calculateStats(continuousSignal1, continuousSignal2);
