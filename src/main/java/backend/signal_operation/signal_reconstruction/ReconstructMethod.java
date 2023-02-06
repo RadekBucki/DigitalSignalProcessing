@@ -5,5 +5,5 @@ import backend.signal.DiscreteSignal;
 import java.util.Map;
 
 public interface ReconstructMethod {
-    double reconstruct(DiscreteSignal signal, double time);
+    double reconstruct(DiscreteSignal signal, double time, double frequency);
 }

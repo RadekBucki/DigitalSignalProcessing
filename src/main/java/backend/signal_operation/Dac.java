@@ -5,8 +5,10 @@ import backend.signal.ContinuousSignal;
 import backend.signal.DiscreteSignal;
 import backend.signal_operation.signal_reconstruction.ReconstructMethod;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 
 public class Dac {
@@ -31,15 +33,14 @@ public class Dac {
     }
 
     private ContinuousSignal reconstruct(DiscreteSignal discreteSignal, ReconstructMethod reconstructMethod) {
-        return (ContinuousSignal) signalFactory.createContinuousSignal(
-                IntStream.range(discreteSignal.getN1(), discreteSignal.getN2())
-                        .mapToDouble(i -> discreteSignal.getD() * i)
-                        .boxed()
-                        .collect(Collectors.toMap(
-                                t -> t,
-                                t -> reconstructMethod.reconstruct(discreteSignal, t)
-                        ))
-        );
+        double f = discreteSignal.getF();
+        double t1 = discreteSignal.getN1() / discreteSignal.getF();
+        double t2 = discreteSignal.getN2() / discreteSignal.getF();
+        Map<Double, Double> points = new LinkedHashMap<>();
+        for (double i = t1; i <= t2; i+= (1 / f) / 100) {
+            points.put(i, reconstructMethod.reconstruct(discreteSignal, i, f));
+        }
+        return (ContinuousSignal) signalFactory.createContinuousSignal(points);
     }
 
     public Map<String, Double> calculateStats(ContinuousSignal continuousSignal1, ContinuousSignal continuousSignal2) {
