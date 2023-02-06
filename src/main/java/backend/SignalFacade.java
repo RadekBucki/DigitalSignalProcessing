@@ -1,6 +1,8 @@
 package backend;
 
 import backend.signal.AbstractSignal;
+import backend.signal.ContinuousSignal;
+import backend.signal.DiscreteSignal;
 import backend.signal.serialize.SignalSerializer;
 
 import java.util.List;
@@ -27,7 +29,12 @@ public class SignalFacade {
     public AbstractSignal getSignal(Class<?> name, List<Double> parameters) {
         return signalFactory.getSignal(name, parameters);
     }
-
+    public ContinuousSignal reconstruct(DiscreteSignal discreteSignal) {
+        return signalOperationFactory.createDac().reconstruct(discreteSignal);
+    }
+    public List<Double> calculateDacStats(ContinuousSignal continuousSignal1, ContinuousSignal continuousSignal2) {
+        return signalOperationFactory.createDac().calculateStats(continuousSignal1, continuousSignal2);
+    }
     public Class<AbstractSignal> getDefaultSignal() {
         return signalFactory.getDefaultSignal();
     }

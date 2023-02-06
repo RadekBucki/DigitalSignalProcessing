@@ -1,9 +1,6 @@
 package backend;
 
-import backend.signal_operation.SignalAdd;
-import backend.signal_operation.SignalDivide;
-import backend.signal_operation.SignalMultiply;
-import backend.signal_operation.SignalSubtract;
+import backend.signal_operation.*;
 
 public class SignalOperationFactory {
     public SignalAdd createSignalAdd(SignalFactory signalFactory) {
@@ -17,5 +14,11 @@ public class SignalOperationFactory {
     }
     public SignalDivide createSignalDivide(SignalFactory signalFactory) {
         return new SignalDivide(signalFactory);
+    }
+    public Dac createDac() {
+        return new Dac(createReconstructMethodFactory());
+    }
+    private ReconstructMethodFactory createReconstructMethodFactory() {
+        return new ReconstructMethodFactory();
     }
 }

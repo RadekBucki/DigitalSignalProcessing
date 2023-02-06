@@ -161,9 +161,6 @@ package backend {
         + createSignalSubtract(): AbstractSignalOperation
         + createSignalMultiply(): AbstractSignalOperation
         + createSignalDivide(): AbstractSignalOperation
-    }
-    
-    class SignalConverterFactory {
         + createAdc(): Adc
         + createDac(): Dac
     }
@@ -257,9 +254,8 @@ package backend {
     
     SignalFacade ---> SignalOperationFactory
     SignalFacade ---> SignalFactory
-    SignalFacade ---> SignalConverterFactory
-    SignalConverterFactory ..> Dac
-    SignalConverterFactory ..> Adc
+    SignalOperationFactory ..> Dac
+    SignalOperationFactory ..> Adc
     Dac ---> ReconstructMethodFactory
     ReconstructMethodFactory ..> ReconstructMethod
     
