@@ -6,6 +6,7 @@ import backend.signal.DiscreteSignal;
 import backend.signal.serialize.SignalSerializer;
 
 import java.util.List;
+import java.util.Map;
 
 public class SignalFacade {
     private final SignalOperationFactory signalOperationFactory = new SignalOperationFactory();
@@ -38,7 +39,7 @@ public class SignalFacade {
     public ContinuousSignal reconstructSinc(DiscreteSignal discreteSignal) {
         return signalOperationFactory.createDac().reconstructSinc(discreteSignal);
     }
-    public List<Double> calculateDacStats(ContinuousSignal continuousSignal1, ContinuousSignal continuousSignal2) {
+    public Map<String, Double> calculateDacStats(ContinuousSignal continuousSignal1, ContinuousSignal continuousSignal2) {
         return signalOperationFactory.createDac().calculateStats(continuousSignal1, continuousSignal2);
     }
     public Class<AbstractSignal> getDefaultSignal() {
