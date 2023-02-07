@@ -5,6 +5,7 @@ import backend.signal_operation.*;
 public class SignalOperationFactory {
     private final QuantizationMethodFactory quantizationMethodFactory = new QuantizationMethodFactory();
     private final SignalFactory signalFactory;
+    private final ReconstructMethodFactory reconstructMethodFactory = new ReconstructMethodFactory();
 
     public SignalOperationFactory(SignalFactory signalFactory) {
         this.signalFactory = signalFactory;
@@ -25,7 +26,7 @@ public class SignalOperationFactory {
     public Adc createAdc() {
         return new Adc(quantizationMethodFactory, signalFactory);
     }
-    public Adc createDac() {
-        return null;
+    public Dac createDac() {
+        return new Dac(reconstructMethodFactory, signalFactory);
     }
 }

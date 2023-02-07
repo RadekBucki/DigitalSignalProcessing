@@ -153,7 +153,9 @@ package backend {
         + sampling(ContinuousSignal, double): AbstractSignal
         + quantizationWithTruncation(DiscreteSignal, int): AbstractSignal
         + quantizationWithRounding(DiscreteSignal, int): AbstractSignal
-        + reconstruct(DiscreteSignal): ContinuousSignal
+        + reconstructZeroOrderHold((DiscreteSignal): ContinuousSignal
+        + reconstructFirstOrderHold((DiscreteSignal): ContinuousSignal
+        + reconstructSinc((DiscreteSignal): ContinuousSignal
         + calculateDacStats(ContinuousSignal, ContinuousSignal): double[]
     }
     
@@ -162,9 +164,6 @@ package backend {
         + createSignalSubtract(): AbstractSignalOperation
         + createSignalMultiply(): AbstractSignalOperation
         + createSignalDivide(): AbstractSignalOperation
-    }
-    
-    class SignalConverterFactory {
         + createAdc(): Adc
         + createDac(): Dac
     }
@@ -187,8 +186,11 @@ package backend {
             # operation(double, double): double
         }
         class Dac {
-            + reconstruct(DiscreteSignal): ContinuousSignal
             + calculateStats(ContinuousSignal, ContinuousSignal): double[]
+            + reconstructZeroOrderHold((DiscreteSignal): ContinuousSignal
+            + reconstructFirstOrderHold((DiscreteSignal): ContinuousSignal
+            + reconstructSinc((DiscreteSignal): ContinuousSignal
+            - reconstruct(DiscreteSignal, ReconstructMethod): ContinuousSignal
             - calculateMSE(ContinuousSignal, ContinuousSignal): double
             - calculateSNR(ContinuousSignal, ContinuousSignal): double
             - calculatePSNR(ContinuousSignal, ContinuousSignal): double
@@ -259,9 +261,8 @@ package backend {
     
     SignalFacade ---> SignalOperationFactory
     SignalFacade ---> SignalFactory
-    SignalFacade ---> SignalConverterFactory
-    SignalConverterFactory ..> Dac
-    SignalConverterFactory ..> Adc
+    SignalOperationFactory ..> Dac
+    SignalOperationFactory ..> Adc
     Dac ---> ReconstructMethodFactory
     ReconstructMethodFactory ..> ReconstructMethod
     
