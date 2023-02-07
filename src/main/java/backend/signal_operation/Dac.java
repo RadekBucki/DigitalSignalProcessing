@@ -43,10 +43,11 @@ public class Dac {
     }
 
     public Map<String, Double> calculateStats(ContinuousSignal continuousSignal1, ContinuousSignal continuousSignal2) {
+        double mse = calculateMse(continuousSignal1, continuousSignal2);
         return Map.of(
-                "MSE", calculateMse(continuousSignal1, continuousSignal2),
-                "SNR", calculateSnr(continuousSignal1, continuousSignal2),
-                "PSNR", calculatePsnr(continuousSignal1, continuousSignal2),
+                "MSE", mse,
+                "SNR", calculateSnr(continuousSignal1, mse),
+                "PSNR", calculatePsnr(continuousSignal1, mse),
                 "MD", calculateMd(continuousSignal1, continuousSignal2)
         );
     }
@@ -66,24 +67,24 @@ public class Dac {
                 .orElse(0.0);
     }
 
-    private double calculateSnr(ContinuousSignal continuousSignal1, ContinuousSignal continuousSignal2) {
+    private double calculateSnr(ContinuousSignal continuousSignal1, double mse) {
         return 10 * Math.log10(
                 continuousSignal1.getPoints()
                         .values()
                         .stream()
                         .mapToDouble(value -> value * value)
                         .sum()
-                        / (calculateMse(continuousSignal1, continuousSignal2) * continuousSignal1.getPoints().size())
+                        / (mse * continuousSignal1.getPoints().size())
         );
     }
 
-    private double calculatePsnr(ContinuousSignal continuousSignal1, ContinuousSignal continuousSignal2) {
+    private double calculatePsnr(ContinuousSignal continuousSignal1, double mse) {
         return 10 * Math.log10(
                 continuousSignal1.getPoints()
                         .values()
                         .stream()
                         .max(Double::compareTo)
-                        .orElse(0.0) / calculateMse(continuousSignal1, continuousSignal2)
+                        .orElse(0.0) / mse
         );
     }
 
@@ -95,6 +96,6 @@ public class Dac {
                         entry.getValue() - continuousSignal2.getPoints().getOrDefault(entry.getKey(), 0.0)
                 ))
                 .max()
-                .orElse(0.0) / calculateMse(continuousSignal1, continuousSignal2);
+                .orElse(0.0);
     }
 }
