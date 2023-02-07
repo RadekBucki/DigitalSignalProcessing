@@ -1,6 +1,7 @@
 package frontend.alert;
 
 import javafx.scene.control.Alert;
+import javafx.stage.Modality;
 
 public class AlertBox {
     /**
@@ -14,6 +15,7 @@ public class AlertBox {
         alert.setTitle(title);
         alert.setHeaderText(title);
         alert.setContentText(message);
+        alert.initModality(Modality.NONE);
         alert.show();
     }
 }
