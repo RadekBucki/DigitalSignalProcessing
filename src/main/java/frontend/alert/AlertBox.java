@@ -14,6 +14,6 @@ public class AlertBox {
         alert.setTitle(title);
         alert.setHeaderText(title);
         alert.setContentText(message);
-        alert.showAndWait();
+        alert.show();
     }
 }
