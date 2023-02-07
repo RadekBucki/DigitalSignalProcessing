@@ -150,13 +150,6 @@ package backend {
         + getPossibleSignals(): AbstractSignal[]
         + writeSignal(AbstractSignal, String)
         + readSignal(String): AbstractSignal
-        + sampling(ContinuousSignal, double): AbstractSignal
-        + quantizationWithTruncation(DiscreteSignal, int): AbstractSignal
-        + quantizationWithRounding(DiscreteSignal, int): AbstractSignal
-        + reconstructZeroOrderHold((DiscreteSignal): ContinuousSignal
-        + reconstructFirstOrderHold((DiscreteSignal): ContinuousSignal
-        + reconstructSinc((DiscreteSignal): ContinuousSignal
-        + calculateDacStats(ContinuousSignal, ContinuousSignal): double[]
     }
     
     class SignalOperationFactory {
@@ -164,9 +157,10 @@ package backend {
         + createSignalSubtract(): AbstractSignalOperation
         + createSignalMultiply(): AbstractSignalOperation
         + createSignalDivide(): AbstractSignalOperation
-        + createAdc(): Adc
-        + createDac(): Dac
     }
+    
+    SignalFacade ---> SignalOperationFactory
+    SignalFacade ---> SignalFactory
     
     package signal_operation {
         abstract class AbstractSignalOperation {
@@ -185,60 +179,6 @@ package backend {
         class SignalDivide {
             # operation(double, double): double
         }
-        class Dac {
-            + calculateStats(ContinuousSignal, ContinuousSignal): double[]
-            + reconstructZeroOrderHold((DiscreteSignal): ContinuousSignal
-            + reconstructFirstOrderHold((DiscreteSignal): ContinuousSignal
-            + reconstructSinc((DiscreteSignal): ContinuousSignal
-            - reconstruct(DiscreteSignal, ReconstructMethod): ContinuousSignal
-            - calculateMSE(ContinuousSignal, ContinuousSignal): double
-            - calculateSNR(ContinuousSignal, ContinuousSignal): double
-            - calculatePSNR(ContinuousSignal, ContinuousSignal): double
-            - calculateMD(ContinuousSignal, ContinuousSignal): double
-        }
-        class ReconstructMethodFactory {
-            + createZeroOrderHold(): ReconstructMethod
-            + createFirstOrderHold(): ReconstructMethod
-            + createSinc(): ReconstructMethod
-        }
-    
-        package signal_reconstruction {
-            interface ReconstructMethod {
-                + {abstract} reconstruct(DiscreteSignal): ContinuousSignal
-            }
-            class ZeroOrderHold {
-                + reconstruct(DiscreteSignal): ContinuousSignal
-            }
-            class FirstOrderHold {
-                + reconstruct(DiscreteSignal): ContinuousSignal
-            }
-            class Sinc {
-                + reconstruct(DiscreteSignal): ContinuousSignal
-            }
-        }
-        
-        class Adc {
-            + sampling(ContinuousSignal, double): AbstractSignal
-            + quantizationWithTruncation(DiscreteSignal, int): AbstractSignal
-            + quantizationWithRounding(DiscreteSignal, int): AbstractSignal
-        }
-    
-        class QuantizationMethodFactory {
-            + createQuantizationWithTruncation(): QuantizationMethod
-            + createQuantizationWithRounding(): QuantizationMethod
-        }
-        
-        package signal_quantization {
-            interface QuantizationMethod {
-                + {abstract} quantize(double[], double): double
-            }
-            class QuantizationWithTruncation {
-                + quantize(double[], double): double
-            }
-            class QuantizationWithRounding {
-                + quantize(double[], double): double
-            }
-        }
     }
     
     AbstractSignalOperation <|-- SignalAdd
@@ -249,22 +189,6 @@ package backend {
     AbstractSignalOperation ---> SignalFactory
     
     SignalOperationFactory ..> AbstractSignalOperation
-    
-    QuantizationMethod <|-- QuantizationWithTruncation
-    QuantizationMethod <|-- QuantizationWithRounding
-    Adc ---> QuantizationMethodFactory
-    QuantizationMethodFactory ..> QuantizationMethod
-    
-    ReconstructMethod <|-- ZeroOrderHold
-    ReconstructMethod <|-- FirstOrderHold
-    ReconstructMethod <|-- Sinc
-    
-    SignalFacade ---> SignalOperationFactory
-    SignalFacade ---> SignalFactory
-    SignalOperationFactory ..> Dac
-    SignalOperationFactory ..> Adc
-    Dac ---> ReconstructMethodFactory
-    ReconstructMethodFactory ..> ReconstructMethod
     
     package serialize {
         class SignalSerializer {
@@ -336,5 +260,116 @@ package frontend {
     SignalTabController ..> FieldReader
 }
 SignalTabController ....> SignalFacade
+SignalOperationTabController ....> SignalFacade
+```
+
+## Task 2 - Quantization, sampling and reconstruction
+
+```plantuml
+package backend {    
+    class SignalFacade {
+        + sampling(ContinuousSignal, double): AbstractSignal
+        + quantizationWithTruncation(DiscreteSignal, int): AbstractSignal
+        + quantizationWithRounding(DiscreteSignal, int): AbstractSignal
+        + reconstructZeroOrderHold((DiscreteSignal): ContinuousSignal
+        + reconstructFirstOrderHold((DiscreteSignal): ContinuousSignal
+        + reconstructSinc((DiscreteSignal): ContinuousSignal
+        + calculateDacStats(ContinuousSignal, ContinuousSignal): double[]
+    }
+    
+    class SignalOperationFactory {
+        + createAdc(): Adc
+        + createDac(): Dac
+    }
+    
+    package signal_operation {
+        class Dac {
+            + calculateStats(ContinuousSignal, ContinuousSignal): double[]
+            + reconstructZeroOrderHold((DiscreteSignal): ContinuousSignal
+            + reconstructFirstOrderHold((DiscreteSignal): ContinuousSignal
+            + reconstructSinc((DiscreteSignal): ContinuousSignal
+            - reconstruct(DiscreteSignal, ReconstructMethod): ContinuousSignal
+            - calculateMSE(ContinuousSignal, ContinuousSignal): double
+            - calculateSNR(ContinuousSignal, ContinuousSignal): double
+            - calculatePSNR(ContinuousSignal, ContinuousSignal): double
+            - calculateMD(ContinuousSignal, ContinuousSignal): double
+        }
+        class ReconstructMethodFactory {
+            + createZeroOrderHold(): ReconstructMethod
+            + createFirstOrderHold(): ReconstructMethod
+            + createSinc(): ReconstructMethod
+        }
+    
+        package signal_reconstruction {
+            interface ReconstructMethod {
+                + {abstract} reconstruct(DiscreteSignal): ContinuousSignal
+            }
+            class ZeroOrderHold {
+                + reconstruct(DiscreteSignal): ContinuousSignal
+            }
+            class FirstOrderHold {
+                + reconstruct(DiscreteSignal): ContinuousSignal
+            }
+            class Sinc {
+                + reconstruct(DiscreteSignal): ContinuousSignal
+            }
+        }
+        
+        class Adc {
+            + sampling(ContinuousSignal, double): AbstractSignal
+            + quantizationWithTruncation(DiscreteSignal, int): AbstractSignal
+            + quantizationWithRounding(DiscreteSignal, int): AbstractSignal
+        }
+    
+        class QuantizationMethodFactory {
+            + createQuantizationWithTruncation(): QuantizationMethod
+            + createQuantizationWithRounding(): QuantizationMethod
+        }
+        
+        package signal_quantization {
+            interface QuantizationMethod {
+                + {abstract} quantize(double[], double): double
+            }
+            class QuantizationWithTruncation {
+                + quantize(double[], double): double
+            }
+            class QuantizationWithRounding {
+                + quantize(double[], double): double
+            }
+        }
+    }
+    
+    QuantizationMethod <|-- QuantizationWithTruncation
+    QuantizationMethod <|-- QuantizationWithRounding
+    Adc ---> QuantizationMethodFactory
+    QuantizationMethodFactory ..> QuantizationMethod
+    
+    ReconstructMethod <|-- ZeroOrderHold
+    ReconstructMethod <|-- FirstOrderHold
+    ReconstructMethod <|-- Sinc
+    
+    SignalFacade ---> SignalOperationFactory
+    SignalOperationFactory ..> Dac
+    SignalOperationFactory ..> Adc
+    Dac ---> ReconstructMethodFactory
+    ReconstructMethodFactory ..> ReconstructMethod
+}
+
+package frontend {
+    class SignalOperationTabController {
+        + addOrUpdateSignal()
+        + mathOperation()
+        + samplingOperation()
+        + quantizationOperation()
+        + reconstructOperation()
+        - shouldSamplingButtonBeDisabled()
+        - shouldQuantizationButtonBeDisabled()
+        - shouldReconstructButtonBeDisabled()
+        - shouldReconstructButtonBeDisabled()
+        + onUpdateMathOperationsComboBox()
+        + onUpdateSignalACDCComboBox()
+        + onUpdateReconstructionTypeComboBox()
+    }
+}
 SignalOperationTabController ....> SignalFacade
 ```

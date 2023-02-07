@@ -24,20 +24,20 @@
         </Label>
         <HBox prefHeight="35.0" prefWidth="1000.0">
             <Label prefHeight="25.0" prefWidth="100.0" text="Signal operation"/>
-            <ComboBox fx:id="signalOperationComboBox" onAction="#onUpdateComboBox" prefHeight="25.0"
+            <ComboBox fx:id="signalOperationComboBox" onAction="#onUpdateMathOperationsComboBox" prefHeight="25.0"
                       prefWidth="440.0" promptText="Choose signal operation"/>
         </HBox>
         <HBox prefHeight="35.0" prefWidth="1000.0">
             <Label prefHeight="25.0" prefWidth="100.0" text="Signal 1"/>
-            <ComboBox fx:id="signal1ComboBox" onAction="#onUpdateComboBox" prefHeight="25.0" prefWidth="440.0"
+            <ComboBox fx:id="signal1ComboBox" onAction="#onUpdateMathOperationsComboBox" prefHeight="25.0" prefWidth="440.0"
                       promptText="Choose signal"/>
         </HBox>
         <HBox prefHeight="35.0" prefWidth="200.0">
             <Label prefHeight="25.0" prefWidth="100.0" text="Signal 2"/>
-            <ComboBox fx:id="signal2ComboBox" onAction="#onUpdateComboBox" prefHeight="25.0" prefWidth="440.0"
+            <ComboBox fx:id="signal2ComboBox" onAction="#onUpdateMathOperationsComboBox" prefHeight="25.0" prefWidth="440.0"
                       promptText="Choose signal"/>
         </HBox>
-        <Button fx:id="applyOperationButton" disable="true" mnemonicParsing="false" onAction="#applyOperation"
+        <Button fx:id="applyOperationButton" disable="true" mnemonicParsing="false" onAction="#mathOperation"
                 text="Apply operation" textAlignment="CENTER"/>
         <Label prefHeight="37.0" prefWidth="220.0" text="A/D &amp; D/A">
             <font>

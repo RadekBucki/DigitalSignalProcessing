@@ -125,7 +125,7 @@ public class SignalOperationTabController implements Initializable {
         );
     }
 
-    public void applyOperation() {
+    public void mathOperation() {
         AbstractSignal signal = signalOperations.get(signalOperationComboBox.getValue()).apply(
             signals.get(signal1ComboBox.getValue()),
             signals.get(signal2ComboBox.getValue())
@@ -168,24 +168,16 @@ public class SignalOperationTabController implements Initializable {
         createSignalTab.accept(signal);
     }
 
-    public void onUpdateComboBox() {
-        applyOperationButton.setDisable(
-                signalOperationComboBox.getValue() == null ||
-                signal1ComboBox.getValue() == null ||
-                signal2ComboBox.getValue() == null
-        );
-    }
-
     public void setCreateSignalTab(Consumer<AbstractSignal> createSignalTab) {
         this.createSignalTab = createSignalTab;
     }
 
-    public boolean shouldSamplingButtonBeDisabled() {
+    private boolean shouldSamplingButtonBeDisabled() {
         return !(signals.get(signalACDCComboBox.getValue()) instanceof ContinuousSignal) ||
                 samplingFrequency.getText().isEmpty();
     }
 
-    public boolean shouldQuantizationButtonBeDisabled() {
+    private boolean shouldQuantizationButtonBeDisabled() {
         return !(signals.get(signalACDCComboBox.getValue()) instanceof DiscreteSignal) ||
                 numOfLevelsQuantization.getText().isEmpty() ||
                 quantizationTypeComboBox.getValue() == null;
@@ -195,6 +187,14 @@ public class SignalOperationTabController implements Initializable {
         return !(signals.get(signalACDCComboBox.getValue()) instanceof DiscreteSignal)  ||
                 reconstructionTypeComboBox.getValue() == null ||
                 (numOfSamples.getText().isEmpty() && reconstructionTypeComboBox.getValue().equals("Sinc"));
+    }
+
+    public void onUpdateMathOperationsComboBox() {
+        applyOperationButton.setDisable(
+                signalOperationComboBox.getValue() == null ||
+                        signal1ComboBox.getValue() == null ||
+                        signal2ComboBox.getValue() == null
+        );
     }
 
     public void onUpdateSignalACDCComboBox() {
