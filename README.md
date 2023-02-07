@@ -290,11 +290,20 @@ package frontend {
         + saveSignal()
         + loadSignal()
         + setSignal()
-        + onUpdateComboBox()
     }
     class SignalOperationTabController {
         + addOrUpdateSignal()
-        + applyOperation()
+        + mathOperation()
+        + samplingOperation()
+        + quantizationOperation()
+        + reconstructOperation()
+        - shouldSamplingButtonBeDisabled()
+        - shouldQuantizationButtonBeDisabled()
+        - shouldReconstructButtonBeDisabled()
+        - shouldReconstructButtonBeDisabled()
+        + onUpdateMathOperationsComboBox()
+        + onUpdateSignalACDCComboBox()
+        + onUpdateReconstructionTypeComboBox()
     }
     package file {
         class FileChoose {
