@@ -150,13 +150,6 @@ package backend {
         + getPossibleSignals(): AbstractSignal[]
         + writeSignal(AbstractSignal, String)
         + readSignal(String): AbstractSignal
-        + sampling(ContinuousSignal, double): AbstractSignal
-        + quantizationWithTruncation(DiscreteSignal, int): AbstractSignal
-        + quantizationWithRounding(DiscreteSignal, int): AbstractSignal
-        + reconstructZeroOrderHold((DiscreteSignal): ContinuousSignal
-        + reconstructFirstOrderHold((DiscreteSignal): ContinuousSignal
-        + reconstructSinc((DiscreteSignal): ContinuousSignal
-        + calculateDacStats(ContinuousSignal, ContinuousSignal): double[]
     }
     
     class SignalOperationFactory {
@@ -164,9 +157,10 @@ package backend {
         + createSignalSubtract(): AbstractSignalOperation
         + createSignalMultiply(): AbstractSignalOperation
         + createSignalDivide(): AbstractSignalOperation
-        + createAdc(): Adc
-        + createDac(): Dac
     }
+    
+    SignalFacade ---> SignalOperationFactory
+    SignalFacade ---> SignalFactory
     
     package signal_operation {
         abstract class AbstractSignalOperation {
@@ -185,6 +179,110 @@ package backend {
         class SignalDivide {
             # operation(double, double): double
         }
+    }
+    
+    AbstractSignalOperation <|-- SignalAdd
+    AbstractSignalOperation <|-- SignalSubtract
+    AbstractSignalOperation <|-- SignalMultiply
+    AbstractSignalOperation <|-- SignalDivide
+    
+    AbstractSignalOperation ---> SignalFactory
+    
+    SignalOperationFactory ..> AbstractSignalOperation
+    
+    package serialize {
+        class SignalSerializer {
+            + {static} write(AbstractSignal, String)
+            + {static} read(String): AbstractSignal
+        }
+    }
+    SignalFacade ...> SignalSerializer
+}
+
+package frontend {
+    class MainApplication {
+    }
+    class MainApplicationController {
+        - createSignalTab()
+        - createSignalTabFromAbstractSignal()
+    }
+    class SignalTabController {
+        - createGroupLabel()
+        - shouldGenerateButtonBeDisabled()
+        - parametersTextFields()
+        + createSignalInstance()
+        + saveSignal()
+        + loadSignal()
+        + setSignal()
+        + onUpdateComboBox()
+    }
+    class SignalOperationTabController {
+        + addOrUpdateSignal()
+        + applyOperation()
+    }
+    package file {
+        class FileChoose {
+            + {static} saveChooser()
+            + {static} openChooser()
+            - {static} choose()
+        }
+    }
+    package chart {
+        class ChartGenerator {
+            + {static} generateAmplitudeTimeChart()
+            + {static} generateHistogram()
+            - {static} formatAxis()
+            - {static} changeVisibility()
+        }
+    }
+    package classes {
+        class ClassTranslator {
+            + {static} translatePascalCaseClassToText(Class): String
+        }
+    }
+    package fields {
+        class FieldReader {
+            + {static} getFieldNames(Class): String[]
+        }
+        class FieldMapper {
+            + {static} getFieldNames(String): String
+        }
+    }
+    
+    MainApplicationController o---> SignalTabController
+    MainApplicationController o--> SignalOperationTabController
+    MainApplication o--> MainApplicationController
+    
+    SignalTabController ..> FileChoose
+    SignalTabController ..> ChartGenerator
+    SignalTabController ..> ClassTranslator
+    SignalTabController ..> FieldMapper
+    SignalTabController ..> FieldReader
+}
+SignalTabController ....> SignalFacade
+SignalOperationTabController ....> SignalFacade
+```
+
+## Task 2 - Quantization, sampling and reconstruction
+
+```plantuml
+package backend {    
+    class SignalFacade {
+        + sampling(ContinuousSignal, double): AbstractSignal
+        + quantizationWithTruncation(DiscreteSignal, int): AbstractSignal
+        + quantizationWithRounding(DiscreteSignal, int): AbstractSignal
+        + reconstructZeroOrderHold((DiscreteSignal): ContinuousSignal
+        + reconstructFirstOrderHold((DiscreteSignal): ContinuousSignal
+        + reconstructSinc((DiscreteSignal): ContinuousSignal
+        + calculateDacStats(ContinuousSignal, ContinuousSignal): double[]
+    }
+    
+    class SignalOperationFactory {
+        + createAdc(): Adc
+        + createDac(): Dac
+    }
+    
+    package signal_operation {
         class Dac {
             + calculateStats(ContinuousSignal, ContinuousSignal): double[]
             + reconstructZeroOrderHold((DiscreteSignal): ContinuousSignal
@@ -241,15 +339,6 @@ package backend {
         }
     }
     
-    AbstractSignalOperation <|-- SignalAdd
-    AbstractSignalOperation <|-- SignalSubtract
-    AbstractSignalOperation <|-- SignalMultiply
-    AbstractSignalOperation <|-- SignalDivide
-    
-    AbstractSignalOperation ---> SignalFactory
-    
-    SignalOperationFactory ..> AbstractSignalOperation
-    
     QuantizationMethod <|-- QuantizationWithTruncation
     QuantizationMethod <|-- QuantizationWithRounding
     Adc ---> QuantizationMethodFactory
@@ -260,37 +349,13 @@ package backend {
     ReconstructMethod <|-- Sinc
     
     SignalFacade ---> SignalOperationFactory
-    SignalFacade ---> SignalFactory
     SignalOperationFactory ..> Dac
     SignalOperationFactory ..> Adc
     Dac ---> ReconstructMethodFactory
     ReconstructMethodFactory ..> ReconstructMethod
-    
-    package serialize {
-        class SignalSerializer {
-            + {static} write(AbstractSignal, String)
-            + {static} read(String): AbstractSignal
-        }
-    }
-    SignalFacade ...> SignalSerializer
 }
 
 package frontend {
-    class MainApplication {
-    }
-    class MainApplicationController {
-        - createSignalTab()
-        - createSignalTabFromAbstractSignal()
-    }
-    class SignalTabController {
-        - createGroupLabel()
-        - shouldGenerateButtonBeDisabled()
-        - parametersTextFields()
-        + createSignalInstance()
-        + saveSignal()
-        + loadSignal()
-        + setSignal()
-    }
     class SignalOperationTabController {
         + addOrUpdateSignal()
         + mathOperation()
@@ -305,45 +370,6 @@ package frontend {
         + onUpdateSignalACDCComboBox()
         + onUpdateReconstructionTypeComboBox()
     }
-    package file {
-        class FileChoose {
-            + {static} saveChooser()
-            + {static} openChooser()
-            - {static} choose()
-        }
-    }
-    package chart {
-        class ChartGenerator {
-            + {static} generateAmplitudeTimeChart()
-            + {static} generateHistogram()
-            - {static} formatAxis()
-            - {static} changeVisibility()
-        }
-    }
-    package classes {
-        class ClassTranslator {
-            + {static} translatePascalCaseClassToText(Class): String
-        }
-    }
-    package fields {
-        class FieldReader {
-            + {static} getFieldNames(Class): String[]
-        }
-        class FieldMapper {
-            + {static} getFieldNames(String): String
-        }
-    }
-    
-    MainApplicationController o---> SignalTabController
-    MainApplicationController o--> SignalOperationTabController
-    MainApplication o--> MainApplicationController
-    
-    SignalTabController ..> FileChoose
-    SignalTabController ..> ChartGenerator
-    SignalTabController ..> ClassTranslator
-    SignalTabController ..> FieldMapper
-    SignalTabController ..> FieldReader
 }
-SignalTabController ....> SignalFacade
 SignalOperationTabController ....> SignalFacade
 ```
