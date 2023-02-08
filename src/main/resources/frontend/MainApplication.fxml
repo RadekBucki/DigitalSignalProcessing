@@ -8,20 +8,12 @@
 <TabPane fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
          stylesheets="@MainApplication.css" tabClosingPolicy="ALL_TABS" xmlns="http://javafx.com/javafx/16"
          xmlns:fx="http://javafx.com/fxml/1" fx:controller="frontend.MainApplicationController">
-    <tabs>
-        <Tab fx:id="signalOperationTab" closable="false" styleClass="highlighting-tab" text="Signal Operation">
-            <content>
-                <VBox fx:id="signalOperationTabVBox">
-                    <children>
-                        <fx:include fx:id="signalOperationTabFxml" source="SignalOperationTab.fxml"/>
-                    </children>
-                </VBox>
-            </content>
-        </Tab>
-        <Tab fx:id="plusTab" closable="false" styleClass="highlighting-tab" text="+">
-            <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
-            </content>
-        </Tab>
-    </tabs>
+    <Tab closable="false" styleClass="highlighting-tab" text="Signal Operation">
+        <VBox >
+            <fx:include fx:id="signalOperationTabFxml" source="SignalOperationTab.fxml"/>
+        </VBox>
+    </Tab>
+    <Tab fx:id="plusTab" closable="false" styleClass="highlighting-tab" text="+">
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
+    </Tab>
 </TabPane>
