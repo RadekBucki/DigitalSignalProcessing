@@ -13,11 +13,13 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 import java.awt.*;
+import java.awt.geom.Ellipse2D;
 import java.text.NumberFormat;
 import java.util.Map;
 import java.util.Optional;
 
 public class ChartGenerator {
+    private static final float POINT_SIZE = 3.0f;
     private ChartGenerator() {
     }
 
@@ -37,6 +39,8 @@ public class ChartGenerator {
         chart.setBackgroundPaint(new Color(0xF4, 0xF4, 0xF4));
         XYPlot plot = (XYPlot) chart.getPlot();
         XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
+        Shape shape = new Ellipse2D.Double(-POINT_SIZE/2, -POINT_SIZE/2, POINT_SIZE, POINT_SIZE);
+        renderer.setSeriesShape(0, shape);
 
         Optional<Map.Entry<Double, Double>> maxEntry = points.entrySet()
                 .stream()
