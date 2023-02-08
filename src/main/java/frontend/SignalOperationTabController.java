@@ -41,7 +41,11 @@ public class SignalOperationTabController implements Initializable {
     }
 
     public void addOrUpdateSignal(String name, AbstractSignal signal) {
-        signals.put(name, signal);
+        if (signal == null) {
+            signals.remove(name);
+        } else {
+            signals.put(name, signal);
+        }
         signal1ComboBox.getItems().setAll(signals.keySet());
         signal2ComboBox.getItems().setAll(signals.keySet());
     }
