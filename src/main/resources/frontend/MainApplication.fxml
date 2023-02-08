@@ -6,7 +6,7 @@
 
 <?import javafx.scene.layout.VBox?>
 <TabPane fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-         stylesheets="@MainApplication.css" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/16"
+         stylesheets="@MainApplication.css" tabClosingPolicy="ALL_TABS" xmlns="http://javafx.com/javafx/16"
          xmlns:fx="http://javafx.com/fxml/1" fx:controller="frontend.MainApplicationController">
     <tabs>
         <Tab fx:id="signalOperationTab" closable="false" styleClass="highlighting-tab" text="Signal Operation">
