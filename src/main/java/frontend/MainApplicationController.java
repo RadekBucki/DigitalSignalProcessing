@@ -13,6 +13,7 @@ import java.util.ResourceBundle;
 
 public class MainApplicationController implements Initializable {
     private static final int DEFAULT_CARD_NUMBER = 2;
+    private int nextTabNumber = 1;
     @FXML
     private TabPane tabPane;
     @FXML
@@ -25,7 +26,7 @@ public class MainApplicationController implements Initializable {
         try {
             plusTab.setOnSelectionChanged(event -> {
                 try {
-                    Tab tab = createSignalTab(tabPane.getTabs().size() - 1);
+                    Tab tab = createSignalTab();
                     tabPane.getTabs().add(tabPane.getTabs().size() - 1, tab);
                     tabPane.getSelectionModel().select(tab);
                 } catch (IOException ignored) {
@@ -33,7 +34,7 @@ public class MainApplicationController implements Initializable {
                 }
             });
             for (int i = 0; i < DEFAULT_CARD_NUMBER; i++) {
-                Tab tab = createSignalTab(i + 1);
+                Tab tab = createSignalTab();
                 tabPane.getTabs().add(tabPane.getTabs().size() - 1, tab);
             }
             tabPane.getSelectionModel().select(tabPane.getTabs().get(1));
@@ -43,23 +44,25 @@ public class MainApplicationController implements Initializable {
         }
     }
 
-    private Tab createSignalTab(int count) throws IOException {
+    private Tab createSignalTab() throws IOException {
         Tab tab = new Tab();
-        String tabName = "Signal " + count;
+        String tabName = "Signal " + nextTabNumber;
         tab.setText(tabName);
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(SignalTabController.RESOURCE));
         tab.setContent(fxmlLoader.load());
         tab.setClosable(true);
+        tab.setOnClosed((event) -> signalOperationTabFxmlController.addOrUpdateSignal(tabName, null));
         SignalTabController signalTabController = fxmlLoader.getController();
         signalTabController.setSignalConsumer(signalOperationTabFxmlController::addOrUpdateSignal);
         signalTabController.setTabName(tabName);
+        nextTabNumber++;
         return tab;
     }
 
     private void createSignalTabFromAbstractSignal(AbstractSignal signal) {
         try {
             Tab tab = new Tab();
-            String tabName = "Signal " + (tabPane.getTabs().size() - 1);
+            String tabName = "Signal " + nextTabNumber;
             tab.setText(tabName);
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(SignalTabController.RESOURCE));
             tab.setClosable(true);
@@ -70,6 +73,7 @@ public class MainApplicationController implements Initializable {
             signalTabController.setSignal(signal);
             tabPane.getTabs().add(tabPane.getTabs().size() - 1, tab);
             tabPane.getSelectionModel().select(tab);
+            nextTabNumber++;
         } catch (IOException ignored) {
             // ignored
         }
