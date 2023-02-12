@@ -8,6 +8,9 @@ public class SignalDivide extends AbstractSignalOperation {
     }
     @Override
     protected Double operation(double signal1Amplitude, double signal2Amplitude) {
+        if (signal1Amplitude - signal2Amplitude < 0.0001) {
+            return 1.0;
+        }
         if (signal2Amplitude == 0) {
             return 0.0;
         }
