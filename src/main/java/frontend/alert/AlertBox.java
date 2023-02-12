@@ -4,6 +4,9 @@ import javafx.scene.control.Alert;
 import javafx.stage.Modality;
 
 public class AlertBox {
+    private AlertBox() {
+    }
+
     /**
      * Method shows alert box with parameters.
      * @param title String

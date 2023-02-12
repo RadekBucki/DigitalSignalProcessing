@@ -319,6 +319,7 @@ package backend {
             + sampling(ContinuousSignal, double): AbstractSignal
             + quantizationWithTruncation(DiscreteSignal, int): AbstractSignal
             + quantizationWithRounding(DiscreteSignal, int): AbstractSignal
+            - quantization(QuantizationMethod,DiscreteSignal,int)
         }
     
         class QuantizationMethodFactory {
@@ -370,6 +371,12 @@ package frontend {
         + onUpdateSignalACDCComboBox()
         + onUpdateReconstructionTypeComboBox()
     }
+    package alert {
+        class AlertBox {
+            + show(String,String,AlertType)
+        }
+    }
+    SignalOperationTabController .> AlertBox
 }
 SignalOperationTabController ....> SignalFacade
 ```
