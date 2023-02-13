@@ -382,6 +382,25 @@ SignalOperationTabController ....> SignalFacade
 ```
 ```plantuml
 package backend {
+    class SignalFacade {
+        + discreteWeave(DiscreteSignal, DiscreteSignal): DiscreteSignal
+        + filter(DiscreteSignal, Pass, Window, double, double): DiscreteSignal
+        + getLowPass(): Pass
+        + getHighPass(): Pass
+        + getBandPass(): Pass
+        + getRectangularWindow(): Window
+        + getHammingWindow(): Window
+        + getHanningWindow(): Window
+        + getBlackmanWindow(): Window
+        + filter(DiscreteSignal, Pass, Window, double, double): DiscreteSignal
+        + discreteWeave(DiscreteSignal, DiscreteSignal): DiscreteSignal
+        + discreteSignalsCorrelation(DiscreteSignal, DiscreteSignal, DiscreteSignalsCorrelationType): double
+    }
+    class SignalOperationFactory {
+        + createDiscreteWeave(): DiscreetWeave
+        + createFilter(): Filter
+        + createDiscreteSignalsCorrelation(): DiscreteSignalsCorrelation
+    }
     package signal_operation {
         class DiscreetWeave {
             + execute(DiscreteSignal, DiscreteSignal): DiscreteSignal
@@ -389,8 +408,8 @@ package backend {
         class Filter {
             + execute(DiscreteSignal, Pass, Window, double, double): DiscreteSignal
         }
-        Filter ..> PassFactory
-        Filter ..> WindowFactory
+        Filter ..> Pass
+        Filter ..> Window
         class PassFactory {
             + createLowPass(): Pass
             + createHighPass(): Pass
@@ -453,5 +472,11 @@ package backend {
             + USING_WEAVE
         }
     }
+    SignalFacade --> SignalOperationFactory
+    SignalFacade --> PassFactory
+    SignalFacade --> WindowFactory
+    SignalOperationFactory ..> DiscreetWeave
+    SignalOperationFactory ..> Filter
+    SignalOperationFactory ..> DiscreteSignalsCorrelation
 }
 ```
