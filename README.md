@@ -442,6 +442,16 @@ package backend {
             Window <|.. HanningWindow
             Window <|.. BlackmanWindow
         }
+        class DiscreteSignalsCorrelation {
+            + execute(DiscreteSignal, DiscreteSignal, DiscreteSignalsCorrelation): DiscreteSignal
+            - executeDirect(DiscreteSignal, DiscreteSignal): DiscreteSignal
+            - executeUsingWeave(DiscreteSignal, DiscreteSignal): DiscreteSignal
+        }
+        DiscreteSignalsCorrelation ..> DiscreteSignalsCorrelationType
+        enum DiscreteSignalsCorrelationType {
+            + DIRECT
+            + USING_WEAVE
+        }
     }
 }
 ```
