@@ -340,14 +340,14 @@ package backend {
         }
     }
     
-    QuantizationMethod <|-- QuantizationWithTruncation
-    QuantizationMethod <|-- QuantizationWithRounding
+    QuantizationMethod <|.. QuantizationWithTruncation
+    QuantizationMethod <|.. QuantizationWithRounding
     Adc ---> QuantizationMethodFactory
     QuantizationMethodFactory ..> QuantizationMethod
     
-    ReconstructMethod <|-- ZeroOrderHold
-    ReconstructMethod <|-- FirstOrderHold
-    ReconstructMethod <|-- Sinc
+    ReconstructMethod <|.. ZeroOrderHold
+    ReconstructMethod <|.. FirstOrderHold
+    ReconstructMethod <|.. Sinc
     
     SignalFacade ---> SignalOperationFactory
     SignalOperationFactory ..> Dac
