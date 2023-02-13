@@ -380,3 +380,68 @@ package frontend {
 }
 SignalOperationTabController ....> SignalFacade
 ```
+```plantuml
+package backend {
+    package signal_operation {
+        class DiscreetWeave {
+            + execute(DiscreteSignal, DiscreteSignal): DiscreteSignal
+        }
+        class Filter {
+            + execute(DiscreteSignal, Pass, Window, double, double): DiscreteSignal
+        }
+        Filter ..> PassFactory
+        Filter ..> WindowFactory
+        class PassFactory {
+            + createLowPass(): Pass
+            + createHighPass(): Pass
+            + createBandPass(): Pass
+        }
+        PassFactory ..> Pass
+        class WindowFactory {
+            + createRectangularWindow(): Window
+            + createHammingWindow(): Window
+            + createHanningWindow(): Window
+            + createBlackmanWindow(): Window
+        }
+        WindowFactory ..> Window
+        package pass {
+            interface Pass {
+                + pass(?): boolean
+            }
+            class LowPass {
+                + pass(?): boolean
+            }
+            class HighPass {
+                + pass(?): boolean
+            }
+            class BandPass {
+                + pass(?): boolean
+            }
+            Pass <|.. LowPass
+            Pass <|.. HighPass
+            Pass <|.. BandPass
+        }
+        package window {
+            interface Window {
+                + window(?): double
+            }
+            class RectangularWindow {
+                + window(?): double
+            }
+            class HammingWindow {
+                + window(?): double
+            }
+            class HanningWindow {
+                + window(?): double
+            }
+            class BlackmanWindow {
+                + window(?): double
+            }
+            Window <|.. RectangularWindow
+            Window <|.. HammingWindow
+            Window <|.. HanningWindow
+            Window <|.. BlackmanWindow
+        }
+    }
+}
+```
