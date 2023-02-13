@@ -74,6 +74,7 @@ public class ChartGenerator {
 
         JFreeChart histogram = ChartFactory.createHistogram("Histogram", "Value",
                 "Frequency", dataset, PlotOrientation.VERTICAL, false, false, false);
+        histogram.setBackgroundPaint(new Color(0xF4, 0xF4, 0xF4));
 
         NumberAxis axis = (NumberAxis) histogram.getXYPlot().getRangeAxis();
         axis.setNumberFormatOverride(NumberFormat.getPercentInstance());
