@@ -302,7 +302,7 @@ package backend {
     
         package signal_reconstruction {
             interface ReconstructMethod {
-                + {abstract} reconstruct(DiscreteSignal): ContinuousSignal
+                + reconstruct(DiscreteSignal): ContinuousSignal
             }
             class ZeroOrderHold {
                 + reconstruct(DiscreteSignal): ContinuousSignal
@@ -329,7 +329,7 @@ package backend {
         
         package signal_quantization {
             interface QuantizationMethod {
-                + {abstract} quantize(double[], double): double
+                + quantize(double[], double): double
             }
             class QuantizationWithTruncation {
                 + quantize(double[], double): double
@@ -340,14 +340,14 @@ package backend {
         }
     }
     
-    QuantizationMethod <|-- QuantizationWithTruncation
-    QuantizationMethod <|-- QuantizationWithRounding
+    QuantizationMethod <|.. QuantizationWithTruncation
+    QuantizationMethod <|.. QuantizationWithRounding
     Adc ---> QuantizationMethodFactory
     QuantizationMethodFactory ..> QuantizationMethod
     
-    ReconstructMethod <|-- ZeroOrderHold
-    ReconstructMethod <|-- FirstOrderHold
-    ReconstructMethod <|-- Sinc
+    ReconstructMethod <|.. ZeroOrderHold
+    ReconstructMethod <|.. FirstOrderHold
+    ReconstructMethod <|.. Sinc
     
     SignalFacade ---> SignalOperationFactory
     SignalOperationFactory ..> Dac
