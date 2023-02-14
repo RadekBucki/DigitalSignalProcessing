@@ -22,7 +22,8 @@ public class Adc {
         AbstractSignal discreteSignal = signalFactory.createDiscreteSignal(continuousSignal.getA(),
                 continuousSignal.getD(), samplingFrequency, continuousSignal.getT1());
         DoubleStream.iterate(continuousSignal.getT1(), d -> d + (1 / samplingFrequency))
-                .limit((long) (continuousSignal.getT2() * samplingFrequency - continuousSignal.getT1() * samplingFrequency + 1))
+                .limit(Math.round(continuousSignal.getT2() * samplingFrequency) -
+                        Math.round(continuousSignal.getT1() * samplingFrequency) + 1)
                 .forEach(d -> discreteSignal.addPoint(d, continuousSignal.calculatePointValue(d)));
         return discreteSignal;
     }
