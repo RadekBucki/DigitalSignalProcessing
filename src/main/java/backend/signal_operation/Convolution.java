@@ -4,8 +4,8 @@ import backend.SignalFactory;
 import backend.signal.DiscreteSignal;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Convolution {
@@ -16,16 +16,18 @@ public class Convolution {
     }
 
     public DiscreteSignal execute(DiscreteSignal signal1, DiscreteSignal signal2) {
-        Map<Double, Double> points = new LinkedHashMap<>();
-        ArrayList<Double> signal1Points = new ArrayList<>(signal1.getPoints().values());
+        AtomicReference<ArrayList<Double>> signal1Points = new AtomicReference<>(new ArrayList<>(signal1.getPoints().values()));
         ArrayList<Double> signal2Points = new ArrayList<>(signal2.getPoints().values());
-
-        IntStream.range(0, signal1.getPoints().size() + signal2.getPoints().size() - 1)
-                .forEach(n -> points.put(n / signal1.getF(), IntStream.range(0, signal1.getPoints().size())
-                        .filter(k -> (k - n) >= 0 && (k - n) < signal2.getPoints().size())
-                        .mapToDouble(k -> signal1Points.get(k) * signal2Points.get(k - n))
-                        .sum()));
-
-        return (DiscreteSignal) signalFactory.createDiscreteSignal(points);
+        return (DiscreteSignal) signalFactory.createDiscreteSignal(
+                IntStream.range(0, signal1Points.get().size() + signal2Points.size() - 1)
+                        .boxed()
+                        .collect(Collectors.toMap(
+                                n -> n / signal1.getF(),
+                                n -> IntStream.range(0, signal1.getPoints().size())
+                                        .filter(k -> (k - n) >= 0 && (k - n) < signal2Points.size())
+                                        .mapToDouble(k -> signal1Points.get().get(k) * signal2Points.get(k - n))
+                                        .sum()
+                        ))
+        );
     }
 }
