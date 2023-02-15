@@ -15,7 +15,7 @@ public class Convolution {
             double value = 0;
             for (int k = 0; k < signal1.getPoints().size(); k++) {
                 if ((n - k) >= 0 && (n - k) < signal2.getPoints().size()) {
-                    value = value + signal1Points.get(k) * signal2Points.get(n - k);
+                    value += signal1Points.get(k) * signal2Points.get(n - k);
                 }
             }
             points.put(n / signal1.getF(), value);
