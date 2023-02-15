@@ -14,6 +14,7 @@ import java.net.URL;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -53,6 +54,12 @@ public class SignalOperationTabController implements Initializable {
     private ComboBox<String> quantizationTypeComboBox;
     @FXML
     private Button reconstructOperationButton;
+    @FXML
+    private ComboBox<String> signal1ConvolutionComboBox;
+    @FXML
+    private ComboBox<String> signal2ConvolutionComboBox;
+    @FXML
+    private Button convolutionOperationButton;
 
     private final SignalFacade signalFacade = new SignalFacade();
 
@@ -120,6 +127,12 @@ public class SignalOperationTabController implements Initializable {
         signal1ComboBox.getItems().setAll(signals.keySet());
         signal2ComboBox.getItems().setAll(signals.keySet());
         signalACDCComboBox.getItems().setAll(signals.keySet());
+        Set<String> discreteSignals = signals.entrySet()
+                .stream()
+                .filter(v -> v.getValue() instanceof DiscreteSignal)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)).keySet();
+        signal1ConvolutionComboBox.getItems().setAll(discreteSignals);
+        signal2ConvolutionComboBox.getItems().setAll(discreteSignals);
         reconstructionSourceSignalComboBox.getItems().setAll(
                 signals.entrySet()
                         .stream()
@@ -172,6 +185,12 @@ public class SignalOperationTabController implements Initializable {
         createSignalTab.accept(signal);
     }
 
+    public void convolutionOperation() {
+        AbstractSignal signal = signalFacade.convolution((DiscreteSignal) signals.get(signal1ConvolutionComboBox.getValue()),
+                (DiscreteSignal) signals.get(signal2ConvolutionComboBox.getValue()));
+        createSignalTab.accept(signal);
+    }
+
     public void setCreateSignalTab(Consumer<AbstractSignal> createSignalTab) {
         this.createSignalTab = createSignalTab;
     }
@@ -211,5 +230,12 @@ public class SignalOperationTabController implements Initializable {
     public void onUpdateReconstructionTypeComboBox() {
         numOfSamples.setDisable(!reconstructionTypeComboBox.getValue().equals("Sinc"));
         reconstructOperationButton.setDisable(shouldReconstructButtonBeDisabled());
+    }
+
+    public void onUpdateConvolutionOperationsComboBox() {
+        convolutionOperationButton.setDisable(
+                        signal1ConvolutionComboBox.getValue() == null ||
+                        signal2ConvolutionComboBox.getValue() == null
+        );
     }
 }
