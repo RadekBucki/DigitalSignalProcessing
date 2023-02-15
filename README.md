@@ -363,14 +363,12 @@ package frontend {
         + samplingOperation()
         + quantizationOperation()
         + reconstructOperation()
-        + convolutionOperation()
         - shouldSamplingButtonBeDisabled()
         - shouldQuantizationButtonBeDisabled()
         - shouldReconstructButtonBeDisabled()
         - shouldReconstructButtonBeDisabled()
         + onUpdateMathOperationsComboBox()
         + onUpdateSignalACDCComboBox()
-        + onUpdateReconstructionTypeComboBox()
         + onUpdateConvolutionOperationsComboBox()
     }
     package alert {
@@ -481,4 +479,12 @@ package backend {
     SignalOperationFactory ..> Filter
     SignalOperationFactory ..> DiscreteSignalsCorrelation
 }
+
+package frontend {
+    class SignalOperationTabController {
+        + convolutionOperation()
+        + onUpdateConvolutionOperationsComboBox()
+    }
+}
+SignalOperationTabController ....> SignalFacade
 ```
