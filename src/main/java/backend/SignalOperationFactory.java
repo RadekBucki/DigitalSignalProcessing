@@ -29,8 +29,7 @@ public class SignalOperationFactory {
     public Dac createDac() {
         return new Dac(reconstructMethodFactory, signalFactory);
     }
-
     public Convolution createConvolution() {
-        return new Convolution();
+        return new Convolution(signalFactory);
     }
 }

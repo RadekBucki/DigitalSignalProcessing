@@ -79,7 +79,7 @@ public class SignalFacade {
                 .quantizationWithRounding(continuousSignal, numOfLevels);
     }
 
-    public DiscreteSignal discreteWeave(DiscreteSignal signal1, DiscreteSignal signal2) {
+    public DiscreteSignal convolution(DiscreteSignal signal1, DiscreteSignal signal2) {
         return signalOperationFactory.createConvolution().execute(signal1, signal2);
     }
 }

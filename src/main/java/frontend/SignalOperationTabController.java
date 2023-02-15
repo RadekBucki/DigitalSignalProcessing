@@ -186,8 +186,9 @@ public class SignalOperationTabController implements Initializable {
     }
 
     public void convolutionOperation() {
-        signalFacade.discreteWeave((DiscreteSignal) signals.get(signal1ConvolutionComboBox.getValue()),
+        AbstractSignal signal = signalFacade.convolution((DiscreteSignal) signals.get(signal1ConvolutionComboBox.getValue()),
                 (DiscreteSignal) signals.get(signal2ConvolutionComboBox.getValue()));
+        createSignalTab.accept(signal);
     }
 
     public void setCreateSignalTab(Consumer<AbstractSignal> createSignalTab) {

@@ -363,6 +363,7 @@ package frontend {
         + samplingOperation()
         + quantizationOperation()
         + reconstructOperation()
+        + convolutionOperation()
         - shouldSamplingButtonBeDisabled()
         - shouldQuantizationButtonBeDisabled()
         - shouldReconstructButtonBeDisabled()
@@ -370,6 +371,7 @@ package frontend {
         + onUpdateMathOperationsComboBox()
         + onUpdateSignalACDCComboBox()
         + onUpdateReconstructionTypeComboBox()
+        + onUpdateConvolutionOperationsComboBox()
     }
     package alert {
         class AlertBox {
