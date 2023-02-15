@@ -34,7 +34,8 @@ public class ContinuousSignal extends AbstractSignal {
     }
 
     public double calculatePointValue(double x) {
-        return points.get(Math.round(x * POINTS_DECIMAL_PLACES_DIVISION) / POINTS_DECIMAL_PLACES_DIVISION);
+        double value = points.get(Math.round(x * POINTS_DECIMAL_PLACES_DIVISION) / POINTS_DECIMAL_PLACES_DIVISION);
+        return value < 0.000001 ? 0 : value;
     }
 
     @Override
