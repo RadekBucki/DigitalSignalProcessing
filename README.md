@@ -397,12 +397,12 @@ package backend {
         + discreteSignalsCorrelation(DiscreteSignal, DiscreteSignal, DiscreteSignalsCorrelationType): double
     }
     class SignalOperationFactory {
-        + createDiscreteWeave(): DiscreetWeave
+        + createConvolution(): Convolution
         + createFilter(): Filter
         + createDiscreteSignalsCorrelation(): DiscreteSignalsCorrelation
     }
     package signal_operation {
-        class DiscreetWeave {
+        class Convolution {
             + execute(DiscreteSignal, DiscreteSignal): DiscreteSignal
         }
         class Filter {
@@ -475,7 +475,7 @@ package backend {
     SignalFacade --> SignalOperationFactory
     SignalFacade --> PassFactory
     SignalFacade --> WindowFactory
-    SignalOperationFactory ..> DiscreetWeave
+    SignalOperationFactory ..> Convolution
     SignalOperationFactory ..> Filter
     SignalOperationFactory ..> DiscreteSignalsCorrelation
 }

@@ -27,43 +27,59 @@ public class SignalFacade {
     public AbstractSignal divide(AbstractSignal signal1, AbstractSignal signal2) {
         return signalOperationFactory.createSignalDivide(signalFactory).execute(signal1, signal2);
     }
+
     public AbstractSignal getSignal(Class<?> name, List<Double> parameters) {
         return signalFactory.getSignal(name, parameters);
     }
+
     public ContinuousSignal reconstructZeroOrderHold(DiscreteSignal discreteSignal, Integer numberOfSamples) {
         return signalOperationFactory.createDac().reconstructZeroOrderHold(discreteSignal);
     }
+
     public ContinuousSignal reconstructFirstMethodHold(DiscreteSignal discreteSignal, Integer numberOfSamples) {
         return signalOperationFactory.createDac().reconstructFirstOrderHold(discreteSignal);
     }
+
     public ContinuousSignal reconstructSinc(DiscreteSignal discreteSignal, Integer numberOfSamples) {
         return signalOperationFactory.createDac().reconstructSinc(discreteSignal, numberOfSamples);
     }
+
     public Map<String, Double> calculateDacStats(ContinuousSignal continuousSignal1, ContinuousSignal continuousSignal2) {
         return signalOperationFactory.createDac().calculateStats(continuousSignal1, continuousSignal2);
     }
+
     public Class<AbstractSignal> getDefaultSignal() {
         return signalFactory.getDefaultSignal();
     }
+
     public List<Class<? extends AbstractSignal>> getPossibleSignals() {
         return signalFactory.getPossibleSignals();
     }
+
     public AbstractSignal readSignal(String filePath) {
         return SignalSerializer.read(filePath);
     }
+
     public void writeSignal(AbstractSignal signal, String filePath) {
         SignalSerializer.write(signal, filePath);
     }
+
     public AbstractSignal sampling(ContinuousSignal continuousSignal, double samplingFrequency) {
         return signalOperationFactory.createAdc()
                 .sampling(continuousSignal, samplingFrequency);
     }
+
     public AbstractSignal quantizationWithTruncate(DiscreteSignal continuousSignal, int numOfLevels) {
         return signalOperationFactory.createAdc()
                 .quantizationWithTruncation(continuousSignal, numOfLevels);
     }
+
     public AbstractSignal quantizationWithRounding(DiscreteSignal continuousSignal, int numOfLevels) {
         return signalOperationFactory.createAdc()
                 .quantizationWithRounding(continuousSignal, numOfLevels);
+    }
+
+    public DiscreteSignal discreteWeave(DiscreteSignal signal1, DiscreteSignal signal2) {
+        return signalOperationFactory.createConvolution().execute(signal1, signal2);
     }
 }
