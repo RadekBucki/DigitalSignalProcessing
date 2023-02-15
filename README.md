@@ -464,12 +464,13 @@ package backend {
         class DiscreteSignalsCorrelation {
             + execute(DiscreteSignal, DiscreteSignal, DiscreteSignalsCorrelationType): DiscreteSignal
             - executeDirect(DiscreteSignal, DiscreteSignal): DiscreteSignal
-            - executeUsingWeave(DiscreteSignal, DiscreteSignal): DiscreteSignal
+            - executeUsingConvolution(DiscreteSignal, DiscreteSignal): DiscreteSignal
         }
         DiscreteSignalsCorrelation ..> DiscreteSignalsCorrelationType
+        DiscreteSignalsCorrelation o-> Convolution
         enum DiscreteSignalsCorrelationType {
             + DIRECT
-            + USING_WEAVE
+            + USING_CONVOLUTION
         }
     }
     SignalFacade --> SignalOperationFactory

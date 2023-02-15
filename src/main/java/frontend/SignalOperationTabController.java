@@ -87,7 +87,7 @@ public class SignalOperationTabController implements Initializable {
     );
     private final Map<String, DiscreteSignalsCorrelationType> discreteSignalsCorrelationTypes = Map.of(
             "Direct", DiscreteSignalsCorrelationType.DIRECT,
-            "Using Weave", DiscreteSignalsCorrelationType.USING_WEAVE
+            "Using convolution", DiscreteSignalsCorrelationType.USING_CONVOLUTION
     );
     private final Map<String, AbstractSignal> signals = new LinkedHashMap<>();
 

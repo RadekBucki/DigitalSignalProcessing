@@ -22,8 +22,8 @@ public class Convolution {
 
         IntStream.range(0, signal1.getPoints().size() + signal2.getPoints().size() - 1)
                 .forEach(n -> points.put(n / signal1.getF(), IntStream.range(0, signal1.getPoints().size())
-                        .filter(k -> (n - k) >= 0 && (n - k) < signal2.getPoints().size())
-                        .mapToDouble(k -> signal1Points.get(k) * signal2Points.get(n - k))
+                        .filter(k -> (k - n) >= 0 && (k - n) < signal2.getPoints().size())
+                        .mapToDouble(k -> signal1Points.get(k) * signal2Points.get(k - n))
                         .sum()));
 
         return (DiscreteSignal) signalFactory.createDiscreteSignal(points);
