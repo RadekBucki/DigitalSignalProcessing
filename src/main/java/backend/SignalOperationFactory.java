@@ -32,4 +32,8 @@ public class SignalOperationFactory {
     public Convolution createConvolution() {
         return new Convolution(signalFactory);
     }
+
+    public DiscreteSignalsCorrelation createDiscreteSignalsCorrelation() {
+        return new DiscreteSignalsCorrelation(signalFactory);
+    }
 }

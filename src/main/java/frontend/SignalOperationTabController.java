@@ -4,6 +4,7 @@ import backend.SignalFacade;
 import backend.signal.AbstractSignal;
 import backend.signal.ContinuousSignal;
 import backend.signal.DiscreteSignal;
+import backend.signal_operation.DiscreteSignalsCorrelationType;
 import frontend.alert.AlertBox;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -55,11 +56,15 @@ public class SignalOperationTabController implements Initializable {
     @FXML
     private Button reconstructOperationButton;
     @FXML
-    private ComboBox<String> signal1ConvolutionComboBox;
+    private ComboBox<String> signal1ConvolutionCorrelationComboBox;
     @FXML
-    private ComboBox<String> signal2ConvolutionComboBox;
+    private ComboBox<String> signal2ConvolutionCorrelationComboBox;
     @FXML
     private Button convolutionOperationButton;
+    @FXML
+    public ComboBox<String> correlationTypeComboBox;
+    @FXML
+    public Button correlationOperationButton;
 
     private final SignalFacade signalFacade = new SignalFacade();
 
@@ -79,6 +84,10 @@ public class SignalOperationTabController implements Initializable {
             "Zero Order Hold", signalFacade::reconstructZeroOrderHold,
             "First Order Hold", signalFacade::reconstructFirstMethodHold,
             "Sinc", signalFacade::reconstructSinc
+    );
+    private final Map<String, DiscreteSignalsCorrelationType> discreteSignalsCorrelationTypes = Map.of(
+            "Direct", DiscreteSignalsCorrelationType.DIRECT,
+            "Using Weave", DiscreteSignalsCorrelationType.USING_WEAVE
     );
     private final Map<String, AbstractSignal> signals = new LinkedHashMap<>();
 
@@ -116,6 +125,7 @@ public class SignalOperationTabController implements Initializable {
             return text;
         }));
         reconstructionTypeComboBox.getItems().addAll(reconstructionTypes.keySet());
+        correlationTypeComboBox.getItems().setAll(discreteSignalsCorrelationTypes.keySet());
     }
 
     public void addOrUpdateSignal(String name, AbstractSignal signal) {
@@ -124,22 +134,25 @@ public class SignalOperationTabController implements Initializable {
         } else {
             signals.put(name, signal);
         }
-        signal1ComboBox.getItems().setAll(signals.keySet());
-        signal2ComboBox.getItems().setAll(signals.keySet());
-        signalACDCComboBox.getItems().setAll(signals.keySet());
+
         Set<String> discreteSignals = signals.entrySet()
                 .stream()
                 .filter(v -> v.getValue() instanceof DiscreteSignal)
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)).keySet();
-        signal1ConvolutionComboBox.getItems().setAll(discreteSignals);
-        signal2ConvolutionComboBox.getItems().setAll(discreteSignals);
-        reconstructionSourceSignalComboBox.getItems().setAll(
-                signals.entrySet()
-                        .stream()
-                        .filter(entry -> entry.getValue() instanceof ContinuousSignal)
-                        .map(Map.Entry::getKey)
-                        .toList()
-        );
+
+        Set<String> continuousSignals = signals.entrySet()
+                .stream()
+                .filter(v -> v.getValue() instanceof ContinuousSignal)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)).keySet();
+
+        signal1ComboBox.getItems().setAll(signals.keySet());
+        signal2ComboBox.getItems().setAll(signals.keySet());
+        signalACDCComboBox.getItems().setAll(signals.keySet());
+
+        signal1ConvolutionCorrelationComboBox.getItems().setAll(discreteSignals);
+        signal2ConvolutionCorrelationComboBox.getItems().setAll(discreteSignals);
+
+        reconstructionSourceSignalComboBox.getItems().setAll(continuousSignals);
     }
 
     public void mathOperation() {
@@ -186,8 +199,17 @@ public class SignalOperationTabController implements Initializable {
     }
 
     public void convolutionOperation() {
-        AbstractSignal signal = signalFacade.convolution((DiscreteSignal) signals.get(signal1ConvolutionComboBox.getValue()),
-                (DiscreteSignal) signals.get(signal2ConvolutionComboBox.getValue()));
+        AbstractSignal signal = signalFacade.convolution((DiscreteSignal) signals.get(signal1ConvolutionCorrelationComboBox.getValue()),
+                (DiscreteSignal) signals.get(signal2ConvolutionCorrelationComboBox.getValue()));
+        createSignalTab.accept(signal);
+    }
+
+    public void correlationOperation() {
+        AbstractSignal signal = signalFacade.discreteSignalsCorrelation(
+                (DiscreteSignal) signals.get(signal1ConvolutionCorrelationComboBox.getValue()),
+                (DiscreteSignal) signals.get(signal2ConvolutionCorrelationComboBox.getValue()),
+                discreteSignalsCorrelationTypes.get(correlationTypeComboBox.getValue())
+        );
         createSignalTab.accept(signal);
     }
 
@@ -232,10 +254,15 @@ public class SignalOperationTabController implements Initializable {
         reconstructOperationButton.setDisable(shouldReconstructButtonBeDisabled());
     }
 
-    public void onUpdateConvolutionOperationsComboBox() {
+    public void onUpdateConvolutionCorrelationOperationsComboBox() {
         convolutionOperationButton.setDisable(
-                        signal1ConvolutionComboBox.getValue() == null ||
-                        signal2ConvolutionComboBox.getValue() == null
+                        signal1ConvolutionCorrelationComboBox.getValue() == null ||
+                        signal2ConvolutionCorrelationComboBox.getValue() == null
+        );
+        correlationOperationButton.setDisable(
+                signal1ConvolutionCorrelationComboBox.getValue() == null ||
+                        signal2ConvolutionCorrelationComboBox.getValue() == null ||
+                        correlationTypeComboBox.getValue() == null
         );
     }
 }
