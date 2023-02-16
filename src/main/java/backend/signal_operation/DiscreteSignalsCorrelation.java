@@ -3,11 +3,9 @@ package backend.signal_operation;
 import backend.SignalFactory;
 import backend.signal.DiscreteSignal;
 
-import java.util.ArrayList;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.LinkedHashMap;
 
 public class DiscreteSignalsCorrelation {
     SignalFactory signalFactory;
@@ -30,20 +28,25 @@ public class DiscreteSignalsCorrelation {
     }
 
     private DiscreteSignal executeUsingConvolution(DiscreteSignal signal1, DiscreteSignal signal2) {
-        return convolution.execute(
-                signal1,
-                (DiscreteSignal) signalFactory.createDiscreteSignal(
-                        signal2.getPoints().entrySet()
-                                .stream()
-                                .collect(Collectors.toMap(
-                                        entry -> signal1.getPoints().size() - entry.getKey() - 1,
-                                        Map.Entry::getValue,
-                                        (u, v) -> {
-                                            throw new IllegalStateException(String.format("Duplicate key %s", u));
-                                        },
-                                        LinkedHashMap::new
-                                ))
-                )
+        return (DiscreteSignal) signalFactory.createDiscreteSignal(
+                convolution.execute(
+                                signal1,
+                                (DiscreteSignal) signalFactory.createDiscreteSignal(
+                                        signal2.getPoints().entrySet()
+                                                .stream()
+                                                .collect(Collectors.toMap(
+                                                        entry -> signal1.getPoints().size() - entry.getKey() - 1,
+                                                        Map.Entry::getValue,
+                                                        (u, v) -> {
+                                                            throw new IllegalStateException(String.format("Duplicate key %s", u));
+                                                        },
+                                                        TreeMap::new
+                                                ))
+                                )
+                        ).getPoints()
+                        .entrySet()
+                        .stream()
+                        .collect(Collectors.toMap(e -> e.getKey() - signal2.getPoints().size() + 1, Map.Entry::getValue))
         );
     }
 
@@ -51,14 +54,18 @@ public class DiscreteSignalsCorrelation {
         ArrayList<Double> signal1Points = new ArrayList<>(signal1.getPoints().values());
         ArrayList<Double> signal2Points = new ArrayList<>(signal2.getPoints().values());
         return (DiscreteSignal) signalFactory.createDiscreteSignal(
-                IntStream.range(0, signal1Points.size() + signal2Points.size() - 1)
+                IntStream.range(-signal2Points.size() + 1, signal1Points.size())
                         .boxed()
                         .collect(Collectors.toMap(
                                 n -> n / signal1.getF(),
                                 n -> IntStream.range(0, signal1.getPoints().size())
-                                        .filter(k -> (n - k) >= 0 && (n - k) < signal2Points.size())
-                                        .mapToDouble(k -> signal1Points.get(k) * signal2Points.get(n - k))
-                                        .sum()
+                                        .filter(k -> (k - n) >= 0 && (k - n) < signal2Points.size())
+                                        .mapToDouble(k -> signal1Points.get(k) * signal2Points.get(k - n))
+                                        .sum(),
+                                (u, v) -> {
+                                    throw new IllegalStateException(String.format("Duplicate key %s", u));
+                                },
+                                TreeMap::new
                         ))
         );
     }
