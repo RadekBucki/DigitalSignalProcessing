@@ -393,7 +393,7 @@ package backend {
         + getHanningWindow(): Window
         + getBlackmanWindow(): Window
         + filter(DiscreteSignal, Pass, Window, double, double): DiscreteSignal
-        + discreteWeave(DiscreteSignal, DiscreteSignal): DiscreteSignal
+        + convolution(DiscreteSignal, DiscreteSignal): DiscreteSignal
         + discreteSignalsCorrelation(DiscreteSignal, DiscreteSignal, DiscreteSignalsCorrelationType): double
     }
     class SignalOperationFactory {
@@ -462,14 +462,15 @@ package backend {
             Window <|.. BlackmanWindow
         }
         class DiscreteSignalsCorrelation {
-            + execute(DiscreteSignal, DiscreteSignal, DiscreteSignalsCorrelation): DiscreteSignal
+            + execute(DiscreteSignal, DiscreteSignal, DiscreteSignalsCorrelationType): DiscreteSignal
             - executeDirect(DiscreteSignal, DiscreteSignal): DiscreteSignal
-            - executeUsingWeave(DiscreteSignal, DiscreteSignal): DiscreteSignal
+            - executeUsingConvolution(DiscreteSignal, DiscreteSignal): DiscreteSignal
         }
         DiscreteSignalsCorrelation ..> DiscreteSignalsCorrelationType
+        DiscreteSignalsCorrelation o-> Convolution
         enum DiscreteSignalsCorrelationType {
             + DIRECT
-            + USING_WEAVE
+            + USING_CONVOLUTION
         }
     }
     SignalFacade --> SignalOperationFactory
@@ -483,8 +484,10 @@ package backend {
 package frontend {
     class SignalOperationTabController {
         + convolutionOperation()
-        + onUpdateConvolutionOperationsComboBox()
+        + correlationOperation()
+        + onUpdateConvolutionCorrelationOperationsComboBox()
     }
 }
 SignalOperationTabController ....> SignalFacade
+SignalOperationTabController ..> DiscreteSignalsCorrelationType
 ```

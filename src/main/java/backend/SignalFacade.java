@@ -4,6 +4,7 @@ import backend.signal.AbstractSignal;
 import backend.signal.ContinuousSignal;
 import backend.signal.DiscreteSignal;
 import backend.signal.serialize.SignalSerializer;
+import backend.signal_operation.DiscreteSignalsCorrelationType;
 
 import java.util.List;
 import java.util.Map;
@@ -81,5 +82,13 @@ public class SignalFacade {
 
     public DiscreteSignal convolution(DiscreteSignal signal1, DiscreteSignal signal2) {
         return signalOperationFactory.createConvolution().execute(signal1, signal2);
+    }
+
+    public DiscreteSignal discreteSignalsCorrelation(
+            DiscreteSignal discreteSignal1,
+            DiscreteSignal discreteSignal,
+            DiscreteSignalsCorrelationType discreteSignalsCorrelationType
+    ) {
+        return signalOperationFactory.createDiscreteSignalsCorrelation().execute(discreteSignal1, discreteSignal, discreteSignalsCorrelationType);
     }
 }
