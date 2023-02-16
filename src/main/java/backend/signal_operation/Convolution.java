@@ -4,7 +4,7 @@ import backend.SignalFactory;
 import backend.signal.DiscreteSignal;
 
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -26,7 +26,11 @@ public class Convolution {
                                 n -> IntStream.range(0, signal1.getPoints().size())
                                         .filter(k -> (n - k) >= 0 && (n - k) < signal2Points.size())
                                         .mapToDouble(k -> signal1Points.get(k) * signal2Points.get(n - k))
-                                        .sum()
+                                        .sum(),
+                                (u, v) -> {
+                                    throw new IllegalStateException(String.format("Duplicate key %s", u));
+                                },
+                                TreeMap::new
                         ))
         );
     }
