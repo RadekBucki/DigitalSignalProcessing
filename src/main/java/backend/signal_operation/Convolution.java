@@ -24,8 +24,8 @@ public class Convolution {
                         .collect(Collectors.toMap(
                                 n -> n / signal1.getF(),
                                 n -> IntStream.range(0, signal1.getPoints().size())
-                                        .filter(k -> (k - n) >= 0 && (k - n) < signal2Points.size())
-                                        .mapToDouble(k -> signal1Points.get().get(k) * signal2Points.get(k - n))
+                                        .filter(k -> (n - k) >= 0 && (n - k) < signal2Points.size())
+                                        .mapToDouble(k -> signal1Points.get().get(k) * signal2Points.get(n - k))
                                         .sum()
                         ))
         );
