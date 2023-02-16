@@ -50,6 +50,7 @@ public class DiscreteSignalsCorrelation {
         );
     }
 
+    @SuppressWarnings("DuplicatedCode")
     private DiscreteSignal executeDirect(DiscreteSignal signal1, DiscreteSignal signal2) {
         ArrayList<Double> signal1Points = new ArrayList<>(signal1.getPoints().values());
         ArrayList<Double> signal2Points = new ArrayList<>(signal2.getPoints().values());

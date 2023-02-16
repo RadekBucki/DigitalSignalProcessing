@@ -15,6 +15,7 @@ public class Convolution {
         this.signalFactory = signalFactory;
     }
 
+    @SuppressWarnings("DuplicatedCode")
     public DiscreteSignal execute(DiscreteSignal signal1, DiscreteSignal signal2) {
         ArrayList<Double> signal1Points = new ArrayList<>(signal1.getPoints().values());
         ArrayList<Double> signal2Points = new ArrayList<>(signal2.getPoints().values());
