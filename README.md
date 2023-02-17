@@ -442,19 +442,19 @@ package backend {
         }
         package window {
             interface Window {
-                + window(?): double
+                + window(int, int): double
             }
             class RectangularWindow {
-                + window(?): double
+                + window(int, int): double
             }
             class HammingWindow {
-                + window(?): double
+                + window(int, int): double
             }
             class HanningWindow {
-                + window(?): double
+                + window(int, int): double
             }
             class BlackmanWindow {
-                + window(?): double
+                + window(int, int): double
             }
             Window <|.. RectangularWindow
             Window <|.. HammingWindow
