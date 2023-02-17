@@ -5,8 +5,6 @@ import backend.signal.ContinuousSignal;
 import backend.signal.DiscreteSignal;
 import backend.signal.serialize.SignalSerializer;
 import backend.signal_operation.*;
-import backend.signal_operation.pass.Pass;
-import backend.signal_operation.window.Window;
 
 import java.util.List;
 import java.util.Map;
@@ -14,8 +12,6 @@ import java.util.Map;
 public class SignalFacade {
     private final SignalFactory signalFactory = new SignalFactory();
     private final SignalOperationFactory signalOperationFactory = new SignalOperationFactory(signalFactory);
-    private final WindowFactory windowFactory = new WindowFactory();
-    private final PassFactory passFactory = new PassFactory();
 
     public AbstractSignal add(AbstractSignal signal1, AbstractSignal signal2) {
         return signalOperationFactory.createSignalAdd(signalFactory).execute(signal1, signal2);
@@ -85,22 +81,11 @@ public class SignalFacade {
     }
 
     public DiscreteSignal convolution(DiscreteSignal signal1, DiscreteSignal signal2) {
-        return signalOperationFactory.createConvolution().execute(signal1, signal2);
+         return signalOperationFactory.createConvolution().execute(signal1, signal2);
     }
 
     public DiscreteSignal filter(DiscreteSignal signal, PassType passType, WindowType windowType, int M, double f0) {
-        Window window = switch (windowType) {
-            case RECTANGULAR -> windowFactory.createRectangularWindow();
-            case BLACKMAN -> windowFactory.createBlackmanWindow(M);
-            case HAMMING -> windowFactory.createHammingWindow(M);
-            case HANNING -> windowFactory.createHanningWindow(M);
-        };
-        Pass pass = switch (passType) {
-            case LOW_PASS -> passFactory.createLowPass(M, f0, signal.getF(), window);
-            case BAND_PASS -> passFactory.createBandPass(M, f0, signal.getF(), window);
-            case HIGH_PASS -> passFactory.createHighPass(M, f0, signal.getF(), window);
-        };
-        return signalOperationFactory.createFilter().execute(signal, pass);
+        return signalOperationFactory.createFilter(passType, windowType, M, f0, signal.getF()).execute(signal);
     }
 
     public DiscreteSignal discreteSignalsCorrelation(

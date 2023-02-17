@@ -389,7 +389,7 @@ package backend {
     }
     class SignalOperationFactory {
         + createConvolution(): Convolution
-        + createFilter(): Filter
+        + createFilter(PassType, WindowType, int, double, double): Filter
         + createDiscreteSignalsCorrelation(): DiscreteSignalsCorrelation
     }
     package signal_operation {
@@ -397,9 +397,10 @@ package backend {
             + execute(DiscreteSignal, DiscreteSignal): DiscreteSignal
         }
         class Filter {
-            + execute(DiscreteSignal, Pass, Window): DiscreteSignal
+            + execute(DiscreteSignal): DiscreteSignal
         }
         Filter ..> Pass
+        Filter o-> Convolution
         Pass ..> Window
         class PassFactory {
             + createLowPass(int, double, double, Window): Pass
@@ -476,10 +477,10 @@ package backend {
         }
     }
     SignalFacade --> SignalOperationFactory
-    SignalFacade --> PassFactory
-    SignalFacade --> WindowFactory
-    SignalFacade ..> WindowType
-    SignalFacade ..> PassType
+    SignalOperationFactory --> PassFactory
+    SignalOperationFactory --> WindowFactory
+    SignalOperationFactory ..> WindowType
+    SignalOperationFactory ..> PassType
     SignalOperationFactory ..> Convolution
     SignalOperationFactory ..> Filter
     SignalOperationFactory ..> DiscreteSignalsCorrelation
