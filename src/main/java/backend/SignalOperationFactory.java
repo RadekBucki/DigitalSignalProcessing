@@ -34,7 +34,7 @@ public class SignalOperationFactory {
     }
 
     public Filter createFilter() {
-        return new Filter(signalFactory);
+        return new Filter(signalFactory, createConvolution());
     }
 
     public DiscreteSignalsCorrelation createDiscreteSignalsCorrelation() {
