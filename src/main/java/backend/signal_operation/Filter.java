@@ -4,6 +4,9 @@ import backend.SignalFactory;
 import backend.signal.DiscreteSignal;
 import backend.signal_operation.pass.Pass;
 
+import java.util.Map;
+import java.util.stream.Collectors;
+
 public class Filter {
 
     private final SignalFactory signalFactory;
@@ -13,6 +16,9 @@ public class Filter {
     }
 
     public DiscreteSignal execute(DiscreteSignal signal, Pass pass) {
-        return (DiscreteSignal) signalFactory.createDiscreteSignal(null); //TODO: Iterate over signal and use pass
+        return (DiscreteSignal) signalFactory.createDiscreteSignal(signal.getPoints()
+                .entrySet()
+                .stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, e -> pass.pass((int) (e.getKey() * signal.getF())))));
     }
 }
