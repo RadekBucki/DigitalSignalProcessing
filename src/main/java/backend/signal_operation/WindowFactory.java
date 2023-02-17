@@ -7,15 +7,15 @@ public class WindowFactory {
         return new RectangularWindow();
     }
 
-    public Window createHammingWindow() {
-        return new HammingWindow();
+    public Window createHammingWindow(int M) {
+        return new HammingWindow(M);
     }
 
-    public Window createHanningWindow() {
-        return new HanningWindow();
+    public Window createHanningWindow(int M) {
+        return new HanningWindow(M);
     }
 
-    public Window createBlackmanWindow() {
-        return new BlackmanWindow();
+    public Window createBlackmanWindow(int M) {
+        return new BlackmanWindow(M);
     }
 }
