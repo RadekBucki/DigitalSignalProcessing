@@ -1,9 +1,8 @@
 package backend.signal_operation.window;
 
-public class RectangularWindow implements Window{
-
+public class RectangularWindow implements Window {
     @Override
-    public double window(int n, int M) {
+    public double window(int n) {
         return 1.0;
     }
 }
