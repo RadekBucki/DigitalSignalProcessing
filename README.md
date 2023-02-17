@@ -383,22 +383,13 @@ SignalOperationTabController ....> SignalFacade
 ```plantuml
 package backend {
     class SignalFacade {
-        + discreteWeave(DiscreteSignal, DiscreteSignal): DiscreteSignal
-        + filter(DiscreteSignal, Pass, Window, double, double): DiscreteSignal
-        + getLowPass(): Pass
-        + getHighPass(): Pass
-        + getBandPass(): Pass
-        + getRectangularWindow(): Window
-        + getHammingWindow(): Window
-        + getHanningWindow(): Window
-        + getBlackmanWindow(): Window
-        + filter(DiscreteSignal, Pass, Window, double, double): DiscreteSignal
         + convolution(DiscreteSignal, DiscreteSignal): DiscreteSignal
+        + filter(DiscreteSignal, PassType, WindowType, int, double): DiscreteSignal
         + discreteSignalsCorrelation(DiscreteSignal, DiscreteSignal, DiscreteSignalsCorrelationType): double
     }
     class SignalOperationFactory {
         + createConvolution(): Convolution
-        + createFilter(): Filter
+        + createFilter(PassType, WindowType, int, double, double): Filter
         + createDiscreteSignalsCorrelation(): DiscreteSignalsCorrelation
     }
     package signal_operation {
@@ -406,35 +397,36 @@ package backend {
             + execute(DiscreteSignal, DiscreteSignal): DiscreteSignal
         }
         class Filter {
-            + execute(DiscreteSignal, Pass, Window, double, double): DiscreteSignal
+            + execute(DiscreteSignal): DiscreteSignal
         }
         Filter ..> Pass
-        Filter ..> Window
+        Filter o-> Convolution
+        Pass ..> Window
         class PassFactory {
-            + createLowPass(): Pass
-            + createHighPass(): Pass
-            + createBandPass(): Pass
+            + createLowPass(int, double, double, Window): Pass
+            + createHighPass(int, double, double, Window): Pass
+            + createBandPass(int, double, double, Window): Pass
         }
         PassFactory ..> Pass
         class WindowFactory {
             + createRectangularWindow(): Window
-            + createHammingWindow(): Window
-            + createHanningWindow(): Window
-            + createBlackmanWindow(): Window
+            + createHammingWindow(int): Window
+            + createHanningWindow(int): Window
+            + createBlackmanWindow(int): Window
         }
         WindowFactory ..> Window
         package pass {
             interface Pass {
-                + pass(?): boolean
+                + pass(int): double
             }
             class LowPass {
-                + pass(?): boolean
+                + pass(int): double
             }
             class HighPass {
-                + pass(?): boolean
+                + pass(int): double
             }
             class BandPass {
-                + pass(?): boolean
+                + pass(int): double
             }
             Pass <|.. LowPass
             Pass <|.. HighPass
@@ -442,19 +434,19 @@ package backend {
         }
         package window {
             interface Window {
-                + window(?): double
+                + window(int): double
             }
             class RectangularWindow {
-                + window(?): double
+                + window(int): double
             }
             class HammingWindow {
-                + window(?): double
+                + window(int): double
             }
             class HanningWindow {
-                + window(?): double
+                + window(int): double
             }
             class BlackmanWindow {
-                + window(?): double
+                + window(int): double
             }
             Window <|.. RectangularWindow
             Window <|.. HammingWindow
@@ -472,10 +464,23 @@ package backend {
             + DIRECT
             + USING_CONVOLUTION
         }
+        enum WindowType {
+            + RECTANGULAR
+            + BLACKMAN
+            + HAMMING
+            + HANNING
+        }
+        enum PassType {
+            + LOW_PASS
+            + HIGH_PASS
+            + BAND_PASS
+        }
     }
     SignalFacade --> SignalOperationFactory
-    SignalFacade --> PassFactory
-    SignalFacade --> WindowFactory
+    SignalOperationFactory --> PassFactory
+    SignalOperationFactory --> WindowFactory
+    SignalOperationFactory ..> WindowType
+    SignalOperationFactory ..> PassType
     SignalOperationFactory ..> Convolution
     SignalOperationFactory ..> Filter
     SignalOperationFactory ..> DiscreteSignalsCorrelation
@@ -490,4 +495,6 @@ package frontend {
 }
 SignalOperationTabController ....> SignalFacade
 SignalOperationTabController ..> DiscreteSignalsCorrelationType
+SignalOperationTabController ..> WindowType
+SignalOperationTabController ..> PassType
 ```
