@@ -6,7 +6,6 @@ public class LowPass implements Pass {
     private final int M;
     private final double K;
     private final Window window;
-
     private final int center;
 
     public LowPass(int M, double f0, double f, Window window) {
