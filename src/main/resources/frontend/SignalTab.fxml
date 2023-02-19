@@ -15,7 +15,6 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Line?>
 
 <Pane maxHeight="Infinity" maxWidth="Infinity" minHeight="-Infinity" minWidth="-Infinity"
       xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
@@ -49,7 +48,6 @@
             </VBox>
         </AnchorPane>
     </TitledPane>
-    <Line endY="650.0" layoutX="535.0" stroke="#c4c4c4"/>
     <VBox fx:id="rightPanel" layoutX="540.0" visible="false">
         <Label layoutX="10.0" layoutY="14.0" style="-fx-font-size: 20pt;" text="Charts"/>
         <ImageView fx:id="amplitudeTimeChart" fitHeight="220.0" fitWidth="400.0" pickOnBounds="true"

@@ -118,6 +118,7 @@ public class SignalOperationTabController implements Initializable {
 
     private Consumer<AbstractSignal> createSignalTab = null;
 
+    @SuppressWarnings("DuplicatedCode")
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         signalOperationComboBox.getItems().addAll(signalOperations.keySet());
@@ -155,7 +156,7 @@ public class SignalOperationTabController implements Initializable {
         passComboBox.getItems().setAll(passTypes.keySet());
         rankOfFilter.setTextFormatter(new TextFormatter<>(text -> {
             String newText = text.getControlNewText().replace(",", ".");
-            if (!newText.matches("\\d*")) {
+            if (!newText.matches("-?(\\d*[.])?\\d*")) {
                 rankOfFilter.clear();
                 return null;
             }

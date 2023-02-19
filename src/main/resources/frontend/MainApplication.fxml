@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-
-<TabPane fx:id="tabPane" stylesheets="@MainApplication.css" tabClosingPolicy="ALL_TABS" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="frontend.MainApplicationController">
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.VBox?>
+<TabPane fx:id="tabPane" stylesheets="@MainApplication.css" tabClosingPolicy="ALL_TABS"
+         xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
+         fx:controller="frontend.MainApplicationController">
     <Tab closable="false" styleClass="highlighting-tab" text="Signal Operation">
         <VBox>
-            <fx:include fx:id="signalOperationTabFxml" source="SignalOperationTab.fxml" />
+            <fx:include fx:id="signalOperationTabFxml" source="SignalOperationTab.fxml"/>
         </VBox>
     </Tab>
-    <Tab fx:id="plusTab" closable="false" styleClass="highlighting-tab" text="+" />
+    <Tab fx:id="plusTab" closable="false" styleClass="highlighting-tab" text="+"/>
 </TabPane>
