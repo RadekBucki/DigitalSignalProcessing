@@ -1,19 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
-<TabPane fx:id="tabPane" maxHeight="Infinity" maxWidth="Infinity" minHeight="-Infinity" minWidth="-Infinity"
-         stylesheets="@MainApplication.css" tabClosingPolicy="ALL_TABS" tabMaxHeight="Infinity" tabMaxWidth="Infinity"
-         xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
-         fx:controller="frontend.MainApplicationController">
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<TabPane fx:id="tabPane" stylesheets="@MainApplication.css" tabClosingPolicy="ALL_TABS" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="frontend.MainApplicationController">
     <Tab closable="false" styleClass="highlighting-tab" text="Signal Operation">
         <VBox>
-            <fx:include fx:id="signalOperationTabFxml" source="SignalOperationTab.fxml"/>
+            <fx:include fx:id="signalOperationTabFxml" source="SignalOperationTab.fxml" />
         </VBox>
     </Tab>
-    <Tab fx:id="plusTab" closable="false" styleClass="highlighting-tab" text="+">
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
-    </Tab>
+    <Tab fx:id="plusTab" closable="false" styleClass="highlighting-tab" text="+" />
 </TabPane>
