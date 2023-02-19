@@ -636,8 +636,8 @@ package backend {
 ```plantuml
 package backend {
     class SignalFacade {
-        + discreteFourierTransformWithDecimationInTimeDomain(DiscreteSignal,TransformType): DiscreteSignal
-        + discreteFourierTransformWithDecimationInFrequencyDomain(DiscreteSignal,TransformType): DiscreteSignal
+        + discreteFourierTransformWithDecimationInTimeDomain(DiscreteSignal,TransformType): DiscreteFourierTransformedSignal
+        + discreteFourierTransformWithDecimationInFrequencyDomain(DiscreteSignal,TransformType): DiscreteFourierTransformedSignal
         + discreteCosineTransform(DiscreteSignal,TransformType): DiscreteSignal
         + discreteWalshHadamardTransform(DiscreteSignal,TransformType): DiscreteSignal
         + discreteFalcoTransform(DiscreteSignal,Level): DiscreteSignal
