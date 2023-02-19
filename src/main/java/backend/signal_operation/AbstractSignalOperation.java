@@ -48,10 +48,7 @@ public abstract class AbstractSignalOperation {
         int t1Rounded = (int) (Collections.min(resultPoints.keySet()) * AbstractSignal.getPointsDecimalPlacesDivision());
         int t2Rounded = (int) (Collections.max(resultPoints.keySet()) * AbstractSignal.getPointsDecimalPlacesDivision());
         for (int i = t1Rounded; i <= t2Rounded; i++) {
-            double pointX = i / AbstractSignal.getPointsDecimalPlacesDivision();
-            if (!resultPoints.containsKey(pointX)) {
-                resultPoints.put(pointX, 0.0);
-            }
+            resultPoints.putIfAbsent(i / AbstractSignal.getPointsDecimalPlacesDivision(), 0.0);
         }
 
         ContinuousSignal signal = (ContinuousSignal) signalFactory.createContinuousSignal(resultPoints);
