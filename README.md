@@ -380,6 +380,7 @@ package frontend {
 }
 SignalOperationTabController ....> SignalFacade
 ```
+# Task 3 - convolution, filtering, correlation
 ```plantuml
 package backend {
     class SignalFacade {
@@ -490,7 +491,10 @@ package frontend {
     class SignalOperationTabController {
         + convolutionOperation()
         + correlationOperation()
+        + filterOperation()
         + onUpdateConvolutionCorrelationOperationsComboBox()
+        + shouldFilterButtonBeDisabled()
+        + onUpdateFilterOperationInputFields()
     }
 }
 SignalOperationTabController ....> SignalFacade
