@@ -3,13 +3,13 @@
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.AnchorPane?>
-
 <?import javafx.scene.layout.VBox?>
-<TabPane fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-         stylesheets="@MainApplication.css" tabClosingPolicy="ALL_TABS" xmlns="http://javafx.com/javafx/16"
-         xmlns:fx="http://javafx.com/fxml/1" fx:controller="frontend.MainApplicationController">
+<TabPane fx:id="tabPane" maxHeight="Infinity" maxWidth="Infinity" minHeight="-Infinity" minWidth="-Infinity"
+         stylesheets="@MainApplication.css" tabClosingPolicy="ALL_TABS" tabMaxHeight="Infinity" tabMaxWidth="Infinity"
+         xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
+         fx:controller="frontend.MainApplicationController">
     <Tab closable="false" styleClass="highlighting-tab" text="Signal Operation">
-        <VBox >
+        <VBox>
             <fx:include fx:id="signalOperationTabFxml" source="SignalOperationTab.fxml"/>
         </VBox>
     </Tab>

@@ -93,6 +93,10 @@ public class SignalFacade {
             DiscreteSignal discreteSignal,
             DiscreteSignalsCorrelationType discreteSignalsCorrelationType
     ) {
-        return signalOperationFactory.createDiscreteSignalsCorrelation().execute(discreteSignal1, discreteSignal, discreteSignalsCorrelationType);
+        return signalOperationFactory.createDiscreteSignalsCorrelation().execute(
+                discreteSignal1,
+                discreteSignal,
+                discreteSignalsCorrelationType
+        );
     }
 }
