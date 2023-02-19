@@ -660,20 +660,30 @@ package backend {
             - executeDirect(DiscreteSignal): DiscreteSignal
             - executeFast(DiscreteSignal): DiscreteSignal
         }
+        DiscreteFourierTransformWithDecimationInTimeDomain ..> TransformType
         class DiscreteFourierTransformWithDecimationInFrequencyDomain {
             + execute(DiscreteSignal,TransformType): DiscreteSignal
             - executeDirect(DiscreteSignal): DiscreteSignal
             - executeFast(DiscreteSignal): DiscreteSignal
         }
+        DiscreteFourierTransformWithDecimationInFrequencyDomain ..> TransformType
         class DiscreteCosineTransform {
             + execute(DiscreteSignal,TransformType): DiscreteSignal
             - executeDirect(DiscreteSignal): DiscreteSignal
             - executeFast(DiscreteSignal): DiscreteSignal
         }
+        DiscreteCosineTransform ..> TransformType
         class DiscreteWalshHadamardTransform {
             + execute(DiscreteSignal,TransformType): DiscreteSignal
             - executeDirect(DiscreteSignal): DiscreteSignal
             - executeFast(DiscreteSignal): DiscreteSignal
+        }
+        DiscreteWalshHadamardTransform ..> TransformType
+        
+        enum Level {
+            + DB4
+            + DB6
+            + DB8
         }
         class DiscreteFalcoTransform {
             + execute(DiscreteSignal,Level): DiscreteSignal
@@ -681,11 +691,7 @@ package backend {
             - executeLevelDB6(DiscreteSignal): DiscreteSignal
             - executeLevelDB8(DiscreteSignal): DiscreteSignal
         }
-        enum Level {
-            + DB4
-            + DB6
-            + DB8
-        }
+        DiscreteFalcoTransform ..> Level
     }
     SignalOperationFactory ..> DiscreteFourierTransformWithDecimationInTimeDomain
     SignalOperationFactory ..> DiscreteFourierTransformWithDecimationInFrequencyDomain
