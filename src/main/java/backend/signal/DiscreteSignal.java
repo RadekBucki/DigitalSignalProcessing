@@ -50,6 +50,14 @@ public class DiscreteSignal extends AbstractSignal {
         return Math.sqrt((1.0 / (n2 - n1 + 1)) * points.values().stream().mapToDouble(v -> v * v).sum());
     }
 
+    @Override
+    public double calculatePointValue(double x) {
+        if (points.containsKey(x)) {
+            return points.get(x);
+        }
+        return 0;
+    }
+
     public double getF() {
         return f;
     }

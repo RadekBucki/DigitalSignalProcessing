@@ -2,6 +2,8 @@ package backend.signal_operation;
 
 import backend.SignalFactory;
 
+import java.util.function.Function;
+
 public class SignalDivide extends AbstractSignalOperation {
     public SignalDivide(SignalFactory signalFactory) {
         super(signalFactory);
@@ -15,5 +17,15 @@ public class SignalDivide extends AbstractSignalOperation {
             return 0.0;
         }
         return signal1Amplitude / signal2Amplitude;
+    }
+
+    @Override
+    protected Function<Double, Double> operation(Function<Double, Double> f1, Function<Double, Double> f2) {
+        return x -> {
+            if (f2.apply(x) != 0) {
+                return f1.apply(x) / f2.apply(x);
+            }
+            return 0.0;
+        };
     }
 }
