@@ -5,10 +5,12 @@ import backend.signal.AbstractSignal;
 import backend.signal.ContinuousSignal;
 import backend.signal.DiscreteSignal;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Function;
+
 
 public abstract class AbstractSignalOperation {
     private final SignalFactory signalFactory;
@@ -41,6 +43,15 @@ public abstract class AbstractSignalOperation {
 
         if (signal1 instanceof DiscreteSignal && signal2 instanceof DiscreteSignal) {
             return signalFactory.createDiscreteSignal(resultPoints);
+        }
+
+        int t1Rounded = (int) (Collections.min(resultPoints.keySet()) * AbstractSignal.getPointsDecimalPlacesDivision());
+        int t2Rounded = (int) (Collections.max(resultPoints.keySet()) * AbstractSignal.getPointsDecimalPlacesDivision());
+        for (int i = t1Rounded; i <= t2Rounded; i++) {
+            double pointX = i / AbstractSignal.getPointsDecimalPlacesDivision();
+            if (!resultPoints.containsKey(pointX)) {
+                resultPoints.put(pointX, 0.0);
+            }
         }
 
         ContinuousSignal signal = (ContinuousSignal) signalFactory.createContinuousSignal(resultPoints);
