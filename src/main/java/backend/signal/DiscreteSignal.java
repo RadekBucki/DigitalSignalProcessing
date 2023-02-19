@@ -52,10 +52,7 @@ public class DiscreteSignal extends AbstractSignal {
 
     @Override
     public double calculatePointValue(double x) {
-        if (points.containsKey(x)) {
-            return points.get(x);
-        }
-        return 0;
+        return points.getOrDefault(x, 0.0);
     }
 
     public double getF() {
