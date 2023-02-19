@@ -118,7 +118,6 @@ public class SignalOperationTabController implements Initializable {
 
     private Consumer<AbstractSignal> createSignalTab = null;
 
-    @SuppressWarnings("DuplicatedCode")
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         signalOperationComboBox.getItems().addAll(signalOperations.keySet());
@@ -156,13 +155,19 @@ public class SignalOperationTabController implements Initializable {
         passComboBox.getItems().setAll(passTypes.keySet());
         rankOfFilter.setTextFormatter(new TextFormatter<>(text -> {
             String newText = text.getControlNewText().replace(",", ".");
-            if (!newText.matches("-?(\\d*[.])?\\d*")) {
+            if (!newText.matches("\\d*")) {
                 rankOfFilter.clear();
                 return null;
             }
             filterOperationButton.setDisable(shouldFilterButtonBeDisabled());
             return text;
         }));
+        rankOfFilter.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!rankOfFilter.getText().isEmpty() && Integer.parseInt(rankOfFilter.getText()) % 2 == 0) {
+                rankOfFilter.clear();
+                filterOperationButton.setDisable(shouldFilterButtonBeDisabled());
+            }
+        });
         cutOffFrequency.setTextFormatter(new TextFormatter<>(text -> {
             String newText = text.getControlNewText().replace(",", ".");
             if (!newText.matches("-?(\\d*[.])?\\d*")) {
