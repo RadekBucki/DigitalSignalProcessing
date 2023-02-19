@@ -2,11 +2,13 @@ package backend.signal_operation;
 
 import backend.SignalFactory;
 import backend.signal.AbstractSignal;
+import backend.signal.ContinuousSignal;
 import backend.signal.DiscreteSignal;
 
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 public abstract class AbstractSignalOperation {
     private final SignalFactory signalFactory;
@@ -40,7 +42,11 @@ public abstract class AbstractSignalOperation {
         if (signal1 instanceof DiscreteSignal && signal2 instanceof DiscreteSignal) {
             return signalFactory.createDiscreteSignal(resultPoints);
         }
-        return signalFactory.createContinuousSignal(resultPoints);
+
+        ContinuousSignal signal = (ContinuousSignal) signalFactory.createContinuousSignal(resultPoints);
+        signal.setFunction(operation(signal1::calculatePointValue, signal2::calculatePointValue));
+        return signal;
     }
     protected abstract Double operation(double signal1Amplitude, double signal2Amplitude);
+    protected abstract Function<Double, Double> operation(Function<Double, Double> f1, Function<Double, Double> f2);
 }
