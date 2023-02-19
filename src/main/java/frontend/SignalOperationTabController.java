@@ -272,6 +272,8 @@ public class SignalOperationTabController implements Initializable {
                 Double.parseDouble(cutOffFrequency.getText())
         );
         createSignalTab.accept(signal);
+        rankOfFilter.clear();
+        cutOffFrequency.clear();
     }
 
     public void setCreateSignalTab(Consumer<AbstractSignal> createSignalTab) {
