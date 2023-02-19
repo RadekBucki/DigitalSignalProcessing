@@ -430,8 +430,8 @@ package backend {
                 + pass(int): double
             }
             Pass <|.. LowPass
-            Pass <|.. HighPass
-            Pass <|.. BandPass
+            LowPass <|.. HighPass
+            LowPass <|.. BandPass
         }
         package window {
             interface Window {
