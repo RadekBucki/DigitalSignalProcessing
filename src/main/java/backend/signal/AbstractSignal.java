@@ -36,4 +36,8 @@ public abstract class AbstractSignal implements Serializable {
         return A;
     }
     public abstract double calculatePointValue(double x);
+
+    public static double getPointsDecimalPlacesDivision() {
+        return POINTS_DECIMAL_PLACES_DIVISION;
+    }
 }
