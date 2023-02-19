@@ -25,6 +25,7 @@ package backend {
             # points: double[][]
             # A: double
             # d: double
+            + {abstract} calculatePointValue()
             + {abstract} getAverage()
             + {abstract} getAbsoluteAverage()
             + {abstract} getEffectiveValue()
@@ -39,7 +40,8 @@ package backend {
         class ContinuousSignal {
             # t1: double
             # t2: double
-            + {abstract} calculatePointValue()
+            - function: Function
+            + calculatePointValue()
             + calculateAllPoints()
             + getAverage()
             + getAbsoluteAverage()
@@ -48,11 +50,14 @@ package backend {
             + getEffectiveValue()
             + getT1()
             + getT2()
+            + getFunction()
+            + setFunction()
         }
         class DiscreteSignal {
             # f: double
             # n1: int
             # n2: int
+            + calculatePointValue()
             + getAverage()
             + getAbsoluteAverage()
             + getAveragePower()
@@ -166,18 +171,23 @@ package backend {
         abstract class AbstractSignalOperation {
             + execute(AbstractSignal, AbstractSignal): AbstractSignal
             # {abstract} operation(double, double): double
+            # {abstract} operation(Function, Function): Function
         }
         class SignalAdd {
             # operation(double, double): double
+            # operation(Function, Function): Function
         }
         class SignalSubtract {
             # operation(double, double): double
+            # operation(Function, Function): Function
         }
         class SignalMultiply {
             # operation(double, double): double
+            # operation(Function, Function): Function
         }
         class SignalDivide {
             # operation(double, double): double
+            # operation(Function, Function): Function
         }
     }
     
