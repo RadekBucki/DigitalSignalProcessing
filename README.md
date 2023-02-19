@@ -493,7 +493,8 @@ package frontend {
         + correlationOperation()
         + filterOperation()
         + onUpdateConvolutionCorrelationOperationsComboBox()
-        + onUpdateFilterOperationsComboBox()
+        + shouldFilterButtonBeDisabled()
+        + onUpdateFilterOperationInputFields()
     }
 }
 SignalOperationTabController ....> SignalFacade
