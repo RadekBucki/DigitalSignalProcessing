@@ -632,3 +632,114 @@ package backend {
     SignalOperationFactory ..> DiscreteSignalsCorrelation
 }
 ```
+# Task 4 - Fourier, Walsh-Hadamard, coine and falco transforms, fast algorithms
+```plantuml
+package backend {
+    class SignalFacade {
+        + discreteFourierTransformWithDecimationInTimeDomain(DiscreteSignal,TransformType): DiscreteSignal
+        + discreteFourierTransformWithDecimationInFrequencyDomain(DiscreteSignal,TransformType): DiscreteSignal
+        + discreteCosineTransform(DiscreteSignal,TransformType): DiscreteSignal
+        + discreteWalshHadamardTransform(DiscreteSignal,TransformType): DiscreteSignal
+        + discreteFalcoTransform(DiscreteSignal,Level): DiscreteSignal
+    }
+    class SignalOperationFactory {
+        + createDiscreteFourierTransformWithDecimationInTimeDomain(): DiscreteFourierTransformWithDecimationInTimeDomain
+        + createDiscreteFourierTransformWithDecimationInFrequencyDomain(): DiscreteFourierTransformWithDecimationInFrequencyDomain
+        + createDiscreteCosineTransform(): DiscreteCosineTransform
+        + createDiscreteWalshHadamardTransform(): DiscreteWalshHadamardTransform
+        + createDiscreteFalcoTransform(): DiscreteFalcoTransform
+    }
+    SignalFacade --> SignalOperationFactory
+    package signal_operation {
+        enum TransformType {
+            + DIRECT
+            + FAST
+        }
+        class DiscreteFourierTransformWithDecimationInTimeDomain {
+            + execute(DiscreteSignal,TransformType): DiscreteSignal
+            - executeDirect(DiscreteSignal): DiscreteSignal
+            - executeFast(DiscreteSignal): DiscreteSignal
+        }
+        class DiscreteFourierTransformWithDecimationInFrequencyDomain {
+            + execute(DiscreteSignal,TransformType): DiscreteSignal
+            - executeDirect(DiscreteSignal): DiscreteSignal
+            - executeFast(DiscreteSignal): DiscreteSignal
+        }
+        class DiscreteCosineTransform {
+            + execute(DiscreteSignal,TransformType): DiscreteSignal
+            - executeDirect(DiscreteSignal): DiscreteSignal
+            - executeFast(DiscreteSignal): DiscreteSignal
+        }
+        class DiscreteWalshHadamardTransform {
+            + execute(DiscreteSignal,TransformType): DiscreteSignal
+            - executeDirect(DiscreteSignal): DiscreteSignal
+            - executeFast(DiscreteSignal): DiscreteSignal
+        }
+        class DiscreteFalcoTransform {
+            + execute(DiscreteSignal,Level): DiscreteSignal
+            - executeLevelDB4(DiscreteSignal): DiscreteSignal
+            - executeLevelDB6(DiscreteSignal): DiscreteSignal
+            - executeLevelDB8(DiscreteSignal): DiscreteSignal
+        }
+        enum Level {
+            + DB4
+            + DB6
+            + DB8
+        }
+    }
+    SignalOperationFactory ..> DiscreteFourierTransformWithDecimationInTimeDomain
+    SignalOperationFactory ..> DiscreteFourierTransformWithDecimationInFrequencyDomain
+    SignalOperationFactory ..> DiscreteCosineTransform
+    SignalOperationFactory ..> DiscreteWalshHadamardTransform
+    SignalOperationFactory ..> DiscreteFalcoTransform
+    class SignalFactory {
+        + createDiscreteFourierTransformedSignal(double[]): DiscreteSignal
+    }
+    package signal {
+        SignalFactory ..> DiscreteFourierTransformedSignal
+        SignalFacade --> SignalFactory
+        class DiscreteSignal extends AbstractSignal
+        class DiscreteFourierTransformedSignal extends DiscreteSignal {
+            + getRealPartPoints(): double[]
+            + getImaginaryPartPoints(): double[]
+        }
+    }
+}
+```
+```plantuml
+package frontend {
+    class SignalOperationTabController {
+        + discreteFourierTransformOperation()
+        + discreteCosineTransformOperation()
+        + discreteWalshHadamardTransformOperation()
+        + discreteFalcoTransformOperation()
+        + onUpdateDiscreteFourierTransformOperationsComboBox()
+        + onUpdateDiscreteCosineTransformOperationsComboBox()
+        + onUpdateDiscreteWalshHadamardTransformOperationsComboBox()
+        + onUpdateDiscreteFalcoTransformOperationsComboBox()
+    }
+}
+package backend {
+    class SignalFacade {
+        + discreteFourierTransformWithDecimationInTimeDomain(DiscreteSignal,TransformType): DiscreteSignal
+        + discreteFourierTransformWithDecimationInFrequencyDomain(DiscreteSignal,TransformType): DiscreteSignal
+        + discreteCosineTransform(DiscreteSignal,TransformType): DiscreteSignal
+        + discreteWalshHadamardTransform(DiscreteSignal,TransformType): DiscreteSignal
+        + discreteFalcoTransform(DiscreteSignal,Level): DiscreteSignal
+    }
+    package signal_operation {
+        enum TransformType {
+            + DIRECT
+            + FAST
+        }
+        enum Level {
+            + DB4
+            + DB6
+            + DB8
+        }
+    }
+}
+SignalOperationTabController ....> SignalFacade
+SignalOperationTabController ..> TransformType
+SignalOperationTabController ..> Level
+```
