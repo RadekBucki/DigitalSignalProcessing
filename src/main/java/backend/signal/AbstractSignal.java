@@ -44,4 +44,8 @@ public abstract class AbstractSignal implements Serializable {
     public void addPoint(double x, double y) {
         points.put(x, y);
     }
+
+    public void removePoint(double x) {
+        points.remove(x);
+    }
 }
