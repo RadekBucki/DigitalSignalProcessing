@@ -1,5 +1,6 @@
 package backend;
 
+import backend.radar.Radar;
 import backend.signal.AbstractSignal;
 import backend.signal.ContinuousSignal;
 import backend.signal.DiscreteSignal;
@@ -66,6 +67,8 @@ public class SignalFacade {
     }
 
     public AbstractSignal sampling(ContinuousSignal continuousSignal, double samplingFrequency) {
+        Radar radar = new Radar(1000, 4000, 30, 20, 1, continuousSignal);
+        radar.startWorking();
         return signalOperationFactory.createAdc()
                 .sampling(continuousSignal, samplingFrequency);
     }
