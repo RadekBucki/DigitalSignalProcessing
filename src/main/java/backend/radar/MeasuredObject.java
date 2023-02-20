@@ -3,8 +3,8 @@ package backend.radar;
 public class MeasuredObject {
     private double X;
     private double Y;
-    private double speedX;
-    private double speedY;
+    private final double speedX;
+    private final double speedY;
 
     public MeasuredObject(double x, double y, double speedX, double speedY) {
         X = x;

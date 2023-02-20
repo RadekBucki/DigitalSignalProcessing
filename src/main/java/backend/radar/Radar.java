@@ -1,50 +1,55 @@
 package backend.radar;
 
 import backend.SignalFacade;
+import backend.SignalFactory;
 import backend.signal.ContinuousSignal;
 import backend.signal.DiscreteSignal;
 import backend.signal_operation.DiscreteSignalsCorrelationType;
-import frontend.chart.ChartGenerator;
-import org.jfree.chart.ChartUtilities;
 
-import java.io.File;
 import java.util.*;
 
 public class Radar {
-    private final double X = 0;
-    private final double Y = 0;
+    private final double X;
+    private final double Y;
     private final double probingSignalF;
     private final int discreteBufferSize;
     private final double signalSpeed;
     private final double workTime;
     private final double stepTime;
-    private double nextStepTime;
     private double first = -1;
     private final DiscreteSignal signalSent;
     private final DiscreteSignal signalReceived;
     private final ContinuousSignal probingSignal;
     private final List<Double> samplesSentButNotHit = new ArrayList<>();
-    private final MeasuredObject measuredObject = new MeasuredObject(20, 10, -1, 0);
-    private final SignalFacade facade = new SignalFacade();
-    private List<Double> radarDistances = new ArrayList<>();
-    private List<Double> realDistances = new ArrayList<>();
-    private TreeMap<Double, Double> allRealDistances = new TreeMap<>();
-    private List<Double> hitsTime = new ArrayList<>();
+    private final MeasuredObject measuredObject;
+    private final SignalFacade facade;
+    private final List<Double> radarDistances = new ArrayList<>();
+    private final List<Double> realDistances = new ArrayList<>();
+    private final TreeMap<Double, Double> allRealDistances = new TreeMap<>();
+    private final List<Double> hitsTime = new ArrayList<>();
+    private final SignalFactory signalFactory;
 
     public Radar(double probingSignalF, int discreteBufferSize, double signalSpeed, double workTime, double stepTime,
-                 ContinuousSignal probingSignal) {
+                 ContinuousSignal probingSignal, double radarX, double radarY, double objectX, double objectY,
+                 double objectSpeedX, double objectSpeedY, SignalFacade facade, SignalFactory signalFactory) {
         this.probingSignalF = probingSignalF;
         this.discreteBufferSize = discreteBufferSize;
         this.signalSpeed = signalSpeed;
         this.workTime = workTime;
         this.stepTime = stepTime;
         this.probingSignal = probingSignal;
-        this.nextStepTime = stepTime;
-        signalSent = new DiscreteSignal(0, workTime, probingSignalF);
-        signalReceived = new DiscreteSignal(0, workTime, probingSignalF);
+        measuredObject = new MeasuredObject(objectX, objectY, objectSpeedX, objectSpeedY);
+        this.X = radarX;
+        this.Y = radarY;
+        this.signalFactory = signalFactory;
+        this.facade = facade;
+        signalSent = (DiscreteSignal) signalFactory.createDiscreteSignal(0, workTime, probingSignalF, 0);
+        signalReceived = (DiscreteSignal) signalFactory.createDiscreteSignal(0, workTime, probingSignalF, 0);
+        startWorking();
+        calculateCorrelations();
     }
 
-    public void startWorking() {
+    private void startWorking() {
         for (double time = 0; time < workTime; time += 1 / probingSignalF) {
             double timeRounded = Math.round(time * 10000) / 10000.0;
             double probingSignalTime = Math.floor(timeRounded / probingSignal.getD());
@@ -73,7 +78,9 @@ public class Radar {
             allRealDistances.put(timeRounded, measuredObject.calculateRealDistance(X, Y));
             measuredObject.move(1 / probingSignalF);
         }
+    }
 
+    private void calculateCorrelations() {
         TreeMap<Double, Double> pointsSentWindow = new TreeMap<>();
         TreeMap<Double, Double> pointsReceivedWindow = new TreeMap<>();
         int correlationNumber = 0;
@@ -82,51 +89,9 @@ public class Radar {
             pointsSentWindow.put(timeRounded, signalSent.getPoints().get(timeRounded));
             pointsReceivedWindow.put(timeRounded, signalReceived.getPoints().get(timeRounded));
             if (pointsSentWindow.size() >= discreteBufferSize) {
-                DiscreteSignal signalSentWindow = new DiscreteSignal(pointsSentWindow);
-                DiscreteSignal signalReceivedWindow = new DiscreteSignal(pointsReceivedWindow);
+                DiscreteSignal signalSentWindow = (DiscreteSignal) signalFactory.createDiscreteSignal(pointsSentWindow);
+                DiscreteSignal signalReceivedWindow = (DiscreteSignal) signalFactory.createDiscreteSignal(pointsReceivedWindow);
                 DiscreteSignal correlation = facade.discreteSignalsCorrelation(signalReceivedWindow, signalSentWindow, DiscreteSignalsCorrelationType.DIRECT);
-
-                try {
-                    ChartUtilities.saveChartAsPNG(
-                            new File("chart1.png"),
-                            ChartGenerator.generateAmplitudeTimeChart(
-                                    signalSentWindow.getPoints(),
-                                    signalSentWindow instanceof DiscreteSignal
-                            ),
-                            400,
-                            220
-                    );
-                } catch (Exception ignored) {
-                    //ignored
-                }
-
-                try {
-                    ChartUtilities.saveChartAsPNG(
-                            new File("chart2.png"),
-                            ChartGenerator.generateAmplitudeTimeChart(
-                                    signalReceivedWindow.getPoints(),
-                                    signalReceivedWindow instanceof DiscreteSignal
-                            ),
-                            400,
-                            220
-                    );
-                } catch (Exception ignored) {
-                    //ignored
-                }
-
-                try {
-                    ChartUtilities.saveChartAsPNG(
-                            new File("chart.png"),
-                            ChartGenerator.generateAmplitudeTimeChart(
-                                    correlation.getPoints(),
-                                    correlation instanceof DiscreteSignal
-                            ),
-                            400,
-                            220
-                    );
-                } catch (Exception ignored) {
-                    //ignored
-                }
 
                 correlationNumber++;
                 double centerKey = Math.round((Collections.max(correlation.getPoints().keySet()) + Collections.min(correlation.getPoints().keySet())) / 2 * 10000) / 10000.0;
