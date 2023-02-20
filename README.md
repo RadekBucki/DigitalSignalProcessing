@@ -420,6 +420,8 @@ package backend {
             -realDistances: double[]
             -startWorking()
             -calculateCorrelations()
+            -getRadarDistances()
+            -getRealDistances()
         }
         class MeasuredObject {
             -X: double
