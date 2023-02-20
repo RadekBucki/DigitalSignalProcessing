@@ -1,5 +1,7 @@
 package backend;
 
+import backend.radar.Radar;
+import backend.signal.ContinuousSignal;
 import backend.signal_operation.*;
 import backend.signal_operation.pass.Pass;
 import backend.signal_operation.window.Window;
@@ -54,5 +56,13 @@ public class SignalOperationFactory {
 
     public DiscreteSignalsCorrelation createDiscreteSignalsCorrelation() {
         return new DiscreteSignalsCorrelation(signalFactory, createConvolution());
+    }
+
+    public Radar createRadar(double probingSignalF, int discreteBufferSize, double signalSpeed,
+                             double workTime, double stepTime, ContinuousSignal continuousSignal,
+                             double radarX, double radarY, double objectX, double objectY,
+                             double objectSpeedX, double objectSpeedY, SignalFacade facade) {
+        return new Radar(probingSignalF, discreteBufferSize, signalSpeed, workTime, stepTime, continuousSignal,
+                radarX, radarY, objectX, objectY, objectSpeedX, objectSpeedY, facade, signalFactory);
     }
 }
