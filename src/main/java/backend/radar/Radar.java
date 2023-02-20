@@ -112,4 +112,12 @@ public class Radar {
             }
         }
     }
+
+    public List<Double> getRadarDistances() {
+        return radarDistances;
+    }
+
+    public List<Double> getRealDistances() {
+        return realDistances;
+    }
 }
