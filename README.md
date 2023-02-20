@@ -402,6 +402,37 @@ package backend {
         + createConvolution(): Convolution
         + createFilter(PassType, WindowType, int, double, double): Filter
         + createDiscreteSignalsCorrelation(): DiscreteSignalsCorrelation
+        + createRadar(): Radar
+    }
+    package radar {
+        class Radar {
+            -X: double
+            -Y: double
+            -probingSignalF: double
+            -discreteBufferSize: int
+            -signalSpeed: double
+            -workTime: double
+            -stepTime: double
+            -probingSignal: ContinuousSignal
+            -signalSent: DiscreteSignal
+            -signalReceived: DiscreteSignal
+            -radarDistances: double[]
+            -realDistances: double[]
+            -startWorking()
+            -calculateCorrelations()
+            -getRadarDistances()
+            -getRealDistances()
+        }
+        class MeasuredObject {
+            -X: double
+            -Y: double
+            -speedX: double
+            -speedY: double
+            +move(double)
+            +calculateRealDistance(double)
+        }
+        Radar o-> MeasuredObject
+        SignalOperationFactory ..> Radar
     }
     package signal_operation {
         class Convolution {

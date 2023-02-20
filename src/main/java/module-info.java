@@ -28,4 +28,5 @@ module cps {
     opens frontend.classes to javafx.fxml;
     exports backend.signal_operation.window;
     exports backend.signal_operation.pass;
+    exports backend.radar;
 }
