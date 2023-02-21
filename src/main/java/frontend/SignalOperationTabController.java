@@ -8,6 +8,7 @@ import backend.signal_operation.DiscreteSignalsCorrelationType;
 import backend.signal_operation.PassType;
 import backend.signal_operation.WindowType;
 import frontend.alert.AlertBox;
+import frontend.units.TextFormatterFactory;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -81,6 +82,7 @@ public class SignalOperationTabController implements Initializable {
     public Button filterOperationButton;
 
     private final SignalFacade signalFacade = new SignalFacade();
+    private final TextFormatterFactory formatterFactory = new TextFormatterFactory();
 
     private final Map<String, BiFunction<AbstractSignal, AbstractSignal, AbstractSignal>> signalOperations = Map.of(
             "Add", signalFacade::add,
@@ -122,61 +124,33 @@ public class SignalOperationTabController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         signalOperationComboBox.getItems().addAll(signalOperations.keySet());
         quantizationTypeComboBox.getItems().addAll(quantizationTypes.keySet());
-        samplingFrequency.setTextFormatter(new TextFormatter<>(text -> {
-            String newText = text.getControlNewText().replace(",", ".");
-            if (!newText.matches("-?(\\d*[.])?\\d*")) {
-                samplingFrequency.clear();
-                return null;
-            }
-            samplingOperationButton.setDisable(shouldSamplingButtonBeDisabled());
-            return text;
-        }));
-        numOfLevelsQuantization.setTextFormatter(new TextFormatter<>(text -> {
-            String newText = text.getControlNewText().replace(",", ".");
-            if (!newText.matches("\\d*")) {
-                samplingFrequency.clear();
-                return null;
-            }
-            quantizationOperationButton.setDisable(shouldQuantizationButtonBeDisabled());
-            return text;
-        }));
-        numOfSamples.setTextFormatter(new TextFormatter<>(text -> {
-            String newText = text.getControlNewText().replace(",", ".");
-            if (!newText.matches("\\d*")) {
-                numOfSamples.clear();
-                return null;
-            }
-            reconstructOperationButton.setDisable(shouldReconstructButtonBeDisabled());
-            return text;
-        }));
+        samplingFrequency.setTextFormatter(formatterFactory.createDecimalTextFormatter(
+                samplingFrequency, samplingOperationButton, this::shouldSamplingButtonBeDisabled
+        ));
+        numOfLevelsQuantization.setTextFormatter(formatterFactory.createDecimalTextFormatter(
+                numOfLevelsQuantization, quantizationOperationButton, this::shouldQuantizationButtonBeDisabled
+        ));
+        numOfSamples.setTextFormatter(formatterFactory.createIntegerTextFormatter(
+                numOfSamples, reconstructOperationButton, this::shouldReconstructButtonBeDisabled
+        ));
         reconstructionTypeComboBox.getItems().addAll(reconstructionTypes.keySet());
         correlationTypeComboBox.getItems().setAll(discreteSignalsCorrelationTypes.keySet());
         windowComboBox.getItems().setAll(windowTypes.keySet());
         passComboBox.getItems().setAll(passTypes.keySet());
-        rankOfFilter.setTextFormatter(new TextFormatter<>(text -> {
-            String newText = text.getControlNewText().replace(",", ".");
-            if (!newText.matches("\\d*")) {
-                rankOfFilter.clear();
-                return null;
-            }
-            filterOperationButton.setDisable(shouldFilterButtonBeDisabled());
-            return text;
-        }));
+        rankOfFilter.setTextFormatter(formatterFactory.createIntegerTextFormatter(
+                rankOfFilter, filterOperationButton, this::shouldFilterButtonBeDisabled
+        ));
         rankOfFilter.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!rankOfFilter.getText().isEmpty() && Integer.parseInt(rankOfFilter.getText()) % 2 == 0) {
                 rankOfFilter.clear();
                 filterOperationButton.setDisable(shouldFilterButtonBeDisabled());
             }
         });
-        cutOffFrequency.setTextFormatter(new TextFormatter<>(text -> {
-            String newText = text.getControlNewText().replace(",", ".");
-            if (!newText.matches("-?(\\d*[.])?\\d*")) {
-                cutOffFrequency.clear();
-                return null;
-            }
-            filterOperationButton.setDisable(shouldFilterButtonBeDisabled());
-            return text;
-        }));
+        cutOffFrequency.setTextFormatter(
+                formatterFactory.createIntegerTextFormatter(
+                        cutOffFrequency, filterOperationButton, this::shouldFilterButtonBeDisabled
+                )
+        );
     }
 
     public void addOrUpdateSignal(String name, AbstractSignal signal) {

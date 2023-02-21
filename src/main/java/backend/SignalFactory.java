@@ -9,6 +9,7 @@ import backend.signal.discrete.UnitImpulse;
 
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class SignalFactory {
     private static final Class<AbstractSignal> DEFAULT_SIGNAL = AbstractSignal.class;
@@ -76,13 +77,13 @@ public class SignalFactory {
     }
 
     public AbstractSignal createContinuousSignal(Map<Double, Double> points) {
-        return new ContinuousSignal(points);
+        return new ContinuousSignal(new TreeMap<>(points));
     }
     public AbstractSignal createDiscreteSignal(double A, double d, double f, double t1) {
         return new DiscreteSignal(A, d, f, t1);
     }
     public AbstractSignal createDiscreteSignal(Map<Double, Double> points) {
-        return new DiscreteSignal(points);
+        return new DiscreteSignal(new TreeMap<>(points));
     }
     public AbstractSignal getSignal(Class<?> name, List<Double> parameters) {
         if (name == GaussianNoise.class) {
