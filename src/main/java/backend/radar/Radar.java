@@ -25,6 +25,7 @@ public class Radar {
     private final SignalFacade facade;
     private final List<Double> radarDistances = new ArrayList<>();
     private final List<Double> realDistances = new ArrayList<>();
+    private final List<Double> distancesTimes = new ArrayList<>();
     private final TreeMap<Double, Double> allRealDistances = new TreeMap<>();
     private final List<Double> hitsTime = new ArrayList<>();
     private final SignalFactory signalFactory;
@@ -111,7 +112,11 @@ public class Radar {
                                                 * hitsTime.size() / signalSent.getPoints().size())) * 10000) / 10000.0) - 1)
                         )
                 );
-
+                distancesTimes.add(
+                        hitsTime.get((int) (Math.floor(((discreteBufferSize / 2.0) +
+                                (stepTime * probingSignalF * correlationNumber
+                                        * hitsTime.size() / signalSent.getPoints().size())) * 10000) / 10000.0) - 1)
+                );
                 for (int i = 0; i < stepTime * probingSignalF; i++) {
                     pointsSentWindow.pollFirstEntry();
                     pointsReceivedWindow.pollFirstEntry();
@@ -126,6 +131,10 @@ public class Radar {
 
     public List<Double> getRealDistances() {
         return realDistances;
+    }
+
+    public List<Double> getDistancesTimes() {
+        return distancesTimes;
     }
 
     public List<DiscreteSignal> getSignalSentWindows() {
