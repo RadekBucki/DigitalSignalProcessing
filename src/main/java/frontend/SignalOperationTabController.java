@@ -8,6 +8,7 @@ import backend.signal_operation.DiscreteSignalsCorrelationType;
 import backend.signal_operation.PassType;
 import backend.signal_operation.WindowType;
 import frontend.alert.AlertBox;
+import frontend.units.TextFormatterFactory;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;

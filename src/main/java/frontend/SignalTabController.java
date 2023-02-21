@@ -8,6 +8,7 @@ import frontend.classes.ClassTranslator;
 import frontend.fields.FieldMapper;
 import frontend.fields.FieldReader;
 import frontend.file.FileChoose;
+import frontend.units.TextFormatterFactory;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

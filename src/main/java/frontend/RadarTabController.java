@@ -6,7 +6,7 @@ import backend.signal.AbstractSignal;
 import backend.signal.ContinuousSignal;
 import backend.signal.DiscreteSignal;
 import frontend.chart.ChartGenerator;
-import javafx.event.ActionEvent;
+import frontend.units.TextFormatterFactory;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;

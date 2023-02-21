@@ -1,28 +1,28 @@
-package frontend;
+package frontend.units;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 
-import java.util.function.Supplier;
+import java.util.function.BooleanSupplier;
 
 public class TextFormatterFactory {
 
-    public TextFormatter createIntegerTextFormatter(TextField textField, Button button, Supplier<Boolean> shouldButtonDisabled) {
+    public TextFormatter createIntegerTextFormatter(TextField textField, Button button, BooleanSupplier shouldButtonDisabled) {
         return createTextFormatter(textField, button, shouldButtonDisabled, "\\d*");
     }
 
-    public TextFormatter createDecimalTextFormatter(TextField textField, Button button, Supplier<Boolean> shouldButtonDisabled) {
+    public TextFormatter createDecimalTextFormatter(TextField textField, Button button, BooleanSupplier shouldButtonDisabled) {
         return createTextFormatter(textField, button, shouldButtonDisabled, "-?(\\d*[.])?\\d*");
     }
-    private TextFormatter createTextFormatter(TextField textField, Button button, Supplier<Boolean> shouldButtonDisabled, String regex) {
+    private TextFormatter createTextFormatter(TextField textField, Button button, BooleanSupplier shouldButtonDisabled, String regex) {
         return new TextFormatter<>(text -> {
             String newText = text.getControlNewText().replace(",", ".");
             if (!newText.matches(regex)) {
                 textField.clear();
                 return null;
             }
-            button.setDisable(shouldButtonDisabled.get());
+            button.setDisable(shouldButtonDisabled.getAsBoolean());
             return text;
         });
     }

@@ -538,10 +538,12 @@ package frontend {
         + shouldFilterButtonBeDisabled()
         + onUpdateFilterOperationInputFields()
     }
-    class TextFormatterFactory {
-        + createIntegerTextFormatter(TextField, Button, Function)
-        + createDecimalTextFormatter(TextField, Button, Function)
-        - createTextFormatter(TextField, Button, Function, String)
+    package utils {
+        class TextFormatterFactory {
+            + createIntegerTextFormatter(TextField, Button, Function)
+            + createDecimalTextFormatter(TextField, Button, Function)
+            - createTextFormatter(TextField, Button, Function, String)
+        }
     }
     SignalOperationTabController ..> TextFormatterFactory
 }
