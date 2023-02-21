@@ -397,12 +397,13 @@ package backend {
         + convolution(DiscreteSignal, DiscreteSignal): DiscreteSignal
         + filter(DiscreteSignal, PassType, WindowType, int, double): DiscreteSignal
         + discreteSignalsCorrelation(DiscreteSignal, DiscreteSignal, DiscreteSignalsCorrelationType): double
+        + startRadar(double, int, double, double, double, ContinuousSignal, double, double, double, double, double, double): Radar
     }
     class SignalOperationFactory {
         + createConvolution(): Convolution
         + createFilter(PassType, WindowType, int, double, double): Filter
         + createDiscreteSignalsCorrelation(): DiscreteSignalsCorrelation
-        + createRadar(): Radar
+        + createRadar(double, int, double, double, double, ContinuousSignal, double, double, double, double, double, double, SignalFacade): Radar
     }
     package radar {
         class Radar {
@@ -537,6 +538,12 @@ package frontend {
         + shouldFilterButtonBeDisabled()
         + onUpdateFilterOperationInputFields()
     }
+    class TextFormatterFactory {
+        + createIntegerTextFormatter(TextField, Button, Function)
+        + createDecimalTextFormatter(TextField, Button, Function)
+        - createTextFormatter(TextField, Button, Function, String)
+    }
+    SignalOperationTabController ..> TextFormatterFactory
 }
 SignalOperationTabController ....> SignalFacade
 SignalOperationTabController ..> DiscreteSignalsCorrelationType

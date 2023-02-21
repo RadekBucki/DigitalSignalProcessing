@@ -28,6 +28,9 @@ public class Radar {
     private final TreeMap<Double, Double> allRealDistances = new TreeMap<>();
     private final List<Double> hitsTime = new ArrayList<>();
     private final SignalFactory signalFactory;
+    private final List<DiscreteSignal> signalSentWindows = new ArrayList<>();
+    private final List<DiscreteSignal> signalReceivedWindows = new ArrayList<>();
+    private final List<DiscreteSignal> correlationsWindows = new ArrayList<>();
 
     public Radar(double probingSignalF, int discreteBufferSize, double signalSpeed, double workTime, double stepTime,
                  ContinuousSignal probingSignal, double radarX, double radarY, double objectX, double objectY,
@@ -93,6 +96,10 @@ public class Radar {
                 DiscreteSignal signalReceivedWindow = (DiscreteSignal) signalFactory.createDiscreteSignal(pointsReceivedWindow);
                 DiscreteSignal correlation = facade.discreteSignalsCorrelation(signalReceivedWindow, signalSentWindow, DiscreteSignalsCorrelationType.DIRECT);
 
+                signalSentWindows.add(signalSentWindow);
+                signalReceivedWindows.add(signalReceivedWindow);
+                correlationsWindows.add(correlation);
+
                 correlationNumber++;
                 double centerKey = Math.round((Collections.max(correlation.getPoints().keySet()) + Collections.min(correlation.getPoints().keySet())) / 2 * 10000) / 10000.0;
                 double maxKey = correlation.getPoints().entrySet().stream().filter(e -> e.getKey() > centerKey).max(Map.Entry.comparingByValue()).orElseThrow().getKey();
@@ -119,5 +126,17 @@ public class Radar {
 
     public List<Double> getRealDistances() {
         return realDistances;
+    }
+
+    public List<DiscreteSignal> getSignalSentWindows() {
+        return signalSentWindows;
+    }
+
+    public List<DiscreteSignal> getSignalReceivedWindows() {
+        return signalReceivedWindows;
+    }
+
+    public List<DiscreteSignal> getCorrelationsWindows() {
+        return correlationsWindows;
     }
 }

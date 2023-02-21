@@ -100,11 +100,11 @@ public class SignalFacade {
         );
     }
 
-    public void startRadar(double probingSignalF, int discreteBufferSize, double signalSpeed,
+    public Radar startRadar(double probingSignalF, int discreteBufferSize, double signalSpeed,
                            double workTime, double stepTime, ContinuousSignal continuousSignal,
                            double radarX, double radarY, double objectX, double objectY,
                            double objectSpeedX, double objectSpeedY) {
-        signalOperationFactory.createRadar(probingSignalF, discreteBufferSize, signalSpeed, workTime, stepTime,
+        return signalOperationFactory.createRadar(probingSignalF, discreteBufferSize, signalSpeed, workTime, stepTime,
                 continuousSignal, radarX, radarY, objectX, objectY, objectSpeedX, objectSpeedY, this);
     }
 }

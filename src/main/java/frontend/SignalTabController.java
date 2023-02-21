@@ -34,6 +34,7 @@ import java.util.stream.Stream;
 public class SignalTabController implements Initializable {
     public static final String RESOURCE = "SignalTab.fxml";
     private final SignalFacade facade = new SignalFacade();
+    private final TextFormatterFactory formatterFactory = new TextFormatterFactory();
     private AbstractSignal signal;
     private Class<?> selectedComboBoxKey;
     @FXML
@@ -135,15 +136,9 @@ public class SignalTabController implements Initializable {
     private TextField createGroupNumericalTextField() {
         TextField textField = new TextField();
         textField.setLayoutX(334);
-        textField.setTextFormatter(new TextFormatter<>(text -> {
-            String newText = text.getControlNewText().replace(",", ".");
-            if (!newText.matches("-?(\\d*[.])?\\d*")) {
-                textField.clear();
-                return null;
-            }
-            generateButton.setDisable(shouldGenerateButtonBeDisabled());
-            return text;
-        }));
+        textField.setTextFormatter(formatterFactory.createDecimalTextFormatter(
+                textField, generateButton, this::shouldGenerateButtonBeDisabled
+        ));
         return textField;
     }
 
