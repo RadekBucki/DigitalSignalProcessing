@@ -11,7 +11,15 @@ public class Radar {
     private final double signalSpeed;
     private final double workTime;
 
-    public Radar(double x, double y, ContinuousSignal probingSignal, double probingSignalF, int discreteBufferSize, double signalSpeed, double workTime) {
+    public Radar(
+            double x,
+            double y,
+            ContinuousSignal probingSignal,
+            double probingSignalF,
+            int discreteBufferSize,
+            double signalSpeed,
+            double workTime
+    ) {
         X = x;
         Y = y;
         this.probingSignal = probingSignal;
