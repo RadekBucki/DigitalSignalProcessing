@@ -13,8 +13,8 @@ public class MeasuredObject {
         this.speedY = speedY;
     }
 
-    public double calculateRealDistance(double radarX, double radarY) {
-        return Math.sqrt((X - radarX) * (X - radarX) + (Y - radarY) * (Y - radarY));
+    public double calculateRealDistance(Radar radar) {
+        return Math.sqrt((X - radar.getX()) * (X - radar.getX()) + (Y - radar.getY()) * (Y - radar.getY()));
     }
 
     public void move(double timeDiff) {

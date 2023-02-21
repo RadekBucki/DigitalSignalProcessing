@@ -1,7 +1,7 @@
 package frontend;
 
 import backend.SignalFacade;
-import backend.radar.Radar;
+import backend.radar.RadarExecutor;
 import backend.signal.AbstractSignal;
 import backend.signal.ContinuousSignal;
 import backend.signal.DiscreteSignal;
@@ -78,7 +78,7 @@ public class RadarTabController implements Initializable {
     private final SignalFacade signalFacade = new SignalFacade();
     private final TextFormatterFactory formatterFactory = new TextFormatterFactory();
     private final Map<String, AbstractSignal> signals = new LinkedHashMap<>();
-    private Radar r;
+    private RadarExecutor r;
     private int currentWindow;
 
     @Override
