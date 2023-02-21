@@ -7,8 +7,10 @@ import backend.signal_operation.DiscreteSignalsCorrelationType;
 
 import java.util.*;
 
+import static backend.Rounder.round;
+import static backend.Rounder.floor;
+
 public class RadarExecutor {
-    protected static final double POINTS_DECIMAL_PLACES_DIVISION = 10000.0;
     private final Radar radar;
     private final double stepTime;
     private double first = -1;
@@ -51,7 +53,7 @@ public class RadarExecutor {
 
     private void startWorking() {
         for (double time = 0; time < radar.getWorkTime(); time += radar.getPeriod()) {
-            double timeRounded = Math.round(time * POINTS_DECIMAL_PLACES_DIVISION) / POINTS_DECIMAL_PLACES_DIVISION;
+            double timeRounded = round(time);
             double probingSignalTime = Math.floor(timeRounded / radar.getProbingSignal().getD());
             signalSent.addPoint(timeRounded, radar.getProbingSignal().calculatePointValue(timeRounded - (probingSignalTime * radar.getProbingSignal().getD())));
             samplesSentButNotHit.add(timeRounded);
@@ -59,7 +61,7 @@ public class RadarExecutor {
             //check hit
             double firstToHit = Collections.min(samplesSentButNotHit);
             while (Math.abs(firstToHit - timeRounded) * radar.getSignalSpeed() >= measuredObject.calculateRealDistance(radar)) {
-                double timeReceived = Math.round((timeRounded + Math.abs(firstToHit - timeRounded)) * POINTS_DECIMAL_PLACES_DIVISION) / POINTS_DECIMAL_PLACES_DIVISION;
+                double timeReceived = round(timeRounded + Math.abs(firstToHit - timeRounded));
                 if (first == -1) {
                     first = timeReceived;
                 }
@@ -71,7 +73,7 @@ public class RadarExecutor {
             if (!signalReceived.getPoints().containsKey(timeRounded) && timeRounded >= first && first != -1) {
                 double timeBack = timeRounded;
                 do {
-                    timeBack = Math.round((timeBack - (radar.getPeriod())) * POINTS_DECIMAL_PLACES_DIVISION) / POINTS_DECIMAL_PLACES_DIVISION;
+                    timeBack = round(timeBack - (radar.getPeriod()));
                 } while (!signalReceived.getPoints().containsKey(timeRounded));
                 signalReceived.addPoint(timeRounded, signalReceived.getPoints().get(timeBack));
             }
@@ -85,7 +87,7 @@ public class RadarExecutor {
         TreeMap<Double, Double> pointsReceivedWindow = new TreeMap<>();
         int correlationNumber = 0;
         for (double time = first; time < radar.getWorkTime(); time += radar.getPeriod()) {
-            double timeRounded = Math.round(time * POINTS_DECIMAL_PLACES_DIVISION) / POINTS_DECIMAL_PLACES_DIVISION;
+            double timeRounded = round(time);
             pointsSentWindow.put(timeRounded, signalSent.getPoints().get(timeRounded));
             pointsReceivedWindow.put(timeRounded, signalReceived.getPoints().get(timeRounded));
             if (pointsSentWindow.size() < radar.getDiscreteBufferSize()) {
@@ -100,20 +102,24 @@ public class RadarExecutor {
             correlationsWindows.add(correlation);
 
             correlationNumber++;
-            double centerKey = Math.round((Collections.max(correlation.getPoints().keySet()) + Collections.min(correlation.getPoints().keySet())) / 2 * POINTS_DECIMAL_PLACES_DIVISION) / POINTS_DECIMAL_PLACES_DIVISION;
+            double centerKey = round((Collections.max(correlation.getPoints().keySet()) + Collections.min(correlation.getPoints().keySet())) / 2);
             double maxKey = correlation.getPoints().entrySet().stream().filter(e -> e.getKey() > centerKey).max(Map.Entry.comparingByValue()).orElseThrow().getKey();
             radarDistances.add(Math.abs(maxKey - centerKey) * radar.getSignalSpeed() / 2);
             realDistances.add(
                     allRealDistances.get(
-                            hitsTime.get((int) (Math.floor(((radar.getDiscreteBufferSize() / 2.0) +
+                            hitsTime.get((int) (floor(
+                                    (radar.getDiscreteBufferSize() / 2.0) +
                                     (stepTime * radar.getProbingSignalF() * correlationNumber
-                                            * hitsTime.size() / signalSent.getPoints().size())) * POINTS_DECIMAL_PLACES_DIVISION) / POINTS_DECIMAL_PLACES_DIVISION) - 1)
+                                            * hitsTime.size() / signalSent.getPoints().size())
+                            )) - 1)
                     )
             );
             distancesTimes.add(
-                    hitsTime.get((int) (Math.floor(((radar.getDiscreteBufferSize() / 2.0) +
+                    hitsTime.get((int) (floor(
+                            (radar.getDiscreteBufferSize() / 2.0) +
                             (stepTime * radar.getProbingSignalF() * correlationNumber
-                                    * hitsTime.size() / signalSent.getPoints().size())) * POINTS_DECIMAL_PLACES_DIVISION) / POINTS_DECIMAL_PLACES_DIVISION) - 1)
+                                    * hitsTime.size() / signalSent.getPoints().size())
+                    )) - 1)
             );
             for (int i = 0; i < stepTime * radar.getProbingSignalF(); i++) {
                 pointsSentWindow.pollFirstEntry();
