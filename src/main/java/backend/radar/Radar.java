@@ -34,15 +34,15 @@ public class Radar {
     private final List<DiscreteSignal> correlationsWindows = new ArrayList<>();
 
     public Radar(double probingSignalF, int discreteBufferSize, double signalSpeed, double workTime, double stepTime,
-                 ContinuousSignal probingSignal, double radarX, double radarY, double objectX, double objectY,
-                 double objectSpeedX, double objectSpeedY, SignalFacade facade, SignalFactory signalFactory) {
+                 ContinuousSignal probingSignal, double radarX, double radarY,MeasuredObject measuredObject,
+                 SignalFacade facade, SignalFactory signalFactory) {
         this.probingSignalF = probingSignalF;
         this.discreteBufferSize = discreteBufferSize;
         this.signalSpeed = signalSpeed;
         this.workTime = workTime;
         this.stepTime = stepTime;
         this.probingSignal = probingSignal;
-        measuredObject = new MeasuredObject(objectX, objectY, objectSpeedX, objectSpeedY);
+        this.measuredObject = measuredObject;
         this.X = radarX;
         this.Y = radarY;
         this.signalFactory = signalFactory;
