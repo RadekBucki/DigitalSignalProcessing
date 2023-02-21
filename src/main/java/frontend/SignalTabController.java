@@ -56,7 +56,7 @@ public class SignalTabController implements Initializable {
     private Slider binNumberSlider;
     @FXML
     public GridPane statisticsGrid;
-    private BiConsumer<String, AbstractSignal> signalConsumer = null;
+    private List<BiConsumer<String, AbstractSignal>> signalConsumers = new ArrayList<>();
     private String tabName;
 
     @Override
@@ -127,7 +127,7 @@ public class SignalTabController implements Initializable {
 
         createRightPanel(signal);
 
-        signalConsumer.accept(tabName, signal);
+        notifyAllConsumers(tabName, signal);
         save.setDisable(false);
         load.setDisable(true);
     }
@@ -176,8 +176,8 @@ public class SignalTabController implements Initializable {
         return false;
     }
 
-    public void setSignalConsumer(BiConsumer<String, AbstractSignal> signalConsumer) {
-        this.signalConsumer = signalConsumer;
+    public void addSignalConsumer(BiConsumer<String, AbstractSignal> signalConsumer) {
+        this.signalConsumers.add(signalConsumer);
     }
 
     public void setTabName(String name) {
@@ -203,7 +203,7 @@ public class SignalTabController implements Initializable {
         signalTypes.setDisable(true);
         parametersGrid.setDisable(true);
         createRightPanel(signal);
-        signalConsumer.accept(tabName, signal);
+        notifyAllConsumers(tabName, signal);
         save.setDisable(false);
         load.setDisable(true);
     }
@@ -274,5 +274,11 @@ public class SignalTabController implements Initializable {
 
     private String getHistogramFileName(int number) {
         return "histogram" + number + ".png";
+    }
+
+    private void notifyAllConsumers(String t, AbstractSignal signal) {
+        for (BiConsumer<String, AbstractSignal> consumer : signalConsumers) {
+            consumer.accept(t, signal);
+        }
     }
 }

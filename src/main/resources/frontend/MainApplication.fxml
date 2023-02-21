@@ -7,9 +7,18 @@
          xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1"
          fx:controller="frontend.MainApplicationController">
     <Tab closable="false" styleClass="highlighting-tab" text="Signal Operation">
-        <VBox>
-            <fx:include fx:id="signalOperationTabFxml" source="SignalOperationTab.fxml"/>
-        </VBox>
+        <TabPane>
+            <Tab closable="false" styleClass="highlighting-tab" text="Signal Operation Basic">
+                <VBox>
+                    <fx:include fx:id="signalOperationTabFxml" source="SignalOperationTab.fxml"/>
+                </VBox>
+            </Tab>
+            <Tab closable="false" styleClass="highlighting-tab" text="Radar">
+                <VBox>
+                    <fx:include fx:id="radarTabFxml" source="RadarTab.fxml"/>
+                </VBox>
+            </Tab>
+        </TabPane>
     </Tab>
     <Tab fx:id="plusTab" closable="false" styleClass="highlighting-tab" text="+"/>
 </TabPane>
