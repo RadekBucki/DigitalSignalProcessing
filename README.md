@@ -391,6 +391,67 @@ package frontend {
 SignalOperationTabController ....> SignalFacade
 ```
 # Task 3 - convolution, filtering, correlation
+## Frontend
+```plantuml
+package backend {
+    class SignalFacade {
+        + convolution(DiscreteSignal, DiscreteSignal): DiscreteSignal
+        + filter(DiscreteSignal, PassType, WindowType, int, double): DiscreteSignal
+        + discreteSignalsCorrelation(DiscreteSignal, DiscreteSignal, DiscreteSignalsCorrelationType): double
+        + startRadar(double, int, double, double, double, ContinuousSignal, double, double, double, double, double, double): Radar
+    }
+    package signal_operation {
+        enum DiscreteSignalsCorrelationType {
+            + DIRECT
+            + USING_CONVOLUTION
+        }
+        enum WindowType {
+            + RECTANGULAR
+            + BLACKMAN
+            + HAMMING
+            + HANNING
+        }
+        enum PassType {
+            + LOW_PASS
+            + HIGH_PASS
+            + BAND_PASS
+        }
+    }
+}
+
+package frontend {
+    class SignalOperationTabController {
+        + convolutionOperation()
+        + correlationOperation()
+        + filterOperation()
+        + onUpdateConvolutionCorrelationOperationsComboBox()
+        + shouldFilterButtonBeDisabled()
+        + onUpdateFilterOperationInputFields()
+    }
+    class RadarTabController {
+        + addOrUpdateSignal()
+        + onUpdateRadarInitData()
+        + startRadar()
+        - shouldRadarStartButtonBeDisabled(): boolean
+        - updateData()
+    }
+    package utils {
+        class TextFormatterFactory {
+            + createIntegerTextFormatter(TextField, Button, Function)
+            + createDecimalTextFormatter(TextField, Button, Function)
+            - createTextFormatter(TextField, Button, Function, String)
+        }
+    }
+    SignalOperationTabController ..> TextFormatterFactory
+    RadarTabController ..> TextFormatterFactory
+}
+SignalOperationTabController ....> SignalFacade
+RadarTabController ....> SignalFacade
+SignalOperationTabController ..> DiscreteSignalsCorrelationType
+SignalOperationTabController ..> WindowType
+SignalOperationTabController ..> PassType
+```
+## Backend
 ```plantuml
 package backend {
     class SignalFacade {
@@ -570,36 +631,4 @@ package backend {
     SignalOperationFactory ..> Filter
     SignalOperationFactory ..> DiscreteSignalsCorrelation
 }
-
-package frontend {
-    class SignalOperationTabController {
-        + convolutionOperation()
-        + correlationOperation()
-        + filterOperation()
-        + onUpdateConvolutionCorrelationOperationsComboBox()
-        + shouldFilterButtonBeDisabled()
-        + onUpdateFilterOperationInputFields()
-    }
-    class RadarTabController {
-        + addOrUpdateSignal()
-        + onUpdateRadarInitData()
-        + startRadar()
-        - shouldRadarStartButtonBeDisabled(): boolean
-        - updateData()
-    }
-    package utils {
-        class TextFormatterFactory {
-            + createIntegerTextFormatter(TextField, Button, Function)
-            + createDecimalTextFormatter(TextField, Button, Function)
-            - createTextFormatter(TextField, Button, Function, String)
-        }
-    }
-    SignalOperationTabController ..> TextFormatterFactory
-    RadarTabController ..> TextFormatterFactory
-}
-SignalOperationTabController ....> SignalFacade
-RadarTabController ....> SignalFacade
-SignalOperationTabController ..> DiscreteSignalsCorrelationType
-SignalOperationTabController ..> WindowType
-SignalOperationTabController ..> PassType
 ```
