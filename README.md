@@ -580,6 +580,13 @@ package frontend {
         + shouldFilterButtonBeDisabled()
         + onUpdateFilterOperationInputFields()
     }
+    class RadarTabController {
+        + addOrUpdateSignal()
+        + onUpdateRadarInitData()
+        + startRadar()
+        - shouldRadarStartButtonBeDisabled(): boolean
+        - updateData()
+    }
     package utils {
         class TextFormatterFactory {
             + createIntegerTextFormatter(TextField, Button, Function)
@@ -588,8 +595,10 @@ package frontend {
         }
     }
     SignalOperationTabController ..> TextFormatterFactory
+    RadarTabController ..> TextFormatterFactory
 }
 SignalOperationTabController ....> SignalFacade
+RadarTabController ....> SignalFacade
 SignalOperationTabController ..> DiscreteSignalsCorrelationType
 SignalOperationTabController ..> WindowType
 SignalOperationTabController ..> PassType
