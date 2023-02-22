@@ -1,6 +1,7 @@
 package backend;
 
-import backend.radar.RadarExecutor;
+import backend.radar.Radar;
+import backend.radar.RadarMemory;
 import backend.signal.AbstractSignal;
 import backend.signal.ContinuousSignal;
 import backend.signal.DiscreteSignal;
@@ -100,11 +101,12 @@ public class SignalFacade {
         );
     }
 
-    public RadarExecutor startRadar(double probingSignalF, int discreteBufferSize, double signalSpeed,
-                                    double workTime, double stepTime, ContinuousSignal continuousSignal,
-                                    double radarX, double radarY, double objectX, double objectY,
-                                    double objectSpeedX, double objectSpeedY) {
+    public RadarMemory startRadar(double probingSignalF, int discreteBufferSize, double signalSpeed,
+                                  double workTime, double stepTime, ContinuousSignal continuousSignal,
+                                  double radarX, double radarY, double objectX, double objectY,
+                                  double objectSpeedX, double objectSpeedY) {
         return signalOperationFactory.createRadar(probingSignalF, discreteBufferSize, signalSpeed, workTime, stepTime,
-                continuousSignal, radarX, radarY, objectX, objectY, objectSpeedX, objectSpeedY, this);
+                continuousSignal, radarX, radarY, objectX, objectY, objectSpeedX, objectSpeedY, this)
+                .getRadarMemory();
     }
 }

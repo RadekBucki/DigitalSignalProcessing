@@ -1,14 +1,14 @@
 package backend;
 
-import backend.radar.RadarExecutor;
-import backend.radar.RadarExecutorDependenciesFactory;
+import backend.radar.Radar;
+import backend.radar.RadarDependenciesFactory;
 import backend.signal.ContinuousSignal;
 import backend.signal_operation.*;
 import backend.signal_operation.pass.Pass;
 import backend.signal_operation.window.Window;
 
 public class SignalOperationFactory {
-    RadarExecutorDependenciesFactory radarExecutorDependenciesFactory = new RadarExecutorDependenciesFactory();
+    RadarDependenciesFactory radarDependenciesFactory = new RadarDependenciesFactory();
     private final QuantizationMethodFactory quantizationMethodFactory = new QuantizationMethodFactory();
     private final SignalFactory signalFactory;
     private final ReconstructMethodFactory reconstructMethodFactory = new ReconstructMethodFactory();
@@ -60,22 +60,15 @@ public class SignalOperationFactory {
         return new DiscreteSignalsCorrelation(signalFactory, createConvolution());
     }
 
-    public RadarExecutor createRadar(double probingSignalF, int discreteBufferSize, double signalSpeed,
-                                     double workTime, double stepTime, ContinuousSignal continuousSignal,
-                                     double radarX, double radarY, double objectX, double objectY,
-                                     double objectSpeedX, double objectSpeedY, SignalFacade facade) {
-        return new RadarExecutor(
-                radarExecutorDependenciesFactory.createRadar(
-                        radarX,
-                        radarY,
-                        continuousSignal,
-                        probingSignalF,
-                        discreteBufferSize,
-                        signalSpeed,
-                        workTime
-                ),
-                stepTime,
-                radarExecutorDependenciesFactory.createMeasuredObject(objectX, objectY, objectSpeedX, objectSpeedY),
+    public Radar createRadar(double probingSignalF, int discreteBufferSize, double signalSpeed,
+                             double workTime, double stepTime, ContinuousSignal continuousSignal,
+                             double radarX, double radarY, double objectX, double objectY,
+                             double objectSpeedX, double objectSpeedY, SignalFacade facade) {
+        return new Radar(
+                radarDependenciesFactory.createRadarConfig(continuousSignal, probingSignalF, discreteBufferSize,
+                        workTime, radarX, radarY),
+                radarDependenciesFactory.createEnvironment(signalSpeed, stepTime),
+                radarDependenciesFactory.createMeasuredObject(objectX, objectY, objectSpeedX, objectSpeedY),
                 facade,
                 signalFactory
         );

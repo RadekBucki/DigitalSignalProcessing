@@ -1,7 +1,7 @@
 package frontend;
 
 import backend.SignalFacade;
-import backend.radar.RadarExecutor;
+import backend.radar.RadarMemory;
 import backend.signal.AbstractSignal;
 import backend.signal.ContinuousSignal;
 import backend.signal.DiscreteSignal;
@@ -78,7 +78,7 @@ public class RadarTabController implements Initializable {
     private final SignalFacade signalFacade = new SignalFacade();
     private final TextFormatterFactory formatterFactory = new TextFormatterFactory();
     private final Map<String, AbstractSignal> signals = new LinkedHashMap<>();
-    private RadarExecutor r;
+    private RadarMemory rm;
     private int currentWindow;
 
     @Override
@@ -117,7 +117,7 @@ public class RadarTabController implements Initializable {
     }
 
     public void startRadar() {
-        r = signalFacade.startRadar(Double.parseDouble(samplingFrequency.getText()),
+        rm = signalFacade.startRadar(Double.parseDouble(samplingFrequency.getText()),
                 Integer.parseInt(bufferSize.getText()),
                 Double.parseDouble(signalSpeed.getText()),
                 Double.parseDouble(workTime.getText()),
@@ -170,16 +170,16 @@ public class RadarTabController implements Initializable {
     public void nextWindow() {
         currentWindow++;
         previousWindowButton.setDisable(false);
-        if (currentWindow + 1 == r.getRadarDistances().size()) {
+        if (currentWindow + 1 == rm.getRadarDistances().size()) {
             nextWindowButton.setDisable(true);
         }
         updateData();
     }
 
     private void updateData() {
-        DiscreteSignal signalSent = r.getSignalSentWindows().get(currentWindow);
-        DiscreteSignal signalReceived = r.getSignalReceivedWindows().get(currentWindow);
-        DiscreteSignal correlation = r.getCorrelationsWindows().get(currentWindow);
+        DiscreteSignal signalSent = rm.getSignalSentWindows().get(currentWindow);
+        DiscreteSignal signalReceived = rm.getSignalReceivedWindows().get(currentWindow);
+        DiscreteSignal correlation = rm.getCorrelationsWindows().get(currentWindow);
         try {
             ChartUtilities.saveChartAsPNG(
                     new File("radarChart1.png"),
@@ -217,8 +217,8 @@ public class RadarTabController implements Initializable {
             //ignored
         }
 
-        radarDistance.setText(String.valueOf(r.getRadarDistances().get(currentWindow)));
-        realDistance.setText(String.valueOf(r.getRealDistances().get(currentWindow)));
-        timeDistance.setText(String.valueOf(r.getDistancesTimes().get(currentWindow)));
+        radarDistance.setText(String.valueOf(rm.getRadarDistances().get(currentWindow)));
+        realDistance.setText(String.valueOf(rm.getRealDistances().get(currentWindow)));
+        timeDistance.setText(String.valueOf(rm.getDistancesTimes().get(currentWindow)));
     }
 }
