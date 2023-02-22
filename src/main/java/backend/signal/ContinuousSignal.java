@@ -6,6 +6,9 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.function.Function;
 
+import static backend.Rounder.DECIMAL_PLACES_DIVISION;
+import static backend.Rounder.round;
+
 public class ContinuousSignal extends AbstractSignal {
     private final DSPSimpsonIntegrator si = new DSPSimpsonIntegrator();
     protected double t1;
@@ -27,10 +30,10 @@ public class ContinuousSignal extends AbstractSignal {
     }
 
     public void calculateAllPoints() {
-        int t1Rounded = (int) (t1 * POINTS_DECIMAL_PLACES_DIVISION);
-        int t2Rounded = (int) ((t1 + d) * POINTS_DECIMAL_PLACES_DIVISION);
+        int t1Rounded = (int) (t1 * DECIMAL_PLACES_DIVISION);
+        int t2Rounded = (int) ((t1 + d) * DECIMAL_PLACES_DIVISION);
         for (int i = t1Rounded; i <= t2Rounded; i++) {
-            double pointX = i / POINTS_DECIMAL_PLACES_DIVISION;
+            double pointX = i / DECIMAL_PLACES_DIVISION;
             points.put(pointX, calculatePointValue(pointX));
         }
     }
@@ -40,7 +43,7 @@ public class ContinuousSignal extends AbstractSignal {
         if (function != null) {
             return function.apply(x);
         }
-        double value = points.get(Math.round(x * POINTS_DECIMAL_PLACES_DIVISION) / POINTS_DECIMAL_PLACES_DIVISION);
+        double value = points.get(round(x));
         return Math.abs(value) < 0.000001 ? 0 : value;
     }
 

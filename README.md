@@ -412,17 +412,25 @@ package backend {
             -probingSignalF: double
             -discreteBufferSize: int
             -signalSpeed: double
-            -workTime: double
             -stepTime: double
-            -probingSignal: ContinuousSignal
+            -probingSignal: ContinuousSigna
+            +getX(): double
+            +getY(): double
+            +getProbingSignalF(): double
+            +getPeriod(): double
+            +getDiscreteBufferSize(): int
+            +getSignalSpeed(): double
+            +getStepTime(): double
+            +getProbingSignal(): ContinuousSignal
+        }
+        class RadarExecutor {
+            -radar: Radar
             -signalSent: DiscreteSignal
             -signalReceived: DiscreteSignal
             -radarDistances: double[]
             -realDistances: double[]
             -startWorking()
             -calculateCorrelations()
-            -getRadarDistances()
-            -getRealDistances()
         }
         class MeasuredObject {
             -X: double
@@ -432,8 +440,16 @@ package backend {
             +move(double)
             +calculateRealDistance(double)
         }
-        Radar o-> MeasuredObject
-        SignalOperationFactory ..> Radar
+        class RadarExecutorDependenciesFactory {
+            + createRadar(double, int, double, double, double, ContinuousSignal, double, double, double, double, double, double, SignalFacade): Radar
+            + createMeasuredObject(double, double, double, double): MeasuredObject
+        }
+        RadarExecutorDependenciesFactory ..> Radar
+        RadarExecutorDependenciesFactory ..> MeasuredObject
+        
+        RadarExecutor o-> MeasuredObject
+        SignalOperationFactory ..> RadarExecutor
+        SignalOperationFactory ..> RadarExecutorDependenciesFactory
     }
     package signal_operation {
         class Convolution {

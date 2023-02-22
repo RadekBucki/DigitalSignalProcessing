@@ -1,4 +1,4 @@
-package backend.radar;
+package backend.radar.model;
 
 public class MeasuredObject {
     private double X;
@@ -13,8 +13,8 @@ public class MeasuredObject {
         this.speedY = speedY;
     }
 
-    public double calculateRealDistance(double radarX, double radarY) {
-        return Math.sqrt((X - radarX) * (X - radarX) + (Y - radarY) * (Y - radarY));
+    public double calculateRealDistance(double xFrom, double yFrom) {
+        return Math.sqrt((X - xFrom) * (X - xFrom) + (Y - yFrom) * (Y - yFrom));
     }
 
     public void move(double timeDiff) {

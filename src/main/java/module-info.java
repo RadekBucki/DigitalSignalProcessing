@@ -31,4 +31,5 @@ module cps {
     exports backend.radar;
     exports frontend.units;
     opens frontend.units to javafx.fxml;
+    exports backend.radar.model;
 }
