@@ -5,7 +5,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public abstract class AbstractSignal implements Serializable {
-    protected static final double POINTS_DECIMAL_PLACES_DIVISION = 10000;
     protected Map<Double, Double> points = new LinkedHashMap<>();
     protected double d;
     protected double A;
@@ -37,11 +36,11 @@ public abstract class AbstractSignal implements Serializable {
     }
     public abstract double calculatePointValue(double x);
 
-    public static double getPointsDecimalPlacesDivision() {
-        return POINTS_DECIMAL_PLACES_DIVISION;
-    }
-
     public void addPoint(double x, double y) {
         points.put(x, y);
+    }
+
+    public void removePoint(double x) {
+        points.remove(x);
     }
 }
