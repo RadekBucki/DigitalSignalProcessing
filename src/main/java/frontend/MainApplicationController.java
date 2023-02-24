@@ -73,9 +73,13 @@ public class MainApplicationController implements Initializable {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(SignalTabController.RESOURCE));
             tab.setClosable(true);
             tab.setContent(fxmlLoader.load());
-            tab.setOnClosed((event) -> signalOperationTabFxmlController.addOrUpdateSignal(tabName, null));
             SignalTabController signalTabController = fxmlLoader.getController();
             signalTabController.addSignalConsumer(signalOperationTabFxmlController::addOrUpdateSignal);
+            signalTabController.addSignalConsumer(radarTabFxmlController::addOrUpdateSignal);
+            tab.setOnClosed((event) -> {
+                signalOperationTabFxmlController.addOrUpdateSignal(tabName, null);
+                radarTabFxmlController.addOrUpdateSignal(tabName, null);
+            });
             signalTabController.setTabName(tabName);
             signalTabController.setSignal(signal);
             tabPane.getTabs().add(tabPane.getTabs().size() - 1, tab);
