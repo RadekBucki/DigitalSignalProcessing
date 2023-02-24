@@ -46,7 +46,8 @@ public class DiscreteSignalsCorrelation {
                         ).getPoints()
                         .entrySet()
                         .stream()
-                        .collect(Collectors.toMap(e -> e.getKey() - signal2.getPoints().size() + 1, Map.Entry::getValue))
+                        .collect(Collectors.toMap(e -> e.getKey() - ((signal2.getPoints().size() - 1) / signal1.getF()),
+                                Map.Entry::getValue))
         );
     }
 
