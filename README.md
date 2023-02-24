@@ -633,6 +633,7 @@ package backend {
 }
 ```
 # Task 4 - Fourier, Walsh-Hadamard, coine and falco transforms, fast algorithms
+## Backend
 ```plantuml
 package backend {
     class SignalFacade {
@@ -712,9 +713,10 @@ package backend {
     }
 }
 ```
+## Frontend
 ```plantuml
 package frontend {
-    class SignalOperationTabController {
+    class TransformTabController {
         + discreteFourierTransformOperation()
         + discreteCosineTransformOperation()
         + discreteWalshHadamardTransformOperation()
@@ -745,7 +747,7 @@ package backend {
         }
     }
 }
-SignalOperationTabController ....> SignalFacade
-SignalOperationTabController ..> TransformType
-SignalOperationTabController ..> Level
+TransformTabController ....> SignalFacade
+TransformTabController ..> TransformType
+TransformTabController ..> Level
 ```
