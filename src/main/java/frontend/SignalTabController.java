@@ -2,6 +2,7 @@ package frontend;
 
 import backend.SignalFacade;
 import backend.signal.AbstractSignal;
+import backend.signal.DiscreteFourierTransformedSignal;
 import backend.signal.DiscreteSignal;
 import frontend.chart.ChartGenerator;
 import frontend.classes.ClassTranslator;
@@ -17,7 +18,6 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import org.jfree.chart.ChartUtilities;
 
 import java.io.File;
@@ -39,9 +39,9 @@ public class SignalTabController implements Initializable {
     private AbstractSignal signal;
     private Class<?> selectedComboBoxKey;
     @FXML
-    public Button load;
+    private Button load;
     @FXML
-    public Button save;
+    private Button save;
     @FXML
     private GridPane parametersGrid;
     @FXML
@@ -49,16 +49,22 @@ public class SignalTabController implements Initializable {
     @FXML
     private Button generateButton;
     @FXML
-    public VBox rightPanel;
+    private TabPane rightPanel;
     @FXML
     private ImageView amplitudeTimeChart;
+    @FXML
+    private ImageView amplitudeTimeImaginaryChart;
     @FXML
     private ImageView histogram;
     @FXML
     private Slider binNumberSlider;
     @FXML
-    public GridPane statisticsGrid;
-    private List<BiConsumer<String, AbstractSignal>> signalConsumers = new ArrayList<>();
+    private ImageView imaginaryHistogram;
+    @FXML
+    private Slider binNumberImaginarySlider;
+    @FXML
+    private GridPane statisticsGrid;
+    private final List<BiConsumer<String, AbstractSignal>> signalConsumers = new ArrayList<>();
     private String tabName;
 
     @Override
@@ -80,6 +86,14 @@ public class SignalTabController implements Initializable {
             try {
                 FileInputStream input = new FileInputStream(getHistogramFileName((int) binNumberSlider.getValue()));
                 histogram.setImage(new Image(input));
+            } catch (FileNotFoundException ignored) {
+                //ignored
+            }
+        });
+        binNumberImaginarySlider.valueProperty().addListener((observableValue, oldValue, newValue) -> {
+            try {
+                FileInputStream input = new FileInputStream(getHistogramFileName((int) binNumberImaginarySlider.getValue()));
+                imaginaryHistogram.setImage(new Image(input));
             } catch (FileNotFoundException ignored) {
                 //ignored
             }
@@ -230,6 +244,34 @@ public class SignalTabController implements Initializable {
         input = new FileInputStream(getHistogramFileName((int) binNumberSlider.getValue()));
         histogram.setImage(new Image(input));
 
+        if (signal instanceof DiscreteFourierTransformedSignal) {
+            ChartUtilities.saveChartAsPNG(
+                    new File("chart_imaginary.png"),
+                    ChartGenerator.generateAmplitudeTimeChart(
+                            ((DiscreteFourierTransformedSignal) signal).getImaginaryPartPoints(),
+                            true
+                    ),
+                    400,
+                    220
+            );
+            input = new FileInputStream("chart_imaginary.png");
+            amplitudeTimeImaginaryChart.setImage(new Image(input));
+
+            for (int i = 5; i <= 20; i++) {
+                ChartUtilities.saveChartAsPNG(
+                        new File(getHistogramFileName(i)),
+                        ChartGenerator.generateHistogram(
+                                ((DiscreteFourierTransformedSignal) signal).getImaginaryPartPoints(), i
+                        ),
+                        400,
+                        220
+                );
+            }
+            input = new FileInputStream(getImaginaryHistogramFileName((int) binNumberImaginarySlider.getValue()));
+            imaginaryHistogram.setImage(new Image(input));
+            binNumberImaginarySlider.setVisible(true);
+        }
+
         try {
             createStatistics(Map.of(
                     "Average", signal::getAverage,
@@ -270,6 +312,10 @@ public class SignalTabController implements Initializable {
 
     private String getHistogramFileName(int number) {
         return "histogram" + number + ".png";
+    }
+
+    private String getImaginaryHistogramFileName(int number) {
+        return "histogram_imaginary" + number + ".png";
     }
 
     private void notifyAllConsumers(String t, AbstractSignal signal) {
