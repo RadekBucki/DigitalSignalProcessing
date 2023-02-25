@@ -707,8 +707,9 @@ package backend {
         SignalFacade --> SignalFactory
         class DiscreteSignal extends AbstractSignal
         class DiscreteFourierTransformedSignal extends DiscreteSignal {
-            + getRealPartPoints(): double[]
-            + getImaginaryPartPoints(): double[]
+            # imaginaryPartPoints: double[][]
+            + getRealPartPoints(): double[][]
+            + getImaginaryPartPoints(): double[][]
         }
     }
 }
