@@ -2,10 +2,12 @@ package backend;
 
 import backend.signal.AbstractSignal;
 import backend.signal.ContinuousSignal;
+import backend.signal.DiscreteFourierTransformedSignal;
 import backend.signal.DiscreteSignal;
 import backend.signal.continuous.*;
 import backend.signal.discrete.ImpulseNoise;
 import backend.signal.discrete.UnitImpulse;
+import org.apache.commons.math3.complex.Complex;
 
 import java.util.List;
 import java.util.Map;
@@ -168,6 +170,10 @@ public class SignalFactory {
             );
         }
         return null;
+    }
+
+    public DiscreteSignal createDiscreteFourierTransformedSignal(Map<Double, Complex> points) {
+        return new DiscreteFourierTransformedSignal(points);
     }
 
 }
