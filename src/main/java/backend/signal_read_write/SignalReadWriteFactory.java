@@ -2,7 +2,7 @@ package backend.signal_read_write;
 
 public class SignalReadWriteFactory {
 
-    public static SignalReadWrite getSignalReadWrite(SignalReadWriteType type) {
+    public SignalReadWrite getSignalReadWrite(SignalReadWriteType type) {
         return switch (type) {
             case JSON -> new SignalJsonizer();
             case BINARY -> new SignalSerializer();

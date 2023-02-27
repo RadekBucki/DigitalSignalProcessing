@@ -9,7 +9,6 @@ import java.io.IOException;
 public class SignalJsonizer implements SignalReadWrite {
 
     public AbstractSignal read(String filePath) {
-
         File file = new File(filePath);
         ObjectMapper mapper = new ObjectMapper();
         try {
