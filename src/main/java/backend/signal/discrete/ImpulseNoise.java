@@ -1,7 +1,10 @@
 package backend.signal.discrete;
 
 import backend.signal.DiscreteSignal;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Map;
 import java.util.Random;
 
 public class ImpulseNoise extends DiscreteSignal {
@@ -23,6 +26,22 @@ public class ImpulseNoise extends DiscreteSignal {
                 points.put(time, 0.0);
             }
         }
+    }
+
+    @JsonCreator
+    public ImpulseNoise(
+            @JsonProperty("a") double A,
+            @JsonProperty("d") double d,
+            @JsonProperty("f") double f,
+            @JsonProperty("t1") double t1,
+            @JsonProperty("p") double p,
+            @JsonProperty("n1") int n1,
+            @JsonProperty("n2") int n2,
+            @JsonProperty("points") Map<Double, Double> points
+    ) {
+        super(A, d, f, n1, n2, points);
+        this.t1 = t1;
+        this.p = p;
     }
 
     public double getT1() {

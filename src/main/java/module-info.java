@@ -23,7 +23,7 @@ module cps {
     opens frontend.chart to javafx.fxml;
     exports backend.signal.continuous;
     opens backend.signal.continuous to javafx.fxml;
-    opens backend.signal to javafx.fxml;
+    opens backend.signal to javafx.fxml, com.fasterxml.jackson.databind;
     exports frontend.fields;
     opens frontend.fields to javafx.fxml;
     exports frontend.classes;

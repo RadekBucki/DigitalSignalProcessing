@@ -1,6 +1,10 @@
 package backend.signal.continuous;
 
 import backend.signal.ContinuousSignal;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.Map;
 
 public class RectangularSignal extends ContinuousSignal {
     private final double kw;
@@ -11,6 +15,21 @@ public class RectangularSignal extends ContinuousSignal {
         this.T = T;
         this.kw = kw;
         calculateAllPoints();
+    }
+
+    @JsonCreator
+    public RectangularSignal(
+            @JsonProperty("a") double A,
+            @JsonProperty("d") double d,
+            @JsonProperty("t1") double t1,
+            @JsonProperty("t2") Double t2,
+            @JsonProperty("points") Map<Double, Double> points,
+            @JsonProperty("t") double T,
+            @JsonProperty("kw") double kw
+    ) {
+        super(A, d, t1, t2, points);
+        this.T = T;
+        this.kw = kw;
     }
 
     @Override

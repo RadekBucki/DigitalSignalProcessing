@@ -1,6 +1,8 @@
 package backend.signal;
 
 import backend.simpson.DSPSimpsonIntegrator;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Collections;
 import java.util.Map;
@@ -24,6 +26,19 @@ public class ContinuousSignal extends AbstractSignal {
         this.t2 = Collections.max(points.keySet());
         this.A = Collections.max(points.values());
         this.d = t2 - t1;
+    }
+
+    @JsonCreator
+    public ContinuousSignal(
+            @JsonProperty("a") double A,
+            @JsonProperty("d") double d,
+            @JsonProperty("t1") double t1,
+            @JsonProperty("t2") Double t2,
+            @JsonProperty("points") Map<Double, Double> points
+    ) {
+        super(A, d, points);
+        this.t1 = t1;
+        this.t2 = t2;
     }
 
     public void calculateAllPoints() {
