@@ -3,6 +3,96 @@
 ## Task 1 - Signal and noise generation
 ## Frontend
 ```plantuml
+
+
+package frontend {
+    class MainApplication {
+    }
+    class MainApplicationController {
+        - createSignalTab()
+        - createSignalTabFromAbstractSignal()
+    }
+    class SignalTabController {
+        - createGroupLabel()
+        - shouldGenerateButtonBeDisabled()
+        - parametersTextFields()
+        + createSignalInstance()
+        + saveSignal()
+        + loadSignal()
+        + setSignal()
+        + onUpdateComboBox()
+    }
+    class SignalOperationTabController {
+        + addOrUpdateSignal()
+        + applyOperation()
+    }
+    package file {
+        class FileChoose {
+            + {static} saveChooser()
+            + {static} openChooser()
+            - {static} choose()
+        }
+    }
+    package chart {
+        class ChartGenerator {
+            + {static} generateAmplitudeTimeChart()
+            + {static} generateHistogram()
+            - {static} formatAxis()
+            - {static} changeVisibility()
+        }
+    }
+    package classes {
+        class ClassTranslator {
+            + {static} translatePascalCaseClassToText(Class): String
+        }
+    }
+    package fields {
+        class FieldReader {
+            + {static} getFieldNames(Class): String[]
+        }
+        class FieldMapper {
+            + {static} getFieldNames(String): String
+        }
+    }
+    
+    MainApplicationController o---> SignalTabController
+    MainApplicationController o--> SignalOperationTabController
+    MainApplication o--> MainApplicationController
+    
+    SignalTabController ..> FileChoose
+    SignalTabController ..> ChartGenerator
+    SignalTabController ..> ClassTranslator
+    SignalTabController ..> FieldMapper
+    SignalTabController ..> FieldReader
+}
+package backend {
+    class SignalFacade {
+        + add(AbstractSignal,AbstractSignal): AbstractSignal
+        + subtract(AbstractSignal,AbstractSignal): AbstractSignal
+        + multiply(AbstractSignal,AbstractSignal): AbstractSignal
+        + divide(AbstractSignal,AbstractSignal): AbstractSignal
+        + getSignalFactory(): SignalFactory
+        + getSignal(Class,Double[]): AbstractSignal
+        + getDefaultSignal(): AbstractSignal
+        + getPossibleSignals(): AbstractSignal[]
+        + writeSignal(AbstractSignal, String)
+        + readSignal(String): AbstractSignal
+    }
+    package signal_serialize {
+       
+        enum SignalSerializeType {
+            JSON
+            BINARY
+        }
+    }
+}
+SignalTabController ....> SignalFacade
+SignalTabController ....> SignalSerializeType
+SignalOperationTabController ....> SignalFacade
+```
+## Backend
+### Polymorphic signal hierarchy
+```plantuml
 package backend {
     class SignalFactory {
         + createUniformlyDistributedNoise(): AbstractSignal
@@ -143,7 +233,25 @@ package backend {
         DiscreteSignal <|-- UnitImpulse
         DiscreteSignal <|-- ImpulseNoise
     }
-    
+}
+```
+### Signal operations
+```plantuml
+package backend {    
+    class SignalFactory {
+        + createUniformlyDistributedNoise(): AbstractSignal
+        + createGaussianNoise(): AbstractSignal
+        + createSinusoidalSignal(): AbstractSignal
+        + createOneHalfRectifiedSinusoidalSignal(): AbstractSignal
+        + createTwoHalfRectifiedSinusoidalSignal(): AbstractSignal
+        + createRectangularSignal(): AbstractSignal
+        + createSymmetricalRectangularSignal(): AbstractSignal
+        + createTriangleSignal(): AbstractSignal
+        + createUnitJump(): AbstractSignal
+        + createContinuousSignal(): AbstractSignal
+        + createDiscreteSignal(): AbstractSignal
+        + getSignal(Class,Double[]): AbstractSignal
+    }
     class SignalFacade {
         + add(AbstractSignal,AbstractSignal): AbstractSignal
         + subtract(AbstractSignal,AbstractSignal): AbstractSignal
@@ -227,68 +335,4 @@ package backend {
     }
     SignalFacade ...> SignalSerializerFactory
 }
-
-package frontend {
-    class MainApplication {
-    }
-    class MainApplicationController {
-        - createSignalTab()
-        - createSignalTabFromAbstractSignal()
-    }
-    class SignalTabController {
-        - createGroupLabel()
-        - shouldGenerateButtonBeDisabled()
-        - parametersTextFields()
-        + createSignalInstance()
-        + saveSignal()
-        + loadSignal()
-        + setSignal()
-        + onUpdateComboBox()
-    }
-    class SignalOperationTabController {
-        + addOrUpdateSignal()
-        + applyOperation()
-    }
-    package file {
-        class FileChoose {
-            + {static} saveChooser()
-            + {static} openChooser()
-            - {static} choose()
-        }
-    }
-    package chart {
-        class ChartGenerator {
-            + {static} generateAmplitudeTimeChart()
-            + {static} generateHistogram()
-            - {static} formatAxis()
-            - {static} changeVisibility()
-        }
-    }
-    package classes {
-        class ClassTranslator {
-            + {static} translatePascalCaseClassToText(Class): String
-        }
-    }
-    package fields {
-        class FieldReader {
-            + {static} getFieldNames(Class): String[]
-        }
-        class FieldMapper {
-            + {static} getFieldNames(String): String
-        }
-    }
-    
-    MainApplicationController o---> SignalTabController
-    MainApplicationController o--> SignalOperationTabController
-    MainApplication o--> MainApplicationController
-    
-    SignalTabController ..> FileChoose
-    SignalTabController ..> ChartGenerator
-    SignalTabController ..> ClassTranslator
-    SignalTabController ..> FieldMapper
-    SignalTabController ..> FieldReader
-}
-SignalTabController ....> SignalFacade
-SignalTabController ....> SignalSerializeType
-SignalOperationTabController ....> SignalFacade
 ```
