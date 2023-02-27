@@ -5,7 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-import backend.signal_read_write.SignalReadWriteType;
+import backend.signal_serialize.SignalSerializeType;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.stage.Window;
@@ -13,9 +13,9 @@ import javafx.stage.FileChooser;
 
 public class FileChoose {
     private static String lastUsedDir = "";
-    private static final Map<SignalReadWriteType, String> extensionMap = Map.of(
-            SignalReadWriteType.JSON, "json",
-            SignalReadWriteType.BINARY, "bin"
+    private static final Map<SignalSerializeType, String> extensionMap = Map.of(
+            SignalSerializeType.JSON, "json",
+            SignalSerializeType.BINARY, "bin"
     );
 
     private FileChoose() {
@@ -30,7 +30,7 @@ public class FileChoose {
      * @throws InvocationTargetException exception
      * @throws IllegalAccessException exception
      */
-    public static String saveChooser(String windowTitle, ActionEvent actionEvent, SignalReadWriteType type)
+    public static String saveChooser(String windowTitle, ActionEvent actionEvent, SignalSerializeType type)
             throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         return choose(
                 windowTitle,
@@ -49,7 +49,7 @@ public class FileChoose {
      * @throws InvocationTargetException exception
      * @throws IllegalAccessException exception
      */
-    public static String openChooser(String windowTitle, ActionEvent actionEvent, SignalReadWriteType type)
+    public static String openChooser(String windowTitle, ActionEvent actionEvent, SignalSerializeType type)
             throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         return choose(
                 windowTitle,
@@ -69,7 +69,7 @@ public class FileChoose {
             String windowTitle,
             ActionEvent actionEvent,
             Method showDialog,
-            SignalReadWriteType type
+            SignalSerializeType type
     ) throws InvocationTargetException, IllegalAccessException {
         String extension = extensionMap.get(type);
         FileChooser chooser = new FileChooser();

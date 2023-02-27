@@ -1,7 +1,7 @@
 # DigitalSignalProcessing
 
 ## Task 1 - Signal and noise generation
-
+## Frontend
 ```plantuml
 package backend {
     class SignalFactory {
@@ -200,13 +200,32 @@ package backend {
     
     SignalOperationFactory ..> AbstractSignalOperation
     
-    package serialize {
-        class SignalSerializer {
-            + {static} write(AbstractSignal, String)
-            + {static} read(String): AbstractSignal
+    package signal_serialize {
+        interface SignalSerializer {
+            + write(AbstractSignal, String)
+            + read(String): AbstractSignal
         }
+        class SignalBinarySerializer implements SignalSerializer {
+            + write(AbstractSignal, String)
+            + read(String): AbstractSignal
+        }
+        class SignalJsonSerializer implements SignalSerializer {
+            + write(AbstractSignal, String)
+            + read(String): AbstractSignal
+        }
+        enum SignalSerializeType {
+            JSON
+            BINARY
+        }
+        class SignalSerializerFactory {
+            + createSignalSerializer(SignalSerializeType): SignalSerializer
+            + createJsonSerializer(): SignalSerializer
+            + createBinarySerializer(): SSignalSerializer
+        }
+        SignalSerializerFactory ..> SignalSerializer
+        SignalSerializerFactory ..> SignalSerializeType
     }
-    SignalFacade ...> SignalSerializer
+    SignalFacade ...> SignalSerializerFactory
 }
 
 package frontend {
@@ -270,5 +289,6 @@ package frontend {
     SignalTabController ..> FieldReader
 }
 SignalTabController ....> SignalFacade
+SignalTabController ....> SignalSerializeType
 SignalOperationTabController ....> SignalFacade
 ```

@@ -1,10 +1,10 @@
-package backend.signal_read_write;
+package backend.signal_serialize;
 
 import backend.signal.AbstractSignal;
 
 import java.io.*;
 
-public class SignalSerializer implements SignalReadWrite {
+public class SignalBinarySerializer implements SignalSerialize {
 
     public void write(AbstractSignal signal, String filePath) {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(filePath))){

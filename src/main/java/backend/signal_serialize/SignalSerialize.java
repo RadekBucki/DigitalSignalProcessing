@@ -1,8 +1,8 @@
-package backend.signal_read_write;
+package backend.signal_serialize;
 
 import backend.signal.AbstractSignal;
 
-public interface SignalReadWrite {
+public interface SignalSerialize {
     void write(AbstractSignal signal, String filePath);
     AbstractSignal read(String filePath);
 }

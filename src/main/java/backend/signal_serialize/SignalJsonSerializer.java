@@ -1,4 +1,4 @@
-package backend.signal_read_write;
+package backend.signal_serialize;
 
 import backend.signal.AbstractSignal;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
 
-public class SignalJsonizer implements SignalReadWrite {
+public class SignalJsonSerializer implements SignalSerialize {
 
     public AbstractSignal read(String filePath) {
         File file = new File(filePath);

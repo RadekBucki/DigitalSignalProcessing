@@ -28,5 +28,5 @@ module cps {
     opens frontend.fields to javafx.fxml;
     exports frontend.classes;
     opens frontend.classes to javafx.fxml;
-    exports backend.signal_read_write;
+    exports backend.signal_serialize;
 }

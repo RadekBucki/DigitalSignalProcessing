@@ -3,7 +3,7 @@ package frontend;
 import backend.SignalFacade;
 import backend.signal.AbstractSignal;
 import backend.signal.DiscreteSignal;
-import backend.signal_read_write.SignalReadWriteType;
+import backend.signal_serialize.SignalSerializeType;
 import frontend.chart.ChartGenerator;
 import frontend.classes.ClassTranslator;
 import frontend.fields.FieldMapper;
@@ -41,7 +41,7 @@ public class SignalTabController implements Initializable {
     @FXML
     private Button save;
     @FXML
-    private ComboBox<SignalReadWriteType> loadSaveFileTypeComboBox;
+    private ComboBox<SignalSerializeType> loadSaveFileTypeComboBox;
     @FXML
     private GridPane parametersGrid;
     @FXML
@@ -84,7 +84,7 @@ public class SignalTabController implements Initializable {
                 //ignored
             }
         });
-        loadSaveFileTypeComboBox.getItems().addAll(SignalReadWriteType.values());
+        loadSaveFileTypeComboBox.getItems().addAll(SignalSerializeType.values());
     }
 
     private void createParametersTextFields(Class<?> classDefinition) {
