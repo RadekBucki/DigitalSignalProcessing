@@ -1,11 +1,11 @@
 package backend;
 
-import backend.radar.Radar;
+import backend.signal_serialize.SignalSerializeFactory;
+import backend.signal_serialize.SignalSerializeType;
 import backend.radar.RadarMemory;
 import backend.signal.AbstractSignal;
 import backend.signal.ContinuousSignal;
 import backend.signal.DiscreteSignal;
-import backend.signal.serialize.SignalSerializer;
 import backend.signal_operation.*;
 
 import java.util.List;
@@ -13,6 +13,7 @@ import java.util.Map;
 
 public class SignalFacade {
     private final SignalFactory signalFactory = new SignalFactory();
+    private final SignalSerializeFactory signalReadWriteFactory = new SignalSerializeFactory();
     private final SignalOperationFactory signalOperationFactory = new SignalOperationFactory(signalFactory);
 
     public AbstractSignal add(AbstractSignal signal1, AbstractSignal signal2) {
@@ -35,6 +36,22 @@ public class SignalFacade {
         return signalFactory.getSignal(name, parameters);
     }
 
+    public Class<AbstractSignal> getDefaultSignal() {
+        return signalFactory.getDefaultSignal();
+    }
+
+    public List<Class<? extends AbstractSignal>> getPossibleSignals() {
+        return signalFactory.getPossibleSignals();
+    }
+
+    public AbstractSignal readSignal(SignalSerializeType type, String filePath) {
+        return signalReadWriteFactory.createSignalSerializer(type).read(filePath);
+    }
+
+    public void writeSignal(SignalSerializeType type, AbstractSignal signal, String filePath) {
+        signalReadWriteFactory.createSignalSerializer(type).write(signal, filePath);
+    }
+
     public ContinuousSignal reconstructZeroOrderHold(DiscreteSignal discreteSignal, Integer numberOfSamples) {
         return signalOperationFactory.createDac().reconstructZeroOrderHold(discreteSignal);
     }
@@ -49,22 +66,6 @@ public class SignalFacade {
 
     public Map<String, Double> calculateDacStats(ContinuousSignal continuousSignal1, ContinuousSignal continuousSignal2) {
         return signalOperationFactory.createDac().calculateStats(continuousSignal1, continuousSignal2);
-    }
-
-    public Class<AbstractSignal> getDefaultSignal() {
-        return signalFactory.getDefaultSignal();
-    }
-
-    public List<Class<? extends AbstractSignal>> getPossibleSignals() {
-        return signalFactory.getPossibleSignals();
-    }
-
-    public AbstractSignal readSignal(String filePath) {
-        return SignalSerializer.read(filePath);
-    }
-
-    public void writeSignal(AbstractSignal signal, String filePath) {
-        SignalSerializer.write(signal, filePath);
     }
 
     public AbstractSignal sampling(ContinuousSignal continuousSignal, double samplingFrequency) {

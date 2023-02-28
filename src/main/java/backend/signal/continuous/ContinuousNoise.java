@@ -1,10 +1,25 @@
 package backend.signal.continuous;
 
 import backend.signal.ContinuousSignal;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.Map;
 
 public class ContinuousNoise extends ContinuousSignal {
     public ContinuousNoise(double A, double d, double t1) {
         super(A, d, t1);
+    }
+
+    @JsonCreator
+    public ContinuousNoise(
+            @JsonProperty("a") double A,
+            @JsonProperty("d") double d,
+            @JsonProperty("t1") double t1,
+            @JsonProperty("t2") Double t2,
+            @JsonProperty("points") Map<Double, Double> points
+    ) {
+        super(A, d, t1, t2, points);
     }
 
     @Override

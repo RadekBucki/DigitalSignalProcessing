@@ -1,14 +1,12 @@
-package backend.signal.serialize;
+package backend.signal_serialize;
 
 import backend.signal.AbstractSignal;
 
 import java.io.*;
 
-public class SignalSerializer {
-    private SignalSerializer() {
-    }
+public class SignalBinarySerializer implements SignalSerialize {
 
-    public static void write(AbstractSignal signal, String filePath) {
+    public void write(AbstractSignal signal, String filePath) {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(filePath))){
             out.writeObject(signal);
         } catch (IOException ignored) {
@@ -16,7 +14,7 @@ public class SignalSerializer {
         }
     }
 
-    public static AbstractSignal read(String filePath) {
+    public AbstractSignal read(String filePath) {
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(filePath))){
             return (AbstractSignal) in.readObject();
         } catch (IOException | ClassNotFoundException e) {

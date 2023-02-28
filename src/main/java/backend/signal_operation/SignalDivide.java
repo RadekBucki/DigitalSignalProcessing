@@ -2,6 +2,7 @@ package backend.signal_operation;
 
 import backend.SignalFactory;
 
+import java.util.function.DoubleUnaryOperator;
 import java.util.function.Function;
 
 public class SignalDivide extends AbstractSignalOperation {
@@ -10,7 +11,7 @@ public class SignalDivide extends AbstractSignalOperation {
     }
     @Override
     protected Double operation(double signal1Amplitude, double signal2Amplitude) {
-        if (signal1Amplitude - signal2Amplitude < 0.0001) {
+        if (Math.abs(signal1Amplitude - signal2Amplitude) < 0.0001) {
             return 1.0;
         }
         if (signal2Amplitude == 0) {
@@ -20,10 +21,13 @@ public class SignalDivide extends AbstractSignalOperation {
     }
 
     @Override
-    protected Function<Double, Double> operation(Function<Double, Double> f1, Function<Double, Double> f2) {
+    protected DoubleUnaryOperator operation(DoubleUnaryOperator f1, DoubleUnaryOperator f2) {
         return x -> {
-            if (f2.apply(x) != 0) {
-                return f1.apply(x) / f2.apply(x);
+            if (f2.applyAsDouble(x) != 0) {
+                return f1.applyAsDouble(x) / f2.applyAsDouble(x);
+            }
+            if (Math.abs(f1.applyAsDouble(x) - f2.applyAsDouble(x)) < 0.0001) {
+                return 1.0;
             }
             return 0.0;
         };
