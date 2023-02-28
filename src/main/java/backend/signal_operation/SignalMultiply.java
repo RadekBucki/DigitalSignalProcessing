@@ -2,6 +2,7 @@ package backend.signal_operation;
 
 import backend.SignalFactory;
 
+import java.util.function.DoubleUnaryOperator;
 import java.util.function.Function;
 
 public class SignalMultiply extends AbstractSignalOperation {
@@ -15,7 +16,7 @@ public class SignalMultiply extends AbstractSignalOperation {
     }
 
     @Override
-    protected Function<Double, Double> operation(Function<Double, Double> f1, Function<Double, Double> f2) {
-        return x -> f1.apply(x) * f2.apply(x);
+    protected DoubleUnaryOperator operation(DoubleUnaryOperator f1, DoubleUnaryOperator f2) {
+        return x -> f1.applyAsDouble(x) * f2.applyAsDouble(x);
     }
 }
