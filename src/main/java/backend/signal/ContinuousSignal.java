@@ -12,7 +12,7 @@ public class ContinuousSignal extends AbstractSignal {
     private final DSPSimpsonIntegrator si = new DSPSimpsonIntegrator();
     protected double t1;
     protected Double t2;
-    private Function<Double, Double> function;
+    private transient Function<Double, Double> function;
 
     public ContinuousSignal(double A, double d, double t1) {
         super(A, d);
