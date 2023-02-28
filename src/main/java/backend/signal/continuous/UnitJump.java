@@ -9,6 +9,7 @@ public class UnitJump extends ContinuousSignal {
         super(A, d, t1);
         this.ts = ts;
         calculateAllPoints();
+        setFunction(createFunction(this::calculatePointValue));
     }
 
     @Override

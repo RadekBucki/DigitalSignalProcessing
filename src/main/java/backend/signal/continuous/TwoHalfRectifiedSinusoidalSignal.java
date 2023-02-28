@@ -9,6 +9,7 @@ public class TwoHalfRectifiedSinusoidalSignal extends ContinuousSignal {
         super(A, d, t1);
         this.T = T;
         calculateAllPoints();
+        setFunction(createFunction(this::calculatePointValue));
     }
 
     @Override

@@ -88,4 +88,13 @@ public class ContinuousSignal extends AbstractSignal {
     public void setFunction(Function<Double, Double> function) {
         this.function = function;
     }
+
+    public Function<Double, Double> createFunction(Function<Double, Double> calcPoint) {
+        return (x) -> {
+            if (x > t2 || x < t1) {
+                return 0.0;
+            }
+            return calcPoint.apply(x);
+        };
+    }
 }
