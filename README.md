@@ -76,10 +76,6 @@ package backend {
         + writeSignal(AbstractSignal, String)
         + readSignal(String): AbstractSignal
     }
-    class Rounder {
-        + round(double): double
-        + floor(double): double
-    }
     package signal_serialize {
        
         enum SignalSerializeType {
@@ -282,6 +278,12 @@ package backend {
     
     SignalFacade ---> SignalOperationFactory
     SignalFacade ---> SignalFactory
+    
+    class Rounder {
+        + round(double): double
+        + floor(double): double
+    }
+    AbstractSignalOperation ..> Rounder
     
     package signal_operation {
         abstract class AbstractSignalOperation {
