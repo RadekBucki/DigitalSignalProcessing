@@ -11,10 +11,12 @@
     <HBox spacing="10" layoutX="10" layoutY="10">
         <VBox spacing="10">
             <HBox spacing="10">
-                <Button fx:id="load" mnemonicParsing="false" onAction="#loadSignal" text="Load" textAlignment="CENTER"/>
+                <Button fx:id="load" disable="true" mnemonicParsing="false" onAction="#loadSignal" text="Load"
+                        textAlignment="CENTER"/>
                 <Button fx:id="save" disable="true" mnemonicParsing="false" onAction="#saveSignal" text="Save"
                         textAlignment="CENTER"/>
-                <ComboBox fx:id="loadSaveFileTypeComboBox" prefWidth="440.0" promptText="Choose file type"/>
+                <ComboBox fx:id="loadSaveFileTypeComboBox" prefWidth="440.0" promptText="Choose file type"
+                          onAction="#onUpdateLoadSaveFileTypeComboBox"/>
             </HBox>
             <HBox spacing="10">
                 <Label text="Signal type">
