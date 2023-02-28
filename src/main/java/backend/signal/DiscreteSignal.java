@@ -16,6 +16,13 @@ public class DiscreteSignal extends AbstractSignal {
         this.f = f;
     }
 
+    public DiscreteSignal(double A, double d, double f, double t1) {
+        super(A, d);
+        this.f = f;
+        this.n1 = (int) Math.round(f * t1);
+        this.n2 = (int) Math.round(f * (t1 + d));
+    }
+
     public DiscreteSignal(Map<Double, Double> points) {
         super(points);
         double t1 = Collections.min(points.keySet());
