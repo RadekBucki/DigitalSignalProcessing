@@ -30,7 +30,6 @@ import static com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME;
 })
 @JsonIgnoreProperties(value = {"average", "absoluteAverage", "averagePower", "variance", "effectiveValue", "function"})
 public abstract class AbstractSignal implements Serializable {
-    protected static final double POINTS_DECIMAL_PLACES_DIVISION = 10000;
     protected Map<Double, Double> points = new LinkedHashMap<>();
     protected double d;
     protected double A;
@@ -71,8 +70,4 @@ public abstract class AbstractSignal implements Serializable {
         return A;
     }
     public abstract double calculatePointValue(double x);
-
-    public static double getPointsDecimalPlacesDivision() {
-        return POINTS_DECIMAL_PLACES_DIVISION;
-    }
 }

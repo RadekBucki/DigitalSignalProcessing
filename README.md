@@ -107,6 +107,12 @@ package backend {
         + getSignal(Class,Double[]): AbstractSignal
     }
     
+    class Rounder {
+        + round(double): double
+        + floor(double): double
+    }
+    AbstractSignal ..> Rounder
+    
     package signal {
         SignalFactory ....> AbstractSignal
         abstract class AbstractSignal {
@@ -272,6 +278,12 @@ package backend {
     
     SignalFacade ---> SignalOperationFactory
     SignalFacade ---> SignalFactory
+    
+    class Rounder {
+        + round(double): double
+        + floor(double): double
+    }
+    AbstractSignalOperation ..> Rounder
     
     package signal_operation {
         abstract class AbstractSignalOperation {

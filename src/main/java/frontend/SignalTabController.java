@@ -237,13 +237,17 @@ public class SignalTabController implements Initializable {
         input = new FileInputStream(getHistogramFileName((int) binNumberSlider.getValue()));
         histogram.setImage(new Image(input));
 
-        createStatistics(Map.of(
-                "Average", signal::getAverage,
-                "Absolute Average", signal::getAbsoluteAverage,
-                "Average Power", signal::getAveragePower,
-                "Variance", signal::getVariance,
-                "Effective value", signal::getEffectiveValue
-        ));
+        try {
+            createStatistics(Map.of(
+                    "Average", signal::getAverage,
+                    "Absolute Average", signal::getAbsoluteAverage,
+                    "Average Power", signal::getAveragePower,
+                    "Variance", signal::getVariance,
+                    "Effective value", signal::getEffectiveValue
+            ));
+        } catch (Exception ignored) {
+            //ignored
+        }
 
         rightPanel.setVisible(true);
     }

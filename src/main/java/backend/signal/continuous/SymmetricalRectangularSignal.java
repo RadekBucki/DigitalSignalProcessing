@@ -15,6 +15,7 @@ public class SymmetricalRectangularSignal extends ContinuousSignal {
         this.T = T;
         this.kw = kw;
         calculateAllPoints();
+        setFunction(createFunction(this::calculatePointValue));
     }
 
     @JsonCreator

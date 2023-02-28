@@ -1,5 +1,6 @@
 package backend.signal.continuous;
 
+import backend.Rounder;
 import backend.signal.ContinuousSignal;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -15,6 +16,7 @@ public class TriangleSignal extends ContinuousSignal {
         this.T = T;
         this.kw = kw;
         calculateAllPoints();
+        setFunction(createFunction(this::calculatePointValue));
     }
 
     @JsonCreator
@@ -35,7 +37,8 @@ public class TriangleSignal extends ContinuousSignal {
     @Override
     public double calculatePointValue(double x) {
         int k = (int) Math.floor((x - t1) / T);
-        if (x >= k * T + t1 && x < kw * T + k * T + t1) {
+        if (x >= (Rounder.round(k * T)) + t1
+                && x < kw * T + k * T + t1) {
             return (A / (kw * T)) * (x - k * T - t1);
         }
         return ((-A / (T * (1 - kw))) * (x - k * T - t1)) + (A / (1 - kw));

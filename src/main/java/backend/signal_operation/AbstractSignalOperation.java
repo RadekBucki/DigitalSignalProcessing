@@ -1,5 +1,6 @@
 package backend.signal_operation;
 
+import backend.Rounder;
 import backend.SignalFactory;
 import backend.signal.AbstractSignal;
 import backend.signal.ContinuousSignal;
@@ -9,6 +10,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.DoubleUnaryOperator;
 import java.util.function.Function;
 
 
@@ -45,16 +47,25 @@ public abstract class AbstractSignalOperation {
             return signalFactory.createDiscreteSignal(resultPoints);
         }
 
-        int t1Rounded = (int) (Collections.min(resultPoints.keySet()) * AbstractSignal.getPointsDecimalPlacesDivision());
-        int t2Rounded = (int) (Collections.max(resultPoints.keySet()) * AbstractSignal.getPointsDecimalPlacesDivision());
+        int t1Rounded = (int) (Collections.min(resultPoints.keySet()) * Rounder.DECIMAL_PLACES_DIVISION);
+        int t2Rounded = (int) (Collections.max(resultPoints.keySet()) * Rounder.DECIMAL_PLACES_DIVISION);
         for (int i = t1Rounded; i <= t2Rounded; i++) {
-            resultPoints.putIfAbsent(i / AbstractSignal.getPointsDecimalPlacesDivision(), 0.0);
+            resultPoints.putIfAbsent(i / Rounder.DECIMAL_PLACES_DIVISION, 0.0);
+        }
+
+        DoubleUnaryOperator signal1Function = signal1::calculatePointValue;
+        DoubleUnaryOperator signal2Function = signal2::calculatePointValue;
+        if (signal1 instanceof ContinuousSignal continuousSignal) {
+            signal1Function = continuousSignal.getFunction();
+        }
+        if (signal2 instanceof ContinuousSignal continuousSignal) {
+            signal2Function = continuousSignal.getFunction();
         }
 
         ContinuousSignal signal = (ContinuousSignal) signalFactory.createContinuousSignal(resultPoints);
-        signal.setFunction(operation(signal1::calculatePointValue, signal2::calculatePointValue));
+        signal.setFunction(operation(signal1Function, signal2Function));
         return signal;
     }
     protected abstract Double operation(double signal1Amplitude, double signal2Amplitude);
-    protected abstract Function<Double, Double> operation(Function<Double, Double> f1, Function<Double, Double> f2);
+    protected abstract DoubleUnaryOperator operation(DoubleUnaryOperator f1, DoubleUnaryOperator f2);
 }
