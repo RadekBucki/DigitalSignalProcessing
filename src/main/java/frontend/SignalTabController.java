@@ -131,7 +131,7 @@ public class SignalTabController implements Initializable {
         createRightPanel(signal);
 
         signalConsumer.accept(tabName, signal);
-        save.setDisable(false);
+        save.setDisable(loadSaveFileTypeComboBox.getValue() == null);
         load.setDisable(true);
     }
 
@@ -207,7 +207,7 @@ public class SignalTabController implements Initializable {
         parametersGrid.setDisable(true);
         createRightPanel(signal);
         signalConsumer.accept(tabName, signal);
-        save.setDisable(false);
+        save.setDisable(loadSaveFileTypeComboBox.getValue() == null);
         load.setDisable(true);
     }
 
@@ -281,5 +281,13 @@ public class SignalTabController implements Initializable {
 
     private String getHistogramFileName(int number) {
         return "histogram" + number + ".png";
+    }
+
+    public void onUpdateLoadSaveFileTypeComboBox() {
+        if (loadSaveFileTypeComboBox.getValue() == null) {
+            return;
+        }
+        load.setDisable(signal != null);
+        save.setDisable(signal == null);
     }
 }

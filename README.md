@@ -3,8 +3,6 @@
 ## Task 1 - Signal and noise generation
 ## Frontend
 ```plantuml
-
-
 package frontend {
     class MainApplication {
     }
@@ -20,7 +18,7 @@ package frontend {
         + saveSignal()
         + loadSignal()
         + setSignal()
-        + onUpdateComboBox()
+        + onUpdateLoadSaveFileTypeComboBox()
     }
     class SignalOperationTabController {
         + addOrUpdateSignal()
