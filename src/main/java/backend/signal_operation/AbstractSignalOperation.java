@@ -13,6 +13,8 @@ import java.util.Map;
 import java.util.function.DoubleUnaryOperator;
 import java.util.function.Function;
 
+import static backend.Rounder.DECIMAL_PLACES_DIVISION;
+
 
 public abstract class AbstractSignalOperation {
     private final SignalFactory signalFactory;

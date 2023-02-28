@@ -9,6 +9,7 @@ import frontend.classes.ClassTranslator;
 import frontend.fields.FieldMapper;
 import frontend.fields.FieldReader;
 import frontend.file.FileChoose;
+import frontend.units.TextFormatterFactory;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -34,6 +35,7 @@ import java.util.stream.Stream;
 public class SignalTabController implements Initializable {
     public static final String RESOURCE = "SignalTab.fxml";
     private final SignalFacade facade = new SignalFacade();
+    private final TextFormatterFactory formatterFactory = new TextFormatterFactory();
     private AbstractSignal signal;
     private Class<?> selectedComboBoxKey;
     @FXML
@@ -57,8 +59,8 @@ public class SignalTabController implements Initializable {
     @FXML
     private Slider binNumberSlider;
     @FXML
-    private GridPane statisticsGrid;
-    private BiConsumer<String, AbstractSignal> signalConsumer = null;
+    public GridPane statisticsGrid;
+    private List<BiConsumer<String, AbstractSignal>> signalConsumers = new ArrayList<>();
     private String tabName;
 
     @Override
@@ -130,23 +132,17 @@ public class SignalTabController implements Initializable {
 
         createRightPanel(signal);
 
-        signalConsumer.accept(tabName, signal);
-        save.setDisable(loadSaveFileTypeComboBox.getValue() == null);
+        notifyAllConsumers(tabName, signal);
+        save.setDisable(loadSaveFileTypeComboBox.getValue() == null));
         load.setDisable(true);
     }
 
     private TextField createGroupNumericalTextField() {
         TextField textField = new TextField();
         textField.setLayoutX(334);
-        textField.setTextFormatter(new TextFormatter<>(text -> {
-            String newText = text.getControlNewText().replace(",", ".");
-            if (!newText.matches("-?(\\d*[.])?\\d*")) {
-                textField.clear();
-                return null;
-            }
-            generateButton.setDisable(shouldGenerateButtonBeDisabled());
-            return text;
-        }));
+        textField.setTextFormatter(formatterFactory.createDecimalTextFormatter(
+                textField, generateButton, this::shouldGenerateButtonBeDisabled
+        ));
         return textField;
     }
 
@@ -179,8 +175,8 @@ public class SignalTabController implements Initializable {
         return false;
     }
 
-    public void setSignalConsumer(BiConsumer<String, AbstractSignal> signalConsumer) {
-        this.signalConsumer = signalConsumer;
+    public void addSignalConsumer(BiConsumer<String, AbstractSignal> signalConsumer) {
+        this.signalConsumers.add(signalConsumer);
     }
 
     public void setTabName(String name) {
@@ -206,7 +202,7 @@ public class SignalTabController implements Initializable {
         signalTypes.setDisable(true);
         parametersGrid.setDisable(true);
         createRightPanel(signal);
-        signalConsumer.accept(tabName, signal);
+        notifyAllConsumers(tabName, signal);
         save.setDisable(loadSaveFileTypeComboBox.getValue() == null);
         load.setDisable(true);
     }
@@ -285,6 +281,12 @@ public class SignalTabController implements Initializable {
 
     private String getHistogramFileName(int number) {
         return "histogram" + number + ".png";
+    }
+
+    private void notifyAllConsumers(String t, AbstractSignal signal) {
+        for (BiConsumer<String, AbstractSignal> consumer : signalConsumers) {
+            consumer.accept(t, signal);
+        }
     }
 
     public void onUpdateLoadSaveFileTypeComboBox() {

@@ -10,6 +10,9 @@ import java.util.Map;
 import java.util.function.DoubleUnaryOperator;
 import java.util.function.Function;
 
+import static backend.Rounder.DECIMAL_PLACES_DIVISION;
+import static backend.Rounder.round;
+
 public class ContinuousSignal extends AbstractSignal {
     private final DSPSimpsonIntegrator si = new DSPSimpsonIntegrator();
     protected double t1;
