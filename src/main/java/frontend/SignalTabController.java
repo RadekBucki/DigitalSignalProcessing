@@ -60,7 +60,7 @@ public class SignalTabController implements Initializable {
     private Slider binNumberSlider;
     @FXML
     public GridPane statisticsGrid;
-    private List<BiConsumer<String, AbstractSignal>> signalConsumers = new ArrayList<>();
+    private final List<BiConsumer<String, AbstractSignal>> signalConsumers = new ArrayList<>();
     private String tabName;
 
     @Override
@@ -133,7 +133,7 @@ public class SignalTabController implements Initializable {
         createRightPanel(signal);
 
         notifyAllConsumers(tabName, signal);
-        save.setDisable(loadSaveFileTypeComboBox.getValue() == null));
+        save.setDisable(loadSaveFileTypeComboBox.getValue() == null);
         load.setDisable(true);
     }
 
