@@ -1,16 +1,20 @@
 package backend.signal;
 
+import backend.Rounder;
 import backend.simpson.DSPSimpsonIntegrator;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.function.DoubleUnaryOperator;
 import java.util.function.Function;
 
 public class ContinuousSignal extends AbstractSignal {
     private final DSPSimpsonIntegrator si = new DSPSimpsonIntegrator();
     protected double t1;
     protected Double t2;
-    private Function<Double, Double> function;
+    private transient DoubleUnaryOperator function;
 
     public ContinuousSignal(double A, double d, double t1) {
         super(A, d);
@@ -26,11 +30,24 @@ public class ContinuousSignal extends AbstractSignal {
         this.d = t2 - t1;
     }
 
+    @JsonCreator
+    public ContinuousSignal(
+            @JsonProperty("a") double A,
+            @JsonProperty("d") double d,
+            @JsonProperty("t1") double t1,
+            @JsonProperty("t2") Double t2,
+            @JsonProperty("points") Map<Double, Double> points
+    ) {
+        super(A, d, points);
+        this.t1 = t1;
+        this.t2 = t2;
+    }
+
     public void calculateAllPoints() {
-        int t1Rounded = (int) (t1 * POINTS_DECIMAL_PLACES_DIVISION);
-        int t2Rounded = (int) ((t1 + d) * POINTS_DECIMAL_PLACES_DIVISION);
+        int t1Rounded = (int) (t1 * Rounder.DECIMAL_PLACES_DIVISION);
+        int t2Rounded = (int) ((t1 + d) * Rounder.DECIMAL_PLACES_DIVISION);
         for (int i = t1Rounded; i <= t2Rounded; i++) {
-            double pointX = i / POINTS_DECIMAL_PLACES_DIVISION;
+            double pointX = i / Rounder.DECIMAL_PLACES_DIVISION;
             points.put(pointX, calculatePointValue(pointX));
         }
     }
@@ -38,9 +55,9 @@ public class ContinuousSignal extends AbstractSignal {
     @Override
     public double calculatePointValue(double x) {
         if (function != null) {
-            return function.apply(x);
+            return function.applyAsDouble(x);
         }
-        double value = points.get(Math.round(x * POINTS_DECIMAL_PLACES_DIVISION) / POINTS_DECIMAL_PLACES_DIVISION);
+        double value = points.get(Rounder.round(x));
         return Math.abs(value) < 0.000001 ? 0 : value;
     }
 
@@ -81,11 +98,20 @@ public class ContinuousSignal extends AbstractSignal {
         return t2;
     }
 
-    public Function<Double, Double> getFunction() {
+    public DoubleUnaryOperator getFunction() {
         return function;
     }
 
-    public void setFunction(Function<Double, Double> function) {
+    public void setFunction(DoubleUnaryOperator function) {
         this.function = function;
+    }
+
+    public DoubleUnaryOperator createFunction(DoubleUnaryOperator calcPoint) {
+        return x -> {
+            if (x > t2 || x < t1) {
+                return 0.0;
+            }
+            return calcPoint.applyAsDouble(x);
+        };
     }
 }
