@@ -1,13 +1,15 @@
 package backend;
 
+import backend.signal_serialize.SignalSerializeFactory;
+import backend.signal_serialize.SignalSerializeType;
 import backend.signal.AbstractSignal;
-import backend.signal.serialize.SignalSerializer;
 
 import java.util.List;
 
 public class SignalFacade {
     private final SignalOperationFactory signalOperationFactory = new SignalOperationFactory();
     private final SignalFactory signalFactory = new SignalFactory();
+    private final SignalSerializeFactory signalReadWriteFactory = new SignalSerializeFactory();
 
     public AbstractSignal add(AbstractSignal signal1, AbstractSignal signal2) {
         return signalOperationFactory.createSignalAdd(signalFactory).execute(signal1, signal2);
@@ -34,10 +36,10 @@ public class SignalFacade {
     public List<Class<? extends AbstractSignal>> getPossibleSignals() {
         return signalFactory.getPossibleSignals();
     }
-    public AbstractSignal readSignal(String filePath) {
-        return SignalSerializer.read(filePath);
+    public AbstractSignal readSignal(SignalSerializeType type, String filePath) {
+        return signalReadWriteFactory.createSignalSerializer(type).read(filePath);
     }
-    public void writeSignal(AbstractSignal signal, String filePath) {
-        SignalSerializer.write(signal, filePath);
+    public void writeSignal(SignalSerializeType type, AbstractSignal signal, String filePath) {
+        signalReadWriteFactory.createSignalSerializer(type).write(signal, filePath);
     }
 }

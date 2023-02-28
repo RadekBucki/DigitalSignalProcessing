@@ -1,5 +1,8 @@
 package backend.signal;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Collections;
 import java.util.Map;
 
@@ -22,6 +25,21 @@ public class DiscreteSignal extends AbstractSignal {
         this.f = (points.size() - 1) / d;
         this.n1 = (int) Math.round(f * t1);
         this.n2 = (int) Math.round(f * t2);
+    }
+
+    @JsonCreator
+    public DiscreteSignal(
+            @JsonProperty("a") double A,
+            @JsonProperty("d") double d,
+            @JsonProperty("f") double f,
+            @JsonProperty("n1") Integer n1,
+            @JsonProperty("n2") Integer n2,
+            @JsonProperty("points") Map<Double, Double> points
+    ) {
+        super(A, d, points);
+        this.f = f;
+        this.n1 = n1;
+        this.n2 = n2;
     }
 
     @Override
