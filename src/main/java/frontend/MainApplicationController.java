@@ -51,7 +51,7 @@ public class MainApplicationController implements Initializable {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(SignalTabController.RESOURCE));
         tab.setContent(fxmlLoader.load());
         tab.setClosable(true);
-        tab.setOnClosed((event) -> signalOperationTabFxmlController.addOrUpdateSignal(tabName, null));
+        tab.setOnClosed(event -> signalOperationTabFxmlController.addOrUpdateSignal(tabName, null));
         SignalTabController signalTabController = fxmlLoader.getController();
         signalTabController.setSignalConsumer(signalOperationTabFxmlController::addOrUpdateSignal);
         signalTabController.setTabName(tabName);
@@ -67,7 +67,7 @@ public class MainApplicationController implements Initializable {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(SignalTabController.RESOURCE));
             tab.setClosable(true);
             tab.setContent(fxmlLoader.load());
-            tab.setOnClosed((event) -> signalOperationTabFxmlController.addOrUpdateSignal(tabName, null));
+            tab.setOnClosed(event -> signalOperationTabFxmlController.addOrUpdateSignal(tabName, null));
             SignalTabController signalTabController = fxmlLoader.getController();
             signalTabController.setSignalConsumer(signalOperationTabFxmlController::addOrUpdateSignal);
             signalTabController.setTabName(tabName);
