@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.DoubleUnaryOperator;
 import java.util.function.Function;
 
 
@@ -52,13 +53,13 @@ public abstract class AbstractSignalOperation {
             resultPoints.putIfAbsent(i / Rounder.DECIMAL_PLACES_DIVISION, 0.0);
         }
 
-        Function<Double, Double> signal1Function = signal1::calculatePointValue;
-        Function<Double, Double> signal2Function = signal2::calculatePointValue;
-        if (signal1 instanceof ContinuousSignal) {
-            signal1Function = ((ContinuousSignal) signal1).getFunction();
+        DoubleUnaryOperator signal1Function = signal1::calculatePointValue;
+        DoubleUnaryOperator signal2Function = signal2::calculatePointValue;
+        if (signal1 instanceof ContinuousSignal continuousSignal) {
+            signal1Function = continuousSignal.getFunction();
         }
-        if (signal2 instanceof ContinuousSignal) {
-            signal2Function = ((ContinuousSignal) signal2).getFunction();
+        if (signal2 instanceof ContinuousSignal continuousSignal) {
+            signal2Function = continuousSignal.getFunction();
         }
 
         ContinuousSignal signal = (ContinuousSignal) signalFactory.createContinuousSignal(resultPoints);
@@ -66,5 +67,5 @@ public abstract class AbstractSignalOperation {
         return signal;
     }
     protected abstract Double operation(double signal1Amplitude, double signal2Amplitude);
-    protected abstract Function<Double, Double> operation(Function<Double, Double> f1, Function<Double, Double> f2);
+    protected abstract DoubleUnaryOperator operation(DoubleUnaryOperator f1, DoubleUnaryOperator f2);
 }
