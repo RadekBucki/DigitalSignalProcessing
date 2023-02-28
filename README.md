@@ -108,8 +108,8 @@ package backend {
     }
     
     class Rounder {
-        + round(double): double
-        + floor(double): double
+        + {static} round(double): double
+        + {static} floor(double): double
     }
     AbstractSignal ..> Rounder
     
@@ -280,8 +280,8 @@ package backend {
     SignalFacade ---> SignalFactory
     
     class Rounder {
-        + round(double): double
-        + floor(double): double
+        + {static} round(double): double
+        + {static} floor(double): double
     }
     AbstractSignalOperation ..> Rounder
     
