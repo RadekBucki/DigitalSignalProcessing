@@ -1,5 +1,6 @@
 package backend.signal_operation;
 
+import backend.Rounder;
 import backend.SignalFactory;
 import backend.signal.AbstractSignal;
 import backend.signal.ContinuousSignal;
@@ -45,10 +46,10 @@ public abstract class AbstractSignalOperation {
             return signalFactory.createDiscreteSignal(resultPoints);
         }
 
-        int t1Rounded = (int) (Collections.min(resultPoints.keySet()) * AbstractSignal.getPointsDecimalPlacesDivision());
-        int t2Rounded = (int) (Collections.max(resultPoints.keySet()) * AbstractSignal.getPointsDecimalPlacesDivision());
+        int t1Rounded = (int) (Collections.min(resultPoints.keySet()) * Rounder.DECIMAL_PLACES_DIVISION);
+        int t2Rounded = (int) (Collections.max(resultPoints.keySet()) * Rounder.DECIMAL_PLACES_DIVISION);
         for (int i = t1Rounded; i <= t2Rounded; i++) {
-            resultPoints.putIfAbsent(i / AbstractSignal.getPointsDecimalPlacesDivision(), 0.0);
+            resultPoints.putIfAbsent(i / Rounder.DECIMAL_PLACES_DIVISION, 0.0);
         }
 
         Function<Double, Double> signal1Function = signal1::calculatePointValue;

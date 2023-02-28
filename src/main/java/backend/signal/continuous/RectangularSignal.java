@@ -1,5 +1,6 @@
 package backend.signal.continuous;
 
+import backend.Rounder;
 import backend.signal.ContinuousSignal;
 
 public class RectangularSignal extends ContinuousSignal {
@@ -17,7 +18,7 @@ public class RectangularSignal extends ContinuousSignal {
     @Override
     public double calculatePointValue(double x) {
         int k = (int) Math.floor((x - t1) / T);
-        if (x >= (Math.round(k * T * POINTS_DECIMAL_PLACES_DIVISION) / POINTS_DECIMAL_PLACES_DIVISION) + t1 &&
+        if (x >= (Rounder.round(k * T)) + t1 &&
                 x < kw * T + k * T + t1) {
             return A;
         }
