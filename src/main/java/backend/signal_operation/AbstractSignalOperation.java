@@ -47,12 +47,6 @@ public abstract class AbstractSignalOperation {
             return signalFactory.createDiscreteSignal(resultPoints);
         }
 
-        int t1Rounded = (int) (Collections.min(resultPoints.keySet()) * Rounder.DECIMAL_PLACES_DIVISION);
-        int t2Rounded = (int) (Collections.max(resultPoints.keySet()) * Rounder.DECIMAL_PLACES_DIVISION);
-        for (int i = t1Rounded; i <= t2Rounded; i++) {
-            resultPoints.putIfAbsent(i / Rounder.DECIMAL_PLACES_DIVISION, 0.0);
-        }
-
         DoubleUnaryOperator signal1Function = signal1::calculatePointValue;
         DoubleUnaryOperator signal2Function = signal2::calculatePointValue;
         if (signal1 instanceof ContinuousSignal continuousSignal) {
