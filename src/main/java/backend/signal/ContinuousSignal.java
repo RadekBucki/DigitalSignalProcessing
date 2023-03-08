@@ -44,10 +44,11 @@ public class ContinuousSignal extends AbstractSignal {
     }
 
     public void calculateAllPoints() {
-        int t1Rounded = (int) (t1 * Rounder.DECIMAL_PLACES_DIVISION);
-        int t2Rounded = (int) ((t1 + d) * Rounder.DECIMAL_PLACES_DIVISION);
+        double jump = Rounder.DECIMAL_PLACES_DIVISION / d;
+        int t1Rounded = (int) (t1 * jump);
+        int t2Rounded = (int) ((t1 + d) * jump);
         for (int i = t1Rounded; i <= t2Rounded; i++) {
-            double pointX = i / Rounder.DECIMAL_PLACES_DIVISION;
+            double pointX = i / jump;
             points.put(pointX, calculatePointValue(pointX));
         }
     }
