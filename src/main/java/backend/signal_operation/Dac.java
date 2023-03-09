@@ -58,8 +58,8 @@ public class Dac {
                 .stream()
                 .mapToDouble(
                         entry -> {
-                            double difference = entry.getValue()
-                                    - continuousSignal2.getPoints().getOrDefault(entry.getKey(), 0.0);
+                            double difference = Math.abs(entry.getValue()
+                                    - continuousSignal2.calculatePointValue(entry.getKey()));
                             return difference * difference;
                         }
                 )
