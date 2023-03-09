@@ -26,6 +26,6 @@ public class GaussianNoise extends ContinuousNoise {
 
     @Override
     public double calculatePointValue(double x) {
-        return r.nextGaussian() * 2 * A - A;
+        return r.nextGaussian() * A;
     }
 }

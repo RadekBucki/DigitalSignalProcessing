@@ -1,5 +1,6 @@
 package backend.signal.continuous;
 
+import backend.Rounder;
 import backend.signal.ContinuousSignal;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -24,28 +25,28 @@ public class ContinuousNoise extends ContinuousSignal {
 
     @Override
     public double getAverage() {
-        return (1 / (t2 - t1)) * points.values().stream().mapToDouble(value -> value).sum();
+        return (1 / ((t2 - t1) * Rounder.DECIMAL_PLACES_DIVISION)) * points.values().stream().mapToDouble(value -> value).sum();
     }
 
     @Override
     public double getAbsoluteAverage() {
-        return (1 / (t2 - t1)) * points.values().stream().mapToDouble(Math::abs).sum();
+        return (1 / ((t2 - t1) * Rounder.DECIMAL_PLACES_DIVISION)) * points.values().stream().mapToDouble(Math::abs).sum();
     }
 
     @Override
     public double getAveragePower() {
-        return (1 / (t2 - t1)) * points.values().stream().mapToDouble(value -> value * value).sum();
+        return (1 / ((t2 - t1) * Rounder.DECIMAL_PLACES_DIVISION)) * points.values().stream().mapToDouble(value -> value * value).sum();
     }
 
     @Override
     public double getVariance() {
         double average = getAverage();
-        return (1 / (t2 - t1)) * points.values().stream()
+        return (1 / ((t2 - t1) * Rounder.DECIMAL_PLACES_DIVISION)) * points.values().stream()
                 .mapToDouble(value -> (value - average) * (value - average)).sum();
     }
 
     @Override
     public double getEffectiveValue() {
-        return Math.sqrt((1 / (t2 - t1)) * points.values().stream().mapToDouble(value -> value * value).sum());
+        return Math.sqrt((1 / ((t2 - t1) * Rounder.DECIMAL_PLACES_DIVISION)) * points.values().stream().mapToDouble(value -> value * value).sum());
     }
 }

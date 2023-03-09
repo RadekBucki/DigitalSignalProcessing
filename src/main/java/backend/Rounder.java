@@ -1,7 +1,7 @@
 package backend;
 
 public class Rounder {
-    public static final double DECIMAL_PLACES_DIVISION = 10000.0;
+    public static final double DECIMAL_PLACES_DIVISION = 1000.0;
 
     private Rounder() {
     }
