@@ -1,12 +1,18 @@
 package backend.signal_operation;
 
+import backend.Rounder;
 import backend.SignalFactory;
 import backend.signal.AbstractSignal;
+import backend.signal.ContinuousSignal;
 import backend.signal.DiscreteSignal;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.DoubleUnaryOperator;
+import java.util.function.Function;
+
 
 public abstract class AbstractSignalOperation {
     private final SignalFactory signalFactory;
@@ -40,7 +46,20 @@ public abstract class AbstractSignalOperation {
         if (signal1 instanceof DiscreteSignal && signal2 instanceof DiscreteSignal) {
             return signalFactory.createDiscreteSignal(resultPoints);
         }
-        return signalFactory.createContinuousSignal(resultPoints);
+
+        DoubleUnaryOperator signal1Function = signal1::calculatePointValue;
+        DoubleUnaryOperator signal2Function = signal2::calculatePointValue;
+        if (signal1 instanceof ContinuousSignal continuousSignal) {
+            signal1Function = continuousSignal.getFunction();
+        }
+        if (signal2 instanceof ContinuousSignal continuousSignal) {
+            signal2Function = continuousSignal.getFunction();
+        }
+
+        ContinuousSignal signal = (ContinuousSignal) signalFactory.createContinuousSignal(resultPoints);
+        signal.setFunction(operation(signal1Function, signal2Function));
+        return signal;
     }
     protected abstract Double operation(double signal1Amplitude, double signal2Amplitude);
+    protected abstract DoubleUnaryOperator operation(DoubleUnaryOperator f1, DoubleUnaryOperator f2);
 }
