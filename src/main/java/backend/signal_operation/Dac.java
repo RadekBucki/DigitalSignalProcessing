@@ -44,12 +44,18 @@ public class Dac {
 
     public Map<String, Double> calculateStats(ContinuousSignal continuousSignal1, ContinuousSignal continuousSignal2) {
         double mse = calculateMse(continuousSignal1, continuousSignal2);
+        double snr = calculateSnr(continuousSignal1, mse);
         return Map.of(
                 "MSE", mse,
                 "SNR", calculateSnr(continuousSignal1, mse),
                 "PSNR", calculatePsnr(continuousSignal1, mse),
-                "MD", calculateMd(continuousSignal1, continuousSignal2)
+                "MD", calculateMd(continuousSignal1, continuousSignal2),
+                "ENOB", calculateEnob(snr)
         );
+    }
+
+    private Double calculateEnob(double snr) {
+        return (snr - 1.76) / 6.02;
     }
 
     private double calculateMse(ContinuousSignal continuousSignal1, ContinuousSignal continuousSignal2) {
