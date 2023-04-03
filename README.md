@@ -453,7 +453,7 @@ package frontend {
         - shouldReconstructButtonBeDisabled()
         + onUpdateMathOperationsComboBox()
         + onUpdateSignalACDCComboBox()
-        + onUpdateReconstructionTypeComboBox()
+        + onUpdateConvolutionOperationsComboBox()
     }
     package alert {
         class AlertBox {
@@ -463,4 +463,246 @@ package frontend {
     SignalOperationTabController .> AlertBox
 }
 SignalOperationTabController ....> SignalFacade
+```
+# Task 3 - convolution, filtering, correlation
+## Frontend
+```plantuml
+package backend {
+    class SignalFacade {
+        + convolution(DiscreteSignal, DiscreteSignal): DiscreteSignal
+        + filter(DiscreteSignal, PassType, WindowType, int, double): DiscreteSignal
+        + discreteSignalsCorrelation(DiscreteSignal, DiscreteSignal, DiscreteSignalsCorrelationType): double
+        + startRadar(double, int, double, double, double, ContinuousSignal, double, double, double, double, double, double): Radar
+    }
+    package signal_operation {
+        enum DiscreteSignalsCorrelationType {
+            + DIRECT
+            + USING_CONVOLUTION
+        }
+        enum WindowType {
+            + RECTANGULAR
+            + BLACKMAN
+            + HAMMING
+            + HANNING
+        }
+        enum PassType {
+            + LOW_PASS
+            + HIGH_PASS
+            + BAND_PASS
+        }
+    }
+}
+
+package frontend {
+    class SignalOperationTabController {
+        + convolutionOperation()
+        + correlationOperation()
+        + filterOperation()
+        + onUpdateConvolutionCorrelationOperationsComboBox()
+        + shouldFilterButtonBeDisabled()
+        + onUpdateFilterOperationInputFields()
+    }
+    class RadarTabController {
+        + addOrUpdateSignal()
+        + onUpdateRadarInitData()
+        + startRadar()
+        - shouldRadarStartButtonBeDisabled(): boolean
+        - updateData()
+    }
+    package utils {
+        class TextFormatterFactory {
+            + createIntegerTextFormatter(TextField, Button, Function)
+            + createDecimalTextFormatter(TextField, Button, Function)
+            - createTextFormatter(TextField, Button, Function, String)
+        }
+    }
+    SignalOperationTabController ..> TextFormatterFactory
+    RadarTabController ..> TextFormatterFactory
+}
+SignalOperationTabController ....> SignalFacade
+RadarTabController ....> SignalFacade
+SignalOperationTabController ..> DiscreteSignalsCorrelationType
+SignalOperationTabController ..> WindowType
+SignalOperationTabController ..> PassType
+```
+## Backend
+```plantuml
+package backend {
+    class SignalFacade {
+        + convolution(DiscreteSignal, DiscreteSignal): DiscreteSignal
+        + filter(DiscreteSignal, PassType, WindowType, int, double): DiscreteSignal
+        + discreteSignalsCorrelation(DiscreteSignal, DiscreteSignal, DiscreteSignalsCorrelationType): double
+        + startRadar(double, int, double, double, double, ContinuousSignal, double, double, double, double, double, double): Radar
+    }
+    class SignalOperationFactory {
+        + createConvolution(): Convolution
+        + createFilter(PassType, WindowType, int, double, double): Filter
+        + createDiscreteSignalsCorrelation(): DiscreteSignalsCorrelation
+        + createRadar(double, int, double, double, double, ContinuousSignal, double, double, double, double, double, double, SignalFacade): Radar
+    }
+    package radar {
+        package model {
+            class Environment {
+                + signalSpeed: double
+                + stepTime: double
+            }
+             class MeasuredObject {
+                - X: double
+                - Y: double
+                - speedX: double
+                - speedY: double
+                + move(double)
+                + calculateRealDistance(double)
+            }
+            class RadarConfig {
+                + probingSignal: ContinuousSignal
+                + probingSignalF: double
+                + discreteBufferSize: int
+                + workTime: double
+                + period: double
+                + x: double
+                + y: double
+            }
+        }
+        class RadarMemory {
+            - radarDistances: double[]
+            - realDistances: double[]
+            - distancesTimes: double[]
+            - signalSentWindows: DiscreteSignal[]
+            - signalReceivedWindows: DiscreteSignal[]
+            - correlationWindows: DiscreteSignal[]
+            + getRadarDistances(): double[]
+            + addToRadarDistances(double)
+            + getRealDistances(): double[]
+            + addToRealDistances(double)
+            + getDistancesTimes(): double[]
+            + addToDistancesTimes(double)
+            + getSignalSentWindows(): DiscreteSignal[]
+            + addToSignalSentWindows(DiscreteSignal)
+            + getSignalReceivedWindows(): DiscreteSignal[]
+            + addToSignalReceivedWindows(DiscreteSignal)
+            + getCorrelationWindows(): DiscreteSignal[]
+            + addToCorrelationWindows(DiscreteSignal)
+        }
+        
+        class RadarDependenciesFactory {
+            + createEnvironment(double, double): Environment
+            + createMeasuredObject(double, double, double, double): MeasuredObject
+            + createRadarConfig(ContinuousSignal, double, int, double, double, double, double): RadarConfig
+        }
+        RadarDependenciesFactory ..> Environment
+        RadarDependenciesFactory ..> MeasuredObject
+        RadarDependenciesFactory ..> RadarConfig
+        SignalOperationFactory ..> RadarDependenciesFactory
+        
+        class Radar {
+            - radarConfig: RadarConfig
+            - environment: Environment
+            - measuredObject: MeasuredObject
+            - first: double
+            - signalSent: DiscreteSignal
+            - signalReceived: DiscreteSignal
+            - samplesSentButNotHit: double[]
+            - allRealDistances: double[][]
+            - hitsTime: double[]
+            - startWorking()
+            - calculateCorrelation()
+            + getRadarMemory(): RadarMemory
+        }
+        SignalOperationFactory ..> Radar
+        Radar o--> RadarMemory
+    }
+    package signal_operation {
+        class Convolution {
+            + execute(DiscreteSignal, DiscreteSignal): DiscreteSignal
+        }
+        class Filter {
+            + execute(DiscreteSignal): DiscreteSignal
+        }
+        Filter ..> Pass
+        Filter o-> Convolution
+        Pass ..> Window
+        class PassFactory {
+            + createLowPass(int, double, double, Window): Pass
+            + createHighPass(int, double, double, Window): Pass
+            + createBandPass(int, double, double, Window): Pass
+        }
+        PassFactory ..> Pass
+        class WindowFactory {
+            + createRectangularWindow(): Window
+            + createHammingWindow(int): Window
+            + createHanningWindow(int): Window
+            + createBlackmanWindow(int): Window
+        }
+        WindowFactory ..> Window
+        package pass {
+            interface Pass {
+                + pass(int): double
+            }
+            class LowPass {
+                + pass(int): double
+            }
+            class HighPass {
+                + pass(int): double
+            }
+            class BandPass {
+                + pass(int): double
+            }
+            Pass <|.. LowPass
+            LowPass <|.. HighPass
+            LowPass <|.. BandPass
+        }
+        package window {
+            interface Window {
+                + window(int): double
+            }
+            class RectangularWindow {
+                + window(int): double
+            }
+            class HammingWindow {
+                + window(int): double
+            }
+            class HanningWindow {
+                + window(int): double
+            }
+            class BlackmanWindow {
+                + window(int): double
+            }
+            Window <|.. RectangularWindow
+            Window <|.. HammingWindow
+            Window <|.. HanningWindow
+            Window <|.. BlackmanWindow
+        }
+        class DiscreteSignalsCorrelation {
+            + execute(DiscreteSignal, DiscreteSignal, DiscreteSignalsCorrelationType): DiscreteSignal
+            - executeDirect(DiscreteSignal, DiscreteSignal): DiscreteSignal
+            - executeUsingConvolution(DiscreteSignal, DiscreteSignal): DiscreteSignal
+        }
+        DiscreteSignalsCorrelation ..> DiscreteSignalsCorrelationType
+        DiscreteSignalsCorrelation o-> Convolution
+        enum DiscreteSignalsCorrelationType {
+            + DIRECT
+            + USING_CONVOLUTION
+        }
+        enum WindowType {
+            + RECTANGULAR
+            + BLACKMAN
+            + HAMMING
+            + HANNING
+        }
+        enum PassType {
+            + LOW_PASS
+            + HIGH_PASS
+            + BAND_PASS
+        }
+    }
+    SignalFacade --> SignalOperationFactory
+    SignalOperationFactory --> PassFactory
+    SignalOperationFactory --> WindowFactory
+    SignalOperationFactory ..> WindowType
+    SignalOperationFactory ..> PassType
+    SignalOperationFactory ..> Convolution
+    SignalOperationFactory ..> Filter
+    SignalOperationFactory ..> DiscreteSignalsCorrelation
+}
 ```
