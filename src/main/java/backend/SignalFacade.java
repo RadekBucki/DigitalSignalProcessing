@@ -6,7 +6,6 @@ import backend.radar.RadarMemory;
 import backend.signal.AbstractSignal;
 import backend.signal.ContinuousSignal;
 import backend.signal.DiscreteSignal;
-import backend.signal.serialize.SignalSerializer;
 import backend.signal_operation.*;
 
 import java.util.List;
