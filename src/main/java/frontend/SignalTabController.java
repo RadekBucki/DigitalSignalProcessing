@@ -4,6 +4,7 @@ import backend.SignalFacade;
 import backend.signal.AbstractSignal;
 import backend.signal.DiscreteFourierTransformedSignal;
 import backend.signal.DiscreteSignal;
+import backend.signal_serialize.SignalSerializeType;
 import frontend.chart.ChartGenerator;
 import frontend.classes.ClassTranslator;
 import frontend.fields.FieldMapper;
@@ -42,6 +43,8 @@ public class SignalTabController implements Initializable {
     private Button load;
     @FXML
     private Button save;
+    @FXML
+    private ComboBox<SignalSerializeType> loadSaveFileTypeComboBox;
     @FXML
     private GridPane parametersGrid;
     @FXML
@@ -90,6 +93,7 @@ public class SignalTabController implements Initializable {
                 //ignored
             }
         });
+        loadSaveFileTypeComboBox.getItems().addAll(SignalSerializeType.values());
         binNumberImaginarySlider.valueProperty().addListener((observableValue, oldValue, newValue) -> {
             try {
                 FileInputStream input = new FileInputStream(getHistogramFileName((int) binNumberImaginarySlider.getValue()));
@@ -144,7 +148,7 @@ public class SignalTabController implements Initializable {
         createRightPanel(signal);
 
         notifyAllConsumers(tabName, signal);
-        save.setDisable(false);
+        save.setDisable(loadSaveFileTypeComboBox.getValue() == null);
         load.setDisable(true);
     }
 
@@ -214,7 +218,7 @@ public class SignalTabController implements Initializable {
         parametersGrid.setDisable(true);
         createRightPanel(signal);
         notifyAllConsumers(tabName, signal);
-        save.setDisable(false);
+        save.setDisable(loadSaveFileTypeComboBox.getValue() == null);
         load.setDisable(true);
     }
 
@@ -289,11 +293,15 @@ public class SignalTabController implements Initializable {
 
     public void loadSignal(ActionEvent actionEvent)
             throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, IOException {
-        String path = FileChoose.openChooser("Choose file", actionEvent);
+        String path = FileChoose.openChooser(
+                "Choose file",
+                actionEvent,
+                loadSaveFileTypeComboBox.getValue()
+        );
         if (path.isEmpty()) {
             return;
         }
-        AbstractSignal loadedSignal = facade.readSignal(path);
+        AbstractSignal loadedSignal = facade.readSignal(loadSaveFileTypeComboBox.getValue(), path);
         if (loadedSignal == null) {
             return;
         }
@@ -303,11 +311,15 @@ public class SignalTabController implements Initializable {
 
     public void saveSignal(ActionEvent actionEvent)
             throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
-        String path = FileChoose.saveChooser("Choose file", actionEvent);
+        String path = FileChoose.saveChooser(
+                "Choose file",
+                actionEvent,
+                loadSaveFileTypeComboBox.getValue()
+        );
         if (path.isEmpty()) {
             return;
         }
-        facade.writeSignal(signal, path);
+        facade.writeSignal(loadSaveFileTypeComboBox.getValue(), signal, path);
     }
 
     private String getHistogramFileName(int number) {
@@ -322,5 +334,13 @@ public class SignalTabController implements Initializable {
         for (BiConsumer<String, AbstractSignal> consumer : signalConsumers) {
             consumer.accept(t, signal);
         }
+    }
+
+    public void onUpdateLoadSaveFileTypeComboBox() {
+        if (loadSaveFileTypeComboBox.getValue() == null) {
+            return;
+        }
+        load.setDisable(signal != null);
+        save.setDisable(signal == null);
     }
 }
