@@ -12,17 +12,20 @@ public class Filter {
     private final SignalFactory signalFactory;
     private final Convolution convolution;
     private final Pass pass;
+    private final int rankOfFilter;
 
-    public Filter(Pass pass, SignalFactory signalFactory, Convolution convolution) {
+    public Filter(Pass pass, SignalFactory signalFactory, Convolution convolution, int M) {
         this.signalFactory = signalFactory;
         this.convolution = convolution;
         this.pass = pass;
+        this.rankOfFilter = M;
     }
 
     public DiscreteSignal execute(DiscreteSignal signal) {
         DiscreteSignal filter = (DiscreteSignal) signalFactory.createDiscreteSignal(signal.getPoints()
                 .entrySet()
                 .stream()
+                .limit(rankOfFilter)
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
                         e -> pass.pass((int) (e.getKey() * signal.getF())),
