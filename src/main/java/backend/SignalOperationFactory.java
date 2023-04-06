@@ -53,7 +53,7 @@ public class SignalOperationFactory {
             case BAND_PASS -> passFactory.createBandPass(M, f0, f, window);
             case HIGH_PASS -> passFactory.createHighPass(M, f0, f, window);
         };
-        return new Filter(pass, signalFactory, createConvolution());
+        return new Filter(pass, signalFactory, createConvolution(), M);
     }
 
     public DiscreteSignalsCorrelation createDiscreteSignalsCorrelation() {
