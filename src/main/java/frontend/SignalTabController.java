@@ -2,7 +2,9 @@ package frontend;
 
 import backend.SignalFacade;
 import backend.signal.AbstractSignal;
+import backend.signal.DiscreteFourierTransformedSignal;
 import backend.signal.DiscreteSignal;
+import backend.signal_serialize.SignalSerializeType;
 import frontend.chart.ChartGenerator;
 import frontend.classes.ClassTranslator;
 import frontend.fields.FieldMapper;
@@ -41,6 +43,7 @@ public class SignalTabController implements Initializable {
     private Button load;
     @FXML
     private Button save;
+    @FXML
     private ComboBox<SignalSerializeType> loadSaveFileTypeComboBox;
     @FXML
     private GridPane parametersGrid;
