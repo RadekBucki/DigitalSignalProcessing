@@ -73,4 +73,12 @@ public class SignalOperationFactory {
                 signalFactory
         );
     }
+
+    public DiscreteFourierTransformWithDecimationInTimeDomain createDiscreteFourierTransform() {
+        return new DiscreteFourierTransformWithDecimationInTimeDomain(signalFactory);
+    }
+
+    public DiscreteCosineTransform createDiscreteCosineTransform() {
+        return new DiscreteCosineTransform(signalFactory, this);
+    }
 }
