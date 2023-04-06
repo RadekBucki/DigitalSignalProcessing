@@ -29,9 +29,10 @@ public class DiscreteWalshHadamardTransform {
     private DiscreteSignal executeDirect(DiscreteSignal signal) {
         List<Double> pointsTimes = signal.getPoints().keySet().stream().toList();
         List<Double> pointsValues = signal.getPoints().values().stream().toList();
-        RealMatrix walshHadamardMatrix = calculateWalshHadamardMatrix(pointsValues.size());
+        double[][] normalizeFactor = {{1 / Math.pow(Math.sqrt(2), pointsValues.size())}};
+        RealMatrix walshHadamardMatrix = calculateWalshHadamardMatrix(pointsValues.size()).multiply(MatrixUtils.createRealMatrix(normalizeFactor));
         RealMatrix signalMatrix = MatrixUtils.createColumnRealMatrix(pointsValues.stream().mapToDouble(Double::doubleValue).toArray());
-        List<Double> resultPointsValues = Arrays.stream(walshHadamardMatrix.multiply(signalMatrix).getColumn(0)).boxed().toList();;
+        List<Double> resultPointsValues = Arrays.stream(walshHadamardMatrix.multiply(signalMatrix).getColumn(0)).boxed().toList();
         return (DiscreteSignal) signalFactory.createDiscreteSignal(
                 IntStream.range(0, pointsTimes.size())
                         .boxed()
