@@ -1,7 +1,95 @@
 # DigitalSignalProcessing
 
 ## Task 1 - Signal and noise generation
-
+## Frontend
+```plantuml
+package frontend {
+    class MainApplication {
+    }
+    class MainApplicationController {
+        - createSignalTab()
+        - createSignalTabFromAbstractSignal()
+    }
+    class SignalTabController {
+        - createGroupLabel()
+        - shouldGenerateButtonBeDisabled()
+        - parametersTextFields()
+        + createSignalInstance()
+        + saveSignal()
+        + loadSignal()
+        + setSignal()
+        + onUpdateLoadSaveFileTypeComboBox()
+    }
+    class SignalOperationTabController {
+        + addOrUpdateSignal()
+        + applyOperation()
+    }
+    package file {
+        class FileChoose {
+            + {static} saveChooser()
+            + {static} openChooser()
+            - {static} choose()
+        }
+    }
+    package chart {
+        class ChartGenerator {
+            + {static} generateAmplitudeTimeChart()
+            + {static} generateHistogram()
+            - {static} formatAxis()
+            - {static} changeVisibility()
+        }
+    }
+    package classes {
+        class ClassTranslator {
+            + {static} translatePascalCaseClassToText(Class): String
+        }
+    }
+    package fields {
+        class FieldReader {
+            + {static} getFieldNames(Class): String[]
+        }
+        class FieldMapper {
+            + {static} getFieldNames(String): String
+        }
+    }
+    
+    MainApplicationController o---> SignalTabController
+    MainApplicationController o--> SignalOperationTabController
+    MainApplication o--> MainApplicationController
+    
+    SignalTabController ..> FileChoose
+    SignalTabController ..> ChartGenerator
+    SignalTabController ..> ClassTranslator
+    SignalTabController ..> FieldMapper
+    SignalTabController ..> FieldReader
+}
+package backend {
+    class SignalFacade {
+        + add(AbstractSignal,AbstractSignal): AbstractSignal
+        + subtract(AbstractSignal,AbstractSignal): AbstractSignal
+        + multiply(AbstractSignal,AbstractSignal): AbstractSignal
+        + divide(AbstractSignal,AbstractSignal): AbstractSignal
+        + getSignalFactory(): SignalFactory
+        + getSignal(Class,Double[]): AbstractSignal
+        + getDefaultSignal(): AbstractSignal
+        + getPossibleSignals(): AbstractSignal[]
+        + writeSignal(AbstractSignal, String)
+        + readSignal(String): AbstractSignal
+    }
+    package signal_serialize {
+       
+        enum SignalSerializeType {
+            JSON
+            BINARY
+        }
+    }
+}
+SignalTabController ....> SignalFacade
+SignalTabController ....> SignalSerializeType
+SignalOperationTabController ....> SignalFacade
+```
+## Backend
+### Polymorphic signal hierarchy
 ```plantuml
 package backend {
     class SignalFactory {
@@ -18,6 +106,12 @@ package backend {
         + createDiscreteSignal(): AbstractSignal
         + getSignal(Class,Double[]): AbstractSignal
     }
+    
+    class Rounder {
+        + {static} round(double): double
+        + {static} floor(double): double
+    }
+    AbstractSignal ..> Rounder
     
     package signal {
         SignalFactory ....> AbstractSignal
@@ -143,7 +237,25 @@ package backend {
         DiscreteSignal <|-- UnitImpulse
         DiscreteSignal <|-- ImpulseNoise
     }
-    
+}
+```
+### Signal operations
+```plantuml
+package backend {    
+    class SignalFactory {
+        + createUniformlyDistributedNoise(): AbstractSignal
+        + createGaussianNoise(): AbstractSignal
+        + createSinusoidalSignal(): AbstractSignal
+        + createOneHalfRectifiedSinusoidalSignal(): AbstractSignal
+        + createTwoHalfRectifiedSinusoidalSignal(): AbstractSignal
+        + createRectangularSignal(): AbstractSignal
+        + createSymmetricalRectangularSignal(): AbstractSignal
+        + createTriangleSignal(): AbstractSignal
+        + createUnitJump(): AbstractSignal
+        + createContinuousSignal(): AbstractSignal
+        + createDiscreteSignal(): AbstractSignal
+        + getSignal(Class,Double[]): AbstractSignal
+    }
     class SignalFacade {
         + add(AbstractSignal,AbstractSignal): AbstractSignal
         + subtract(AbstractSignal,AbstractSignal): AbstractSignal
@@ -166,6 +278,12 @@ package backend {
     
     SignalFacade ---> SignalOperationFactory
     SignalFacade ---> SignalFactory
+    
+    class Rounder {
+        + {static} round(double): double
+        + {static} floor(double): double
+    }
+    AbstractSignalOperation ..> Rounder
     
     package signal_operation {
         abstract class AbstractSignalOperation {
@@ -200,77 +318,33 @@ package backend {
     
     SignalOperationFactory ..> AbstractSignalOperation
     
-    package serialize {
-        class SignalSerializer {
-            + {static} write(AbstractSignal, String)
-            + {static} read(String): AbstractSignal
+    package signal_serialize {
+        interface SignalSerializer {
+            + write(AbstractSignal, String)
+            + read(String): AbstractSignal
         }
+        class SignalBinarySerializer implements SignalSerializer {
+            + write(AbstractSignal, String)
+            + read(String): AbstractSignal
+        }
+        class SignalJsonSerializer implements SignalSerializer {
+            + write(AbstractSignal, String)
+            + read(String): AbstractSignal
+        }
+        enum SignalSerializeType {
+            JSON
+            BINARY
+        }
+        class SignalSerializerFactory {
+            + createSignalSerializer(SignalSerializeType): SignalSerializer
+            + createJsonSerializer(): SignalSerializer
+            + createBinarySerializer(): SSignalSerializer
+        }
+        SignalSerializerFactory ..> SignalSerializer
+        SignalSerializerFactory ..> SignalSerializeType
     }
-    SignalFacade ...> SignalSerializer
+    SignalFacade ...> SignalSerializerFactory
 }
-
-package frontend {
-    class MainApplication {
-    }
-    class MainApplicationController {
-        - createSignalTab()
-        - createSignalTabFromAbstractSignal()
-    }
-    class SignalTabController {
-        - createGroupLabel()
-        - shouldGenerateButtonBeDisabled()
-        - parametersTextFields()
-        + createSignalInstance()
-        + saveSignal()
-        + loadSignal()
-        + setSignal()
-        + onUpdateComboBox()
-    }
-    class SignalOperationTabController {
-        + addOrUpdateSignal()
-        + applyOperation()
-    }
-    package file {
-        class FileChoose {
-            + {static} saveChooser()
-            + {static} openChooser()
-            - {static} choose()
-        }
-    }
-    package chart {
-        class ChartGenerator {
-            + {static} generateAmplitudeTimeChart()
-            + {static} generateHistogram()
-            - {static} formatAxis()
-            - {static} changeVisibility()
-        }
-    }
-    package classes {
-        class ClassTranslator {
-            + {static} translatePascalCaseClassToText(Class): String
-        }
-    }
-    package fields {
-        class FieldReader {
-            + {static} getFieldNames(Class): String[]
-        }
-        class FieldMapper {
-            + {static} getFieldNames(String): String
-        }
-    }
-    
-    MainApplicationController o---> SignalTabController
-    MainApplicationController o--> SignalOperationTabController
-    MainApplication o--> MainApplicationController
-    
-    SignalTabController ..> FileChoose
-    SignalTabController ..> ChartGenerator
-    SignalTabController ..> ClassTranslator
-    SignalTabController ..> FieldMapper
-    SignalTabController ..> FieldReader
-}
-SignalTabController ....> SignalFacade
-SignalOperationTabController ....> SignalFacade
 ```
 
 ## Task 2 - Quantization, sampling and reconstruction
@@ -391,6 +465,67 @@ package frontend {
 SignalOperationTabController ....> SignalFacade
 ```
 # Task 3 - convolution, filtering, correlation
+## Frontend
+```plantuml
+package backend {
+    class SignalFacade {
+        + convolution(DiscreteSignal, DiscreteSignal): DiscreteSignal
+        + filter(DiscreteSignal, PassType, WindowType, int, double): DiscreteSignal
+        + discreteSignalsCorrelation(DiscreteSignal, DiscreteSignal, DiscreteSignalsCorrelationType): double
+        + startRadar(double, int, double, double, double, ContinuousSignal, double, double, double, double, double, double): Radar
+    }
+    package signal_operation {
+        enum DiscreteSignalsCorrelationType {
+            + DIRECT
+            + USING_CONVOLUTION
+        }
+        enum WindowType {
+            + RECTANGULAR
+            + BLACKMAN
+            + HAMMING
+            + HANNING
+        }
+        enum PassType {
+            + LOW_PASS
+            + HIGH_PASS
+            + BAND_PASS
+        }
+    }
+}
+
+package frontend {
+    class SignalOperationTabController {
+        + convolutionOperation()
+        + correlationOperation()
+        + filterOperation()
+        + onUpdateConvolutionCorrelationOperationsComboBox()
+        + shouldFilterButtonBeDisabled()
+        + onUpdateFilterOperationInputFields()
+    }
+    class RadarTabController {
+        + addOrUpdateSignal()
+        + onUpdateRadarInitData()
+        + startRadar()
+        - shouldRadarStartButtonBeDisabled(): boolean
+        - updateData()
+    }
+    package utils {
+        class TextFormatterFactory {
+            + createIntegerTextFormatter(TextField, Button, Function)
+            + createDecimalTextFormatter(TextField, Button, Function)
+            - createTextFormatter(TextField, Button, Function, String)
+        }
+    }
+    SignalOperationTabController ..> TextFormatterFactory
+    RadarTabController ..> TextFormatterFactory
+}
+SignalOperationTabController ....> SignalFacade
+RadarTabController ....> SignalFacade
+SignalOperationTabController ..> DiscreteSignalsCorrelationType
+SignalOperationTabController ..> WindowType
+SignalOperationTabController ..> PassType
+```
+## Backend
 ```plantuml
 package backend {
     class SignalFacade {
@@ -406,50 +541,76 @@ package backend {
         + createRadar(double, int, double, double, double, ContinuousSignal, double, double, double, double, double, double, SignalFacade): Radar
     }
     package radar {
-        class Radar {
-            -X: double
-            -Y: double
-            -probingSignalF: double
-            -discreteBufferSize: int
-            -signalSpeed: double
-            -stepTime: double
-            -probingSignal: ContinuousSigna
-            +getX(): double
-            +getY(): double
-            +getProbingSignalF(): double
-            +getPeriod(): double
-            +getDiscreteBufferSize(): int
-            +getSignalSpeed(): double
-            +getStepTime(): double
-            +getProbingSignal(): ContinuousSignal
+        package model {
+            class Environment {
+                + signalSpeed: double
+                + stepTime: double
+            }
+             class MeasuredObject {
+                - X: double
+                - Y: double
+                - speedX: double
+                - speedY: double
+                + move(double)
+                + calculateRealDistance(double)
+            }
+            class RadarConfig {
+                + probingSignal: ContinuousSignal
+                + probingSignalF: double
+                + discreteBufferSize: int
+                + workTime: double
+                + period: double
+                + x: double
+                + y: double
+            }
         }
-        class RadarExecutor {
-            -radar: Radar
-            -signalSent: DiscreteSignal
-            -signalReceived: DiscreteSignal
-            -radarDistances: double[]
-            -realDistances: double[]
-            -startWorking()
-            -calculateCorrelations()
+        class RadarMemory {
+            - radarDistances: double[]
+            - realDistances: double[]
+            - distancesTimes: double[]
+            - signalSentWindows: DiscreteSignal[]
+            - signalReceivedWindows: DiscreteSignal[]
+            - correlationWindows: DiscreteSignal[]
+            + getRadarDistances(): double[]
+            + addToRadarDistances(double)
+            + getRealDistances(): double[]
+            + addToRealDistances(double)
+            + getDistancesTimes(): double[]
+            + addToDistancesTimes(double)
+            + getSignalSentWindows(): DiscreteSignal[]
+            + addToSignalSentWindows(DiscreteSignal)
+            + getSignalReceivedWindows(): DiscreteSignal[]
+            + addToSignalReceivedWindows(DiscreteSignal)
+            + getCorrelationWindows(): DiscreteSignal[]
+            + addToCorrelationWindows(DiscreteSignal)
         }
-        class MeasuredObject {
-            -X: double
-            -Y: double
-            -speedX: double
-            -speedY: double
-            +move(double)
-            +calculateRealDistance(double)
-        }
-        class RadarExecutorDependenciesFactory {
-            + createRadar(double, int, double, double, double, ContinuousSignal, double, double, double, double, double, double, SignalFacade): Radar
-            + createMeasuredObject(double, double, double, double): MeasuredObject
-        }
-        RadarExecutorDependenciesFactory ..> Radar
-        RadarExecutorDependenciesFactory ..> MeasuredObject
         
-        RadarExecutor o-> MeasuredObject
-        SignalOperationFactory ..> RadarExecutor
-        SignalOperationFactory ..> RadarExecutorDependenciesFactory
+        class RadarDependenciesFactory {
+            + createEnvironment(double, double): Environment
+            + createMeasuredObject(double, double, double, double): MeasuredObject
+            + createRadarConfig(ContinuousSignal, double, int, double, double, double, double): RadarConfig
+        }
+        RadarDependenciesFactory ..> Environment
+        RadarDependenciesFactory ..> MeasuredObject
+        RadarDependenciesFactory ..> RadarConfig
+        SignalOperationFactory ..> RadarDependenciesFactory
+        
+        class Radar {
+            - radarConfig: RadarConfig
+            - environment: Environment
+            - measuredObject: MeasuredObject
+            - first: double
+            - signalSent: DiscreteSignal
+            - signalReceived: DiscreteSignal
+            - samplesSentButNotHit: double[]
+            - allRealDistances: double[][]
+            - hitsTime: double[]
+            - startWorking()
+            - calculateCorrelation()
+            + getRadarMemory(): RadarMemory
+        }
+        SignalOperationFactory ..> Radar
+        Radar o--> RadarMemory
     }
     package signal_operation {
         class Convolution {
@@ -544,27 +705,4 @@ package backend {
     SignalOperationFactory ..> Filter
     SignalOperationFactory ..> DiscreteSignalsCorrelation
 }
-
-package frontend {
-    class SignalOperationTabController {
-        + convolutionOperation()
-        + correlationOperation()
-        + filterOperation()
-        + onUpdateConvolutionCorrelationOperationsComboBox()
-        + shouldFilterButtonBeDisabled()
-        + onUpdateFilterOperationInputFields()
-    }
-    package utils {
-        class TextFormatterFactory {
-            + createIntegerTextFormatter(TextField, Button, Function)
-            + createDecimalTextFormatter(TextField, Button, Function)
-            - createTextFormatter(TextField, Button, Function, String)
-        }
-    }
-    SignalOperationTabController ..> TextFormatterFactory
-}
-SignalOperationTabController ....> SignalFacade
-SignalOperationTabController ..> DiscreteSignalsCorrelationType
-SignalOperationTabController ..> WindowType
-SignalOperationTabController ..> PassType
 ```

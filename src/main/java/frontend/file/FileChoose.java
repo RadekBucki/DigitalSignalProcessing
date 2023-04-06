@@ -3,6 +3,9 @@ package frontend.file;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Map;
+
+import backend.signal_serialize.SignalSerializeType;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.stage.Window;
@@ -10,6 +13,10 @@ import javafx.stage.FileChooser;
 
 public class FileChoose {
     private static String lastUsedDir = "";
+    private static final Map<SignalSerializeType, String> extensionMap = Map.of(
+            SignalSerializeType.JSON, "json",
+            SignalSerializeType.BINARY, "bin"
+    );
 
     private FileChoose() {
     }
@@ -23,11 +30,13 @@ public class FileChoose {
      * @throws InvocationTargetException exception
      * @throws IllegalAccessException exception
      */
-    public static String saveChooser(String windowTitle, ActionEvent actionEvent)
+    public static String saveChooser(String windowTitle, ActionEvent actionEvent, SignalSerializeType type)
             throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         return choose(
-                windowTitle, actionEvent,
-                FileChooser.class.getMethod("showSaveDialog", Window.class)
+                windowTitle,
+                actionEvent,
+                FileChooser.class.getMethod("showSaveDialog", Window.class),
+                type
         );
     }
 
@@ -40,11 +49,13 @@ public class FileChoose {
      * @throws InvocationTargetException exception
      * @throws IllegalAccessException exception
      */
-    public static String openChooser(String windowTitle, ActionEvent actionEvent)
+    public static String openChooser(String windowTitle, ActionEvent actionEvent, SignalSerializeType type)
             throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         return choose(
-                windowTitle, actionEvent,
-                FileChooser.class.getMethod("showOpenDialog", Window.class)
+                windowTitle,
+                actionEvent,
+                FileChooser.class.getMethod("showOpenDialog", Window.class),
+                type
         );
     }
 
@@ -54,15 +65,20 @@ public class FileChoose {
      * @param actionEvent ActionEvent
      * @return String
      */
-    private static String choose(String windowTitle, ActionEvent actionEvent, Method showDialog)
-            throws InvocationTargetException, IllegalAccessException {
+    private static String choose(
+            String windowTitle,
+            ActionEvent actionEvent,
+            Method showDialog,
+            SignalSerializeType type
+    ) throws InvocationTargetException, IllegalAccessException {
+        String extension = extensionMap.get(type);
         FileChooser chooser = new FileChooser();
         chooser.setTitle(windowTitle);
         if (!lastUsedDir.isEmpty()) {
             chooser.setInitialDirectory(new File(lastUsedDir));
         }
         chooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("Signal (*.bin)", "*.bin")
+                new FileChooser.ExtensionFilter("Signal (*." + extension + ")", "*." + extension)
         );
         File chosenFile = (File) showDialog.invoke(
                 chooser,
