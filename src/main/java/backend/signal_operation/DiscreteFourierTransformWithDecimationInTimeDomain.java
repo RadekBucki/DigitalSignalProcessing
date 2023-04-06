@@ -10,7 +10,7 @@ import java.util.TreeMap;
 
 public class DiscreteFourierTransformWithDecimationInTimeDomain {
 
-    SignalFactory signalFactory;
+    private final SignalFactory signalFactory;
 
     public DiscreteFourierTransformWithDecimationInTimeDomain(SignalFactory signalFactory) {
         this.signalFactory = signalFactory;
@@ -33,7 +33,7 @@ public class DiscreteFourierTransformWithDecimationInTimeDomain {
             Complex sum = new Complex(0, 0);
             for (int j = 0; j < N; j++) {
                 sum = sum.add(
-                        calculateWn(N).pow(i * j).multiply(pointsValues.get(j))
+                        calculateWn(N).pow(-i * j).multiply(pointsValues.get(j))
                 );
             }
             transformPoints.put(pointsTimes.get(i), sum.divide(N));

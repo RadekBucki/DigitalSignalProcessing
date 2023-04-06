@@ -81,4 +81,8 @@ public class SignalOperationFactory {
     public DiscreteCosineTransform createDiscreteCosineTransform() {
         return new DiscreteCosineTransform(signalFactory, this);
     }
+
+    public DiscreteWalshHadamardTransform createDiscreteWalshHadamardTransform() {
+        return new DiscreteWalshHadamardTransform(signalFactory);
+    }
 }
