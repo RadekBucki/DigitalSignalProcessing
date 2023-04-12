@@ -10,7 +10,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 
 import java.net.URL;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
 public class TransformationTabController implements Initializable {
@@ -50,10 +53,14 @@ public class TransformationTabController implements Initializable {
         falcoSignalComboBox.getItems().setAll(discreteSignals);
     }
 
-    public void applyFalco() {
+    public void discreteFalcoTransformOperation() {
         signalFacade.discreteFalcoTransform(
                 (DiscreteSignal) signals.get(falcoSignalComboBox.getValue()),
                 falcoLevelComboBox.getValue()
         ).forEach(createSignalTab);
+    }
+
+    public void onUpdateDiscreteFalcoTransformOperationsComboBox() {
+        applyFalcoButton.setDisable(falcoSignalComboBox.getValue() == null || falcoLevelComboBox.getValue() == null);
     }
 }

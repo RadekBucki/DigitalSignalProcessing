@@ -11,9 +11,9 @@
     <VBox spacing="10" layoutX="10.0" layoutY="10.0">
         <HBox spacing="10" alignment="CENTER_LEFT">
             <Label text="Discrete Falco Transform"/>
-            <ComboBox fx:id="falcoSignalComboBox" promptText="Choose DiscreteSignal"/>
-            <ComboBox fx:id="falcoLevelComboBox" promptText="ChooseLevel"/>
-            <Button fx:id="applyFalcoButton" text="Apply" onAction="#applyFalco"/>
+            <ComboBox fx:id="falcoSignalComboBox" promptText="Choose DiscreteSignal" onAction="#onUpdateDiscreteFalcoTransformOperationsComboBox"/>
+            <ComboBox fx:id="falcoLevelComboBox" promptText="ChooseLevel" onAction="#onUpdateDiscreteFalcoTransformOperationsComboBox"/>
+            <Button fx:id="applyFalcoButton" text="Apply" onAction="#discreteFalcoTransformOperation" disable="true"/>
         </HBox>
     </VBox>
 </Pane>

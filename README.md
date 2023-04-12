@@ -715,7 +715,7 @@ package backend {
         + discreteFourierTransformWithDecimationInFrequencyDomain(DiscreteSignal,TransformType): DiscreteFourierTransformedSignal
         + discreteCosineTransform(DiscreteSignal,TransformType): DiscreteSignal
         + discreteWalshHadamardTransform(DiscreteSignal,TransformType): DiscreteSignal
-        + discreteFalcoTransform(DiscreteSignal,Level): DiscreteSignal
+        + discreteFalcoTransform(DiscreteSignal,Level): DiscreteSignal[]
     }
     class SignalOperationFactory {
         + createDiscreteFourierTransformWithDecimationInTimeDomain(): DiscreteFourierTransformWithDecimationInTimeDomain
@@ -762,9 +762,7 @@ package backend {
         }
         class DiscreteFalcoTransform {
             + execute(DiscreteSignal,Level): DiscreteSignal
-            - executeLevelDB4(DiscreteSignal): DiscreteSignal
-            - executeLevelDB6(DiscreteSignal): DiscreteSignal
-            - executeLevelDB8(DiscreteSignal): DiscreteSignal
+            - getTransformedPoints(double[],double[]: double[][]
         }
         DiscreteFalcoTransform ..> Level
     }
@@ -808,7 +806,7 @@ package backend {
         + discreteFourierTransformWithDecimationInFrequencyDomain(DiscreteSignal,TransformType): DiscreteSignal
         + discreteCosineTransform(DiscreteSignal,TransformType): DiscreteSignal
         + discreteWalshHadamardTransform(DiscreteSignal,TransformType): DiscreteSignal
-        + discreteFalcoTransform(DiscreteSignal,Level): DiscreteSignal
+        + discreteFalcoTransform(DiscreteSignal,Level): DiscreteSignal[]
     }
     package signal_operation {
         enum TransformType {
