@@ -110,4 +110,8 @@ public class SignalFacade {
                 continuousSignal, radarX, radarY, objectX, objectY, objectSpeedX, objectSpeedY, this)
                 .getRadarMemory();
     }
+
+    public List<DiscreteSignal> discreteFalcoTransform(DiscreteSignal discreteSignal, Level level) {
+        return signalOperationFactory.createDiscreteFalcoTransform().execute(discreteSignal, level);
+    }
 }

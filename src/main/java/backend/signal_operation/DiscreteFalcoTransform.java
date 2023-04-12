@@ -111,7 +111,7 @@ public class DiscreteFalcoTransform {
                 .stream()
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
-                        entry -> IntStream.of(0, filter.size())
+                        entry -> IntStream.of(0, filter.size() - 1)
                                 .mapToDouble(i -> entry.getValue() * filter.get(i) * (filter.size() - i))
                                 .sum()
                 ));

@@ -73,4 +73,8 @@ public class SignalOperationFactory {
                 signalFactory
         );
     }
+
+    public DiscreteFalcoTransform createDiscreteFalcoTransform() {
+        return new DiscreteFalcoTransform(signalFactory);
+    }
 }

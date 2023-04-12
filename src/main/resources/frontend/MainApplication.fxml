@@ -18,6 +18,11 @@
                     <fx:include fx:id="radarTabFxml" source="RadarTab.fxml"/>
                 </VBox>
             </Tab>
+            <Tab closable="false" styleClass="highlighting-tab" text="Transformations">
+                <VBox>
+                    <fx:include fx:id="transformationTabFxml" source="TransformationTab.fxml"/>
+                </VBox>
+            </Tab>
         </TabPane>
     </Tab>
     <Tab fx:id="plusTab" closable="false" styleClass="highlighting-tab" text="+"/>

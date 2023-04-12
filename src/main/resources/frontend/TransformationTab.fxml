@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Button?>
+<Pane xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="frontend.TransformationTabController">
+    <VBox spacing="10" layoutX="10.0" layoutY="10.0">
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Discrete Falco Transform"/>
+            <ComboBox fx:id="falcoSignalComboBox" promptText="Choose DiscreteSignal"/>
+            <ComboBox fx:id="falcoLevelComboBox" promptText="ChooseLevel"/>
+            <Button fx:id="applyFalcoButton" text="Apply" onAction="#applyFalco"/>
+        </HBox>
+    </VBox>
+</Pane>
