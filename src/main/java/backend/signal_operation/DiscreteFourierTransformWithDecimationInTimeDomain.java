@@ -3,8 +3,8 @@ package backend.signal_operation;
 import backend.SignalFactory;
 import backend.signal.DiscreteSignal;
 import org.apache.commons.math3.complex.Complex;
-import org.apache.commons.math3.complex.ComplexUtils;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,30 +68,36 @@ public class DiscreteFourierTransformWithDecimationInTimeDomain {
         if (n == 1) {
             return points;
         }
-        int nHalf = n / 2;
-        List<Complex> fftEven = fft(
-                points.stream()
-                        .filter(point -> points.indexOf(point) % 2 == 0)
-                        .toList()
-        );
-        List<Complex> fftOdd = fft(
-                points.stream()
-                        .filter(point -> points.indexOf(point) % 2 == 1)
-                        .toList()
-        );
-        return IntStream.range(0, n)
-                .mapToObj(i -> {
-                    Complex wn = ComplexUtils.polar2Complex(1, -2 * Math.PI * i / n);
-                    int index = i % (nHalf);
-                    Complex sum = fftEven.get(index)
-                            .add(wn.multiply(fftOdd.get(index)));
-                    if (i < nHalf) {
-                        return sum;
-                    }
-                    return fftEven.get(index)
-                            .subtract(wn.multiply(fftOdd.get(index)));
 
-                })
-                .toList();
+        List<Complex> fftResult = new ArrayList<>(IntStream.range(0, n)
+                .mapToObj(i -> new Complex(0, 0))
+                .toList());
+
+        int log2n = (int) (Math.log(n) / Math.log(2));
+        IntStream.range(0, n)
+                .forEach(i -> fftResult.set(
+                        i,
+                        points.get(Integer.reverse(i) >>> (32 - log2n))
+                ));
+
+        IntStream.rangeClosed(1, log2n)
+                .forEach(i -> {
+                    int m = 1 << i;
+                    double theta = -2 * Math.PI / m;
+                    Complex wM = new Complex(1, 0);
+                    Complex w = new Complex(Math.cos(theta), Math.sin(theta));
+                    for (int j = 0; j < m / 2; j++) {
+                        for (int k = j; k < n; k += m) {
+                            Complex u = fftResult.get(k);
+                            int index = k + m / 2 < n ? k + m / 2 : 0;
+                            Complex t = wM.multiply(fftResult.get(index));
+                            fftResult.set(k, u.add(t));
+                            fftResult.set(index, u.subtract(t));
+                        }
+                        wM = wM.multiply(w);
+                    }
+                });
+
+        return fftResult;
     }
 }
