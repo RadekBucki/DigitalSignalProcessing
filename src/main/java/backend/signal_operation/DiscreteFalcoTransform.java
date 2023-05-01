@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import static java.lang.Math.sqrt;
 
@@ -65,9 +64,11 @@ public class DiscreteFalcoTransform {
     );
 
     SignalFactory signalFactory;
+    Convolution convolution;
 
-    public DiscreteFalcoTransform(SignalFactory signalFactory) {
+    public DiscreteFalcoTransform(SignalFactory signalFactory, Convolution convolution) {
         this.signalFactory = signalFactory;
+        this.convolution = convolution;
     }
 
     public List<DiscreteSignal> execute(DiscreteSignal signal, Level level) {
@@ -107,13 +108,12 @@ public class DiscreteFalcoTransform {
     }
 
     private Map<Double, Double> getTransformedPoints(Map<Double, Double> points, List<Double> filter) {
-        return points.entrySet()
-                .stream()
-                .collect(Collectors.toMap(
-                        Map.Entry::getKey,
-                        entry -> IntStream.of(0, filter.size() - 1)
-                                .mapToDouble(i -> entry.getValue() * filter.get(i) * (filter.size() - i))
-                                .sum()
-                ));
+        AtomicInteger i = new AtomicInteger(0);
+        return convolution.execute(
+                (DiscreteSignal) signalFactory.createDiscreteSignal(points),
+                (DiscreteSignal) signalFactory.createDiscreteSignal(filter.stream().collect(Collectors.toMap(
+                        aDouble -> (double) i.getAndIncrement(),
+                        aDouble -> aDouble))
+                )).getPoints();
     }
 }

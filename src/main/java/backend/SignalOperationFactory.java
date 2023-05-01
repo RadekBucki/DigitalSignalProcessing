@@ -75,6 +75,6 @@ public class SignalOperationFactory {
     }
 
     public DiscreteFalcoTransform createDiscreteFalcoTransform() {
-        return new DiscreteFalcoTransform(signalFactory);
+        return new DiscreteFalcoTransform(signalFactory, createConvolution());
     }
 }
