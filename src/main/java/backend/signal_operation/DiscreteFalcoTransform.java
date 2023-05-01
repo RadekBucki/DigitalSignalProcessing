@@ -63,8 +63,8 @@ public class DiscreteFalcoTransform {
             -H_DB8.get(0) / 8
     );
 
-    SignalFactory signalFactory;
-    Convolution convolution;
+    private final SignalFactory signalFactory;
+    private final Convolution convolution;
 
     public DiscreteFalcoTransform(SignalFactory signalFactory, Convolution convolution) {
         this.signalFactory = signalFactory;
