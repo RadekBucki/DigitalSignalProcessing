@@ -22,6 +22,8 @@ public class MainApplicationController implements Initializable {
     private SignalOperationTabController signalOperationTabFxmlController;
     @FXML
     private RadarTabController radarTabFxmlController;
+    @FXML
+    private TransformationTabController transformationTabFxmlController;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -41,6 +43,7 @@ public class MainApplicationController implements Initializable {
             }
             tabPane.getSelectionModel().select(tabPane.getTabs().get(1));
             signalOperationTabFxmlController.setCreateSignalTab(this::createSignalTabFromAbstractSignal);
+            transformationTabFxmlController.setCreateSignalTab(this::createSignalTabFromAbstractSignal);
         } catch (IOException ignored) {
             //ignored
         }
@@ -56,10 +59,12 @@ public class MainApplicationController implements Initializable {
         tab.setOnClosed(event -> {
             signalOperationTabFxmlController.addOrUpdateSignal(tabName, null);
             radarTabFxmlController.addOrUpdateSignal(tabName, null);
+            transformationTabFxmlController.addOrUpdateSignal(tabName, null);
         });
         SignalTabController signalTabController = fxmlLoader.getController();
         signalTabController.addSignalConsumer(signalOperationTabFxmlController::addOrUpdateSignal);
         signalTabController.addSignalConsumer(radarTabFxmlController::addOrUpdateSignal);
+        signalTabController.addSignalConsumer(transformationTabFxmlController::addOrUpdateSignal);
         signalTabController.setTabName(tabName);
         nextTabNumber++;
         return tab;
@@ -76,9 +81,11 @@ public class MainApplicationController implements Initializable {
             SignalTabController signalTabController = fxmlLoader.getController();
             signalTabController.addSignalConsumer(signalOperationTabFxmlController::addOrUpdateSignal);
             signalTabController.addSignalConsumer(radarTabFxmlController::addOrUpdateSignal);
+            signalTabController.addSignalConsumer(transformationTabFxmlController::addOrUpdateSignal);
             tab.setOnClosed(event -> {
                 signalOperationTabFxmlController.addOrUpdateSignal(tabName, null);
                 radarTabFxmlController.addOrUpdateSignal(tabName, null);
+                transformationTabFxmlController.addOrUpdateSignal(tabName, null);
             });
             signalTabController.setTabName(tabName);
             signalTabController.setSignal(signal);
