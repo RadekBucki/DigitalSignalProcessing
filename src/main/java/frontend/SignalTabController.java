@@ -263,7 +263,7 @@ public class SignalTabController implements Initializable {
 
             for (int i = 5; i <= 20; i++) {
                 ChartUtilities.saveChartAsPNG(
-                        new File(getHistogramFileName(i)),
+                        new File(getImaginaryHistogramFileName(i)),
                         ChartGenerator.generateHistogram(
                                 ((DiscreteFourierTransformedSignal) signal).getImaginaryPartPoints(), i
                         ),
