@@ -3,6 +3,7 @@ package backend.signal_operation;
 import backend.SignalFactory;
 import backend.signal.DiscreteSignal;
 import org.apache.commons.math3.complex.Complex;
+import org.apache.commons.math3.complex.ComplexUtils;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -26,9 +27,18 @@ public class DiscreteFourierTransformWithDecimationInTimeDomain {
     }
 
     private DiscreteSignal executeFast(DiscreteSignal signal) {
-        Map<Double, Double> points = signal.getPoints();
-        Map<Double, Complex> map = new LinkedHashMap<>();
-        return (DiscreteSignal) signalFactory.createDiscreteFourierTransformedSignal(map);
+        List<Double> points = signal.getPoints().values().stream().toList();
+        List<Complex> map = points.stream()
+                .map(point -> new Complex(point, 0))
+                .collect(Collectors.toList());
+
+        List<Complex> y = fft(map);
+
+        Map<Double, Complex> result = IntStream.range(0, y.size())
+                .boxed()
+                .collect(Collectors.toMap(Double::valueOf, y::get, (a, b) -> b, LinkedHashMap::new));
+
+        return (DiscreteSignal) signalFactory.createDiscreteFourierTransformedSignal(result);
     }
 
     private DiscreteSignal executeDirect(DiscreteSignal signal) {
@@ -51,5 +61,37 @@ public class DiscreteFourierTransformWithDecimationInTimeDomain {
                         ))
                         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
         );
+    }
+
+    List<Complex> fft(List<Complex> points) {
+        int n = points.size();
+        if (n == 1) {
+            return points;
+        }
+        int nHalf = n / 2;
+        List<Complex> fftEven = fft(
+                points.stream()
+                        .filter(point -> points.indexOf(point) % 2 == 0)
+                        .toList()
+        );
+        List<Complex> fftOdd = fft(
+                points.stream()
+                        .filter(point -> points.indexOf(point) % 2 == 1)
+                        .toList()
+        );
+        return IntStream.range(0, n)
+                .mapToObj(i -> {
+                    Complex wn = ComplexUtils.polar2Complex(1, -2 * Math.PI * i / n);
+                    int index = i % (nHalf);
+                    Complex sum = fftEven.get(index)
+                            .add(wn.multiply(fftOdd.get(index)));
+                    if (i < nHalf) {
+                        return sum;
+                    }
+                    return fftEven.get(index)
+                            .subtract(wn.multiply(fftOdd.get(index)));
+
+                })
+                .toList();
     }
 }
