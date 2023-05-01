@@ -706,22 +706,16 @@ package backend {
     SignalOperationFactory ..> DiscreteSignalsCorrelation
 }
 ```
-# Task 4 - Fourier, Walsh-Hadamard, coine and falco transforms, fast algorithms
+# Task 4 - Fourier and falco transforms, fast algorithms
 ## Backend
 ```plantuml
 package backend {
     class SignalFacade {
         + discreteFourierTransformWithDecimationInTimeDomain(DiscreteSignal,TransformType): DiscreteFourierTransformedSignal
-        + discreteFourierTransformWithDecimationInFrequencyDomain(DiscreteSignal,TransformType): DiscreteFourierTransformedSignal
-        + discreteCosineTransform(DiscreteSignal,TransformType): DiscreteSignal
-        + discreteWalshHadamardTransform(DiscreteSignal,TransformType): DiscreteSignal
         + discreteFalcoTransform(DiscreteSignal,Level): DiscreteSignal[]
     }
     class SignalOperationFactory {
         + createDiscreteFourierTransformWithDecimationInTimeDomain(): DiscreteFourierTransformWithDecimationInTimeDomain
-        + createDiscreteFourierTransformWithDecimationInFrequencyDomain(): DiscreteFourierTransformWithDecimationInFrequencyDomain
-        + createDiscreteCosineTransform(): DiscreteCosineTransform
-        + createDiscreteWalshHadamardTransform(): DiscreteWalshHadamardTransform
         + createDiscreteFalcoTransform(): DiscreteFalcoTransform
     }
     SignalFacade --> SignalOperationFactory
@@ -736,24 +730,6 @@ package backend {
             - executeFast(DiscreteSignal): DiscreteSignal
         }
         DiscreteFourierTransformWithDecimationInTimeDomain ..> TransformType
-        class DiscreteFourierTransformWithDecimationInFrequencyDomain {
-            + execute(DiscreteSignal,TransformType): DiscreteSignal
-            - executeDirect(DiscreteSignal): DiscreteSignal
-            - executeFast(DiscreteSignal): DiscreteSignal
-        }
-        DiscreteFourierTransformWithDecimationInFrequencyDomain ..> TransformType
-        class DiscreteCosineTransform {
-            + execute(DiscreteSignal,TransformType): DiscreteSignal
-            - executeDirect(DiscreteSignal): DiscreteSignal
-            - executeFast(DiscreteSignal): DiscreteSignal
-        }
-        DiscreteCosineTransform ..> TransformType
-        class DiscreteWalshHadamardTransform {
-            + execute(DiscreteSignal,TransformType): DiscreteSignal
-            - executeDirect(DiscreteSignal): DiscreteSignal
-            - executeFast(DiscreteSignal): DiscreteSignal
-        }
-        DiscreteWalshHadamardTransform ..> TransformType
         
         enum Level {
             + DB4
@@ -767,9 +743,6 @@ package backend {
         DiscreteFalcoTransform ..> Level
     }
     SignalOperationFactory ..> DiscreteFourierTransformWithDecimationInTimeDomain
-    SignalOperationFactory ..> DiscreteFourierTransformWithDecimationInFrequencyDomain
-    SignalOperationFactory ..> DiscreteCosineTransform
-    SignalOperationFactory ..> DiscreteWalshHadamardTransform
     SignalOperationFactory ..> DiscreteFalcoTransform
     class SignalFactory {
         + createDiscreteFourierTransformedSignal(double[]): DiscreteSignal
@@ -791,21 +764,12 @@ package backend {
 package frontend {
     class TransformTabController {
         + discreteFourierTransformOperation()
-        + discreteCosineTransformOperation()
-        + discreteWalshHadamardTransformOperation()
-        + discreteFalcoTransformOperation()
         + onUpdateDiscreteFourierTransformOperationsComboBox()
-        + onUpdateDiscreteCosineTransformOperationsComboBox()
-        + onUpdateDiscreteWalshHadamardTransformOperationsComboBox()
-        + onUpdateDiscreteFalcoTransformOperationsComboBox()
     }
 }
 package backend {
     class SignalFacade {
         + discreteFourierTransformWithDecimationInTimeDomain(DiscreteSignal,TransformType): DiscreteSignal
-        + discreteFourierTransformWithDecimationInFrequencyDomain(DiscreteSignal,TransformType): DiscreteSignal
-        + discreteCosineTransform(DiscreteSignal,TransformType): DiscreteSignal
-        + discreteWalshHadamardTransform(DiscreteSignal,TransformType): DiscreteSignal
         + discreteFalcoTransform(DiscreteSignal,Level): DiscreteSignal[]
     }
     package signal_operation {
