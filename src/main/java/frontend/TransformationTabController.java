@@ -4,6 +4,7 @@ import backend.SignalFacade;
 import backend.signal.AbstractSignal;
 import backend.signal.DiscreteSignal;
 import backend.signal_operation.Level;
+import backend.signal_operation.TransformType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -28,10 +29,17 @@ public class TransformationTabController implements Initializable {
     public ComboBox<Level> falcoLevelComboBox;
     @FXML
     public Button applyFalcoButton;
+    @FXML
+    private ComboBox<String> fourierSignalComboBox;
+    @FXML
+    public ComboBox<TransformType> fourierType;
+    @FXML
+    public Button applyFourierButton;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         falcoLevelComboBox.getItems().setAll(Level.values());
+        fourierType.getItems().setAll(TransformType.values());
     }
 
     public void setCreateSignalTab(Consumer<AbstractSignal> createSignalTab) {
@@ -51,6 +59,7 @@ public class TransformationTabController implements Initializable {
                 .map(Map.Entry::getKey)
                 .toList();
         falcoSignalComboBox.getItems().setAll(discreteSignals);
+        fourierSignalComboBox.getItems().setAll(discreteSignals);
     }
 
     public void discreteFalcoTransformOperation() {
@@ -60,7 +69,18 @@ public class TransformationTabController implements Initializable {
         ).forEach(createSignalTab);
     }
 
+    public void discreteFourierTransformOperation() {
+        createSignalTab.accept(signalFacade.discreteFourierTransform(
+                (DiscreteSignal) signals.get(fourierSignalComboBox.getValue()),
+                fourierType.getValue()
+        ));
+    }
+
     public void onUpdateDiscreteFalcoTransformOperationsComboBox() {
         applyFalcoButton.setDisable(falcoSignalComboBox.getValue() == null || falcoLevelComboBox.getValue() == null);
+    }
+
+    public void onUpdateDiscreteFourierTransformOperationsComboBox() {
+        applyFourierButton.setDisable(fourierSignalComboBox.getValue() == null || fourierType.getValue() == null);
     }
 }

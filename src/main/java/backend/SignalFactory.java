@@ -2,10 +2,12 @@ package backend;
 
 import backend.signal.AbstractSignal;
 import backend.signal.ContinuousSignal;
+import backend.signal.DiscreteFourierTransformedSignal;
 import backend.signal.DiscreteSignal;
 import backend.signal.continuous.*;
 import backend.signal.discrete.ImpulseNoise;
 import backend.signal.discrete.UnitImpulse;
+import org.apache.commons.math3.complex.Complex;
 
 import java.util.List;
 import java.util.Map;
@@ -84,6 +86,10 @@ public class SignalFactory {
     }
     public AbstractSignal createDiscreteSignal(Map<Double, Double> points) {
         return new DiscreteSignal(new TreeMap<>(points));
+    }
+
+    public AbstractSignal createDiscreteFourierTransformedSignal(Map<Double, Complex> points) {
+        return new DiscreteFourierTransformedSignal(points);
     }
     public AbstractSignal getSignal(Class<?> name, List<Double> parameters) {
         if (name == GaussianNoise.class) {
