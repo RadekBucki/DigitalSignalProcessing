@@ -1,11 +1,11 @@
 package backend.signal_operation;
 
 import backend.SignalFactory;
+import backend.SignalOperationFactory;
 import backend.signal.DiscreteSignal;
 import org.apache.commons.math3.complex.Complex;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -13,6 +13,7 @@ import java.util.stream.IntStream;
 
 public class DiscreteFourierTransformWithDecimationInTimeDomain {
     private final SignalFactory signalFactory;
+    private final SignalOperationFactory signalOperationFactory = new SignalOperationFactory(new SignalFactory());
 
     public DiscreteFourierTransformWithDecimationInTimeDomain(SignalFactory signalFactory) {
         this.signalFactory = signalFactory;
@@ -27,19 +28,30 @@ public class DiscreteFourierTransformWithDecimationInTimeDomain {
     }
 
     private DiscreteSignal executeFast(DiscreteSignal signal) {
-        List<Double> points = signal.getPoints().values().stream().toList();
-        List<Complex> map = points.stream()
-                .map(point -> new Complex(point, 0))
-                .collect(Collectors.toList());
+        Map<Double, Complex> outputSignalPoints = new HashMap<>();
 
-        List<Complex> y = fft(map);
+        Filter filter = signalOperationFactory.createFilter(PassType.LOW_PASS, WindowType.HAMMING, 1, 2, 3);
 
-        Map<Double, Complex> result = IntStream.range(0, y.size())
-                .boxed()
-                .collect(Collectors.toMap(Double::valueOf, y::get, (a, b) -> b, LinkedHashMap::new));
+        DiscreteSignal filteredSignal = filter.execute(signal);
+        Map<Double, Double> filteredSignalPoints = filteredSignal.getPoints();
 
-        return (DiscreteSignal) signalFactory.createDiscreteFourierTransformedSignal(result);
+        int N = filteredSignalPoints.size();
+        List<Double> filteredSignalXes = filteredSignalPoints.keySet().stream().toList();
+        double step = filteredSignalXes.get(1) - filteredSignalXes.get(0);
+        double lastX = filteredSignalXes.get(filteredSignalXes.size() - 1);
+        for (double k = 0; k < lastX; k += step) {
+            Complex sum = new Complex(0, 0);
+            for (double n = 0; n < lastX; n += step) {
+                double real = filteredSignalPoints.get(n) * Math.cos(2 * Math.PI * k * n / N);
+                double imag = -filteredSignalPoints.get(n) * Math.sin(2 * Math.PI * k * n / N);
+                sum = sum.add(new Complex(real, imag));
+            }
+            outputSignalPoints.put(k, sum);
+        }
+
+        return (DiscreteSignal) signalFactory.createDiscreteFourierTransformedSignal(outputSignalPoints);
     }
+
 
     private DiscreteSignal executeDirect(DiscreteSignal signal) {
         List<Double> frequencies = signal.getPoints().keySet().stream().toList();
@@ -61,43 +73,5 @@ public class DiscreteFourierTransformWithDecimationInTimeDomain {
                         ))
                         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
         );
-    }
-
-    List<Complex> fft(List<Complex> points) {
-        int n = points.size();
-        if (n == 1) {
-            return points;
-        }
-
-        List<Complex> fftResult = new ArrayList<>(IntStream.range(0, n)
-                .mapToObj(i -> new Complex(0, 0))
-                .toList());
-
-        int log2n = (int) (Math.log(n) / Math.log(2));
-        IntStream.range(0, n)
-                .forEach(i -> fftResult.set(
-                        i,
-                        points.get(Integer.reverse(i) >>> (32 - log2n))
-                ));
-
-        IntStream.rangeClosed(1, log2n)
-                .forEach(i -> {
-                    int m = 1 << i;
-                    double theta = -2 * Math.PI / m;
-                    Complex wM = new Complex(1, 0);
-                    Complex w = new Complex(Math.cos(theta), Math.sin(theta));
-                    for (int j = 0; j < m / 2; j++) {
-                        for (int k = j; k < n; k += m) {
-                            Complex u = fftResult.get(k);
-                            int index = k + m / 2 < n ? k + m / 2 : 0;
-                            Complex t = wM.multiply(fftResult.get(index));
-                            fftResult.set(k, u.add(t));
-                            fftResult.set(index, u.subtract(t));
-                        }
-                        wM = wM.multiply(w);
-                    }
-                });
-
-        return fftResult;
     }
 }
