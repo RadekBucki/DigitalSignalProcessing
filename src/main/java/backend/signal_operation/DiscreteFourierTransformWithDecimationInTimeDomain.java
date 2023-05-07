@@ -31,7 +31,18 @@ public class DiscreteFourierTransformWithDecimationInTimeDomain {
         return (DiscreteSignal) signalFactory.createDiscreteFourierTransformedSignal(executeFast(signal.getPoints()));
     }
 
-    public static Map<Double, Complex> executeFast(Map<Double, Double> points) {
+    private static Map<Double, Complex> executeFast(Map<Double, Double> points) {
+        if (points.size() % 2 != 0) {
+            int nearestPowerOfTwoUnderPointsSize = 1;
+            while (nearestPowerOfTwoUnderPointsSize < points.size()) {
+                nearestPowerOfTwoUnderPointsSize *= 2;
+            }
+            nearestPowerOfTwoUnderPointsSize /= 2;
+            points = points.entrySet()
+                    .stream()
+                    .limit(nearestPowerOfTwoUnderPointsSize)
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        }
         int n = points.size();
         Complex[] x = new Complex[n];
         for (int i = 0; i < n; i++) {
@@ -40,18 +51,12 @@ public class DiscreteFourierTransformWithDecimationInTimeDomain {
         Complex[] y = fft(x);
         Map<Double, Complex> result = new HashMap<>();
         for (int i = 0; i < n/2; i++) {
-            double freq = (double) i;
             Complex value = y[i].multiply(2.0/n);
-            result.put(freq, value);
+            result.put((double) i, value);
         }
         return result;
     }
 
-    /**
-     * Computes the FFT recursively.
-     * @param x input array of time domain values
-     * @return array of frequency domain values
-     */
     private static Complex[] fft(Complex[] x) {
         int n = x.length;
         if (n == 1) return new Complex[] { x[0] };
