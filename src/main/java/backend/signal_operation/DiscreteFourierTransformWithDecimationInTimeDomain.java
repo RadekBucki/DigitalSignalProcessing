@@ -4,10 +4,10 @@ import backend.SignalFactory;
 import backend.SignalOperationFactory;
 import backend.signal.DiscreteSignal;
 import org.apache.commons.math3.complex.Complex;
-import org.apache.commons.math3.complex.ComplexUtils;
-import org.apache.commons.math3.util.MathUtils;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -32,17 +32,7 @@ public class DiscreteFourierTransformWithDecimationInTimeDomain {
     }
 
     private static Map<Double, Complex> executeFast(Map<Double, Double> points) {
-        if (points.size() % 2 != 0) {
-            int nearestPowerOfTwoUnderPointsSize = 1;
-            while (nearestPowerOfTwoUnderPointsSize < points.size()) {
-                nearestPowerOfTwoUnderPointsSize *= 2;
-            }
-            nearestPowerOfTwoUnderPointsSize /= 2;
-            points = points.entrySet()
-                    .stream()
-                    .limit(nearestPowerOfTwoUnderPointsSize)
-                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-        }
+        points = getProperPointsNumber(points);
         int n = points.size();
         Complex[] x = new Complex[n];
         for (int i = 0; i < n; i++) {
@@ -84,11 +74,12 @@ public class DiscreteFourierTransformWithDecimationInTimeDomain {
     }
 
     private DiscreteSignal executeDirect(DiscreteSignal signal) {
-        List<Double> frequencies = signal.getPoints().keySet().stream().toList();
+        Map<Double,Double> points = signal.getPoints();
+        points = getProperPointsNumber(points);
+        List<Double> frequencies = points.keySet().stream().toList();
         int N = frequencies.size();
         return (DiscreteSignal) signalFactory.createDiscreteFourierTransformedSignal(
-                signal.getPoints()
-                        .keySet()
+                points.keySet()
                         .stream()
                         .map(frequency -> Map.entry(
                                 frequency,
@@ -103,5 +94,20 @@ public class DiscreteFourierTransformWithDecimationInTimeDomain {
                         ))
                         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
         );
+    }
+
+    private static Map<Double, Double> getProperPointsNumber(Map<Double, Double> points) {
+        if (points.size() % 2 != 0) {
+            int nearestPowerOfTwoUnderPointsSize = 1;
+            while (nearestPowerOfTwoUnderPointsSize < points.size()) {
+                nearestPowerOfTwoUnderPointsSize *= 2;
+            }
+            nearestPowerOfTwoUnderPointsSize /= 2;
+            points = points.entrySet()
+                    .stream()
+                    .limit(nearestPowerOfTwoUnderPointsSize)
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        }
+        return points;
     }
 }
