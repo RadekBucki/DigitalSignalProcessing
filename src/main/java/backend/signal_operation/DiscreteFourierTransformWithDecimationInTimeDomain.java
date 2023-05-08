@@ -5,9 +5,7 @@ import backend.SignalOperationFactory;
 import backend.signal.DiscreteSignal;
 import org.apache.commons.math3.complex.Complex;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -34,47 +32,47 @@ public class DiscreteFourierTransformWithDecimationInTimeDomain {
     private static Map<Double, Complex> executeFast(Map<Double, Double> points) {
         points = getProperPointsNumber(points);
         int n = points.size();
-        Complex[] x = new Complex[n];
-        for (int i = 0; i < n; i++) {
-            x[i] = new Complex(points.getOrDefault((double) i, 0.0), 0);
-        }
-        Complex[] y = fft(x);
+        Map<Double, Double> finalPoints = points;
+        List<Complex> x = IntStream.range(0, n)
+                .mapToObj(i -> new Complex(finalPoints.getOrDefault((double) i, 0.0), 0))
+                .collect(Collectors.toList());
+        List<Complex> y = fft(x);
         Map<Double, Complex> result = new HashMap<>();
-        for (int i = 0; i < n/2; i++) {
-            Complex value = y[i].multiply(2.0/n);
+        for (int i = 0; i < n / 2; i++) {
+            Complex value = y.get(i).multiply(2.0 / n);
             result.put((double) i, value);
         }
         return result;
     }
 
-    private static Complex[] fft(Complex[] x) {
-        int n = x.length;
-        if (n == 1) return new Complex[] { x[0] };
+    private static List<Complex> fft(List<Complex> x) {
+        int n = x.size();
+        if (n == 1) return List.of(x.get(0));
         if (n % 2 != 0) {
             throw new IllegalArgumentException("Number of points must be a power of 2");
         }
 
-        Complex[] even = new Complex[n/2];
-        Complex[] odd = new Complex[n/2];
-        for (int k = 0; k < n/2; k++) {
-            even[k] = x[2*k];
-            odd[k] = x[2*k + 1];
+        List<Complex> even = new LinkedList<>();
+        List<Complex> odd = new LinkedList<>();
+        for (int k = 0; k < n / 2; k++) {
+            even.add(x.get(2 * k));
+            odd.add(x.get(2 * k + 1));
         }
-        Complex[] q = fft(even);
-        Complex[] r = fft(odd);
+        List<Complex> q = fft(even);
+        List<Complex> r = fft(odd);
 
         Complex[] y = new Complex[n];
         for (int k = 0; k < n/2; k++) {
             double kth = -2 * k * Math.PI / n;
             Complex wk = new Complex(Math.cos(kth), Math.sin(kth));
-            y[k] = q[k].add(wk.multiply(r[k]));
-            y[k + n/2] = q[k].subtract(wk.multiply(r[k]));
+            y[k] = q.get(k).add(wk.multiply(r.get(k)));
+            y[k + n/2] = q.get(k).subtract(wk.multiply(r.get(k)));
         }
-        return y;
+        return List.of(y);
     }
 
     private DiscreteSignal executeDirect(DiscreteSignal signal) {
-        Map<Double,Double> points = signal.getPoints();
+        Map<Double, Double> points = signal.getPoints();
         points = getProperPointsNumber(points);
         List<Double> frequencies = points.keySet().stream().toList();
         int N = frequencies.size();
