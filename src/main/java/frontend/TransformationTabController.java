@@ -5,8 +5,10 @@ import backend.signal.AbstractSignal;
 import backend.signal.DiscreteSignal;
 import backend.signal_operation.Level;
 import backend.signal_operation.TransformType;
+import frontend.alert.AlertBox;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 
@@ -16,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class TransformationTabController implements Initializable {
     private final Map<String, AbstractSignal> signals = new LinkedHashMap<>();
@@ -63,17 +66,27 @@ public class TransformationTabController implements Initializable {
     }
 
     public void discreteFalcoTransformOperation() {
-        signalFacade.discreteFalcoTransform(
-                (DiscreteSignal) signals.get(falcoSignalComboBox.getValue()),
-                falcoLevelComboBox.getValue()
-        ).forEach(createSignalTab);
+        applyOperationAndDisplayAlertWithTime(() ->
+                signalFacade.discreteFalcoTransform(
+                        (DiscreteSignal) signals.get(falcoSignalComboBox.getValue()),
+                        falcoLevelComboBox.getValue()
+                )
+        );
     }
 
     public void discreteFourierTransformOperation() {
-        createSignalTab.accept(signalFacade.discreteFourierTransform(
+        applyOperationAndDisplayAlertWithTime(() -> List.of(signalFacade.discreteFourierTransform(
                 (DiscreteSignal) signals.get(fourierSignalComboBox.getValue()),
                 fourierType.getValue()
-        ));
+        )));
+    }
+
+    private void applyOperationAndDisplayAlertWithTime(Supplier<List<DiscreteSignal>> operation) {
+        long startTime = System.nanoTime();
+        List<DiscreteSignal> signal = operation.get();
+        long endTime = System.nanoTime();
+        signal.forEach(createSignalTab);
+        AlertBox.show("Time", String.format("Operation took %f seconds", (endTime - startTime) / 1e9), Alert.AlertType.INFORMATION);
     }
 
     public void onUpdateDiscreteFalcoTransformOperationsComboBox() {
