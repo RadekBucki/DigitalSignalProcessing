@@ -26,72 +26,80 @@ public class DiscreteFourierTransformWithDecimationInTimeDomain {
     }
 
     private DiscreteSignal executeFast(DiscreteSignal signal) {
-        return (DiscreteSignal) signalFactory.createDiscreteFourierTransformedSignal(executeFast(signal.getPoints()));
-    }
-
-    private static Map<Double, Complex> executeFast(Map<Double, Double> points) {
-        points = getProperPointsNumber(points);
-        int n = points.size();
-        Map<Double, Double> finalPoints = points;
-        List<Complex> x = IntStream.range(0, n)
-                .mapToObj(i -> new Complex(finalPoints.getOrDefault((double) i, 0.0), 0))
+        List<Double> points = signal.getPoints().values().stream().toList();
+        List<Complex> map = points.stream()
+                .map(point -> new Complex(point, 0))
                 .collect(Collectors.toList());
-        List<Complex> y = fft(x);
-        Map<Double, Complex> result = new HashMap<>();
-        for (int i = 0; i < n / 2; i++) {
-            Complex value = y.get(i).multiply(2.0 / n);
-            result.put((double) i, value);
-        }
-        return result;
+
+        List<Complex> y = fft(map);
+
+        Map<Double, Complex> result = IntStream.range(0, y.size())
+                .boxed()
+                .collect(Collectors.toMap(Double::valueOf, y::get, (a, b) -> b, LinkedHashMap::new));
+
+        return (DiscreteSignal) signalFactory.createDiscreteFourierTransformedSignal(result);
     }
 
-    private static List<Complex> fft(List<Complex> x) {
-        int n = x.size();
-        if (n == 1) return List.of(x.get(0));
-        if (n % 2 != 0) {
-            throw new IllegalArgumentException("Number of points must be a power of 2");
+    List<Complex> fft(List<Complex> points) {
+        int n = points.size();
+        if (n == 1) {
+            return points;
         }
 
-        List<Complex> even = new LinkedList<>();
-        List<Complex> odd = new LinkedList<>();
-        for (int k = 0; k < n / 2; k++) {
-            even.add(x.get(2 * k));
-            odd.add(x.get(2 * k + 1));
-        }
-        List<Complex> q = fft(even);
-        List<Complex> r = fft(odd);
+        List<Complex> fftResult = new ArrayList<>(IntStream.range(0, n)
+                .mapToObj(i -> new Complex(0, 0))
+                .toList());
 
-        Complex[] y = new Complex[n];
-        for (int k = 0; k < n/2; k++) {
-            double kth = -2 * k * Math.PI / n;
-            Complex wk = new Complex(Math.cos(kth), Math.sin(kth));
-            y[k] = q.get(k).add(wk.multiply(r.get(k)));
-            y[k + n/2] = q.get(k).subtract(wk.multiply(r.get(k)));
-        }
-        return List.of(y);
+        int log2n = (int) (Math.log(n) / Math.log(2));
+        IntStream.range(0, n)
+                .forEach(i -> fftResult.set(
+                        i,
+                        points.get(Integer.reverse(i) >>> (32 - log2n))
+                ));
+
+        IntStream.rangeClosed(1, log2n)
+                .forEach(i -> {
+                    int m = 1 << i;
+                    double theta = -2 * Math.PI / m;
+                    Complex wM = new Complex(1, 0);
+                    Complex w = new Complex(Math.cos(theta), Math.sin(theta));
+                    for (int j = 0; j < m / 2; j++) {
+                        for (int k = j; k < n; k += m) {
+                            Complex u = fftResult.get(k);
+                            int index = k + m / 2 < n ? k + m / 2 : 0;
+                            Complex t = wM.multiply(fftResult.get(index));
+                            fftResult.set(k, u.add(t));
+                            fftResult.set(index, u.subtract(t));
+                        }
+                        wM = wM.multiply(w);
+                    }
+                });
+
+        return fftResult;
     }
 
     private DiscreteSignal executeDirect(DiscreteSignal signal) {
-        Map<Double, Double> points = signal.getPoints();
-        points = getProperPointsNumber(points);
-        List<Double> frequencies = points.keySet().stream().toList();
-        int N = frequencies.size();
-        return (DiscreteSignal) signalFactory.createDiscreteFourierTransformedSignal(
-                points.keySet()
-                        .stream()
-                        .map(frequency -> Map.entry(
-                                frequency,
-                                IntStream.range(0, N)
-                                        .mapToObj(n -> new Complex(signal.getPoints().get(frequencies.get(n)), 0)
-                                                .multiply(new Complex(
-                                                        Math.cos(-2 * Math.PI * frequency * n / N),
-                                                        Math.sin(-2 * Math.PI * frequency * n / N)
-                                                ))
-                                        )
-                                        .reduce(Complex.ZERO, Complex::add)
-                        ))
-                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
-        );
+        List<Double> pointsValues = signal.getPoints().values().stream()
+                .limit(signal.getPoints().size() -1).toList();
+        List<Double> pointsTimes = signal.getPoints().keySet().stream()
+                .limit(signal.getPoints().size() -1).toList();;
+        Map<Double, Complex> transformPoints = new TreeMap<>();
+        int N = pointsValues.size();
+        for (int i = 0; i < N; i++) {
+            Complex sum = new Complex(0, 0);
+            for (int j = 0; j < N; j++) {
+                sum = sum.add(
+                        calculateWn(N).pow(-i * j).multiply(pointsValues.get(j))
+                );
+            }
+            transformPoints.put(pointsTimes.get(i), sum.divide(N));
+        }
+        return (DiscreteSignal) signalFactory.createDiscreteFourierTransformedSignal(transformPoints);
+    }
+
+    private Complex calculateWn(int N) {
+        Complex i = new Complex(0, 1);
+        return i.multiply(2 * Math.PI / N).exp();
     }
 
     private static Map<Double, Double> getProperPointsNumber(Map<Double, Double> points) {
