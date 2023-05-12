@@ -61,6 +61,15 @@
                     </VBox>
 
                 </Tab>
+                <Tab text="Module and phase" closable="false" fx:id="moduleAndPhaseTab">
+                    <VBox>
+                        <ImageView fx:id="amplitudeTimeChartModule" fitHeight="220.0" fitWidth="400.0" pickOnBounds="true"
+                                   preserveRatio="true"/>
+                        <ImageView fx:id="amplitudeTimeImaginaryChartPhase" fitHeight="220.0" fitWidth="400.0"
+                                   pickOnBounds="true" preserveRatio="true"/>
+                    </VBox>
+
+                </Tab>
                 <Tab text="Histogram" closable="false">
                     <VBox prefHeight="100.0" prefWidth="200.0">
                         <Group>

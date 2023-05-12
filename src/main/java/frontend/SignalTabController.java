@@ -67,6 +67,12 @@ public class SignalTabController implements Initializable {
     private Slider binNumberImaginarySlider;
     @FXML
     private GridPane statisticsGrid;
+    @FXML
+    private ImageView amplitudeTimeChartModule;
+    @FXML
+    private ImageView amplitudeTimeImaginaryChartPhase;
+    @FXML
+    private Tab moduleAndPhaseTab;
     private final List<BiConsumer<String, AbstractSignal>> signalConsumers = new ArrayList<>();
     private String tabName;
 
@@ -253,13 +259,40 @@ public class SignalTabController implements Initializable {
                     new File("chart_imaginary.png"),
                     ChartGenerator.generateAmplitudeTimeChart(
                             ((DiscreteFourierTransformedSignal) signal).getImaginaryPartPoints(),
-                            true
+                            true,
+                            "Amplitude / time function - imaginary part"
                     ),
                     400,
                     220
             );
             input = new FileInputStream("chart_imaginary.png");
             amplitudeTimeImaginaryChart.setImage(new Image(input));
+
+            ChartUtilities.saveChartAsPNG(
+                    new File("chart_module.png"),
+                    ChartGenerator.generateAmplitudeTimeChart(
+                            ((DiscreteFourierTransformedSignal) signal).getModulePoints(),
+                            true,
+                            "Amplitude / time function - module"
+                    ),
+                    400,
+                    220
+            );
+            input = new FileInputStream("chart_module.png");
+            amplitudeTimeChartModule.setImage(new Image(input));
+
+            ChartUtilities.saveChartAsPNG(
+                    new File("chart_phase.png"),
+                    ChartGenerator.generateAmplitudeTimeChart(
+                            ((DiscreteFourierTransformedSignal) signal).getPhasePoints(),
+                            true,
+                            "Amplitude / time function - phase"
+                    ),
+                    400,
+                    220
+            );
+            input = new FileInputStream("chart_phase.png");
+            amplitudeTimeImaginaryChartPhase.setImage(new Image(input));
 
             for (int i = 5; i <= 20; i++) {
                 ChartUtilities.saveChartAsPNG(
@@ -274,6 +307,8 @@ public class SignalTabController implements Initializable {
             input = new FileInputStream(getImaginaryHistogramFileName((int) binNumberImaginarySlider.getValue()));
             imaginaryHistogram.setImage(new Image(input));
             binNumberImaginarySlider.setVisible(true);
+        } else {
+            rightPanel.getTabs().remove(moduleAndPhaseTab);
         }
 
         try {

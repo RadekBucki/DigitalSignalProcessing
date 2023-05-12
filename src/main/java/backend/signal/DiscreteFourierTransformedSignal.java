@@ -44,4 +44,24 @@ public class DiscreteFourierTransformedSignal extends DiscreteSignal {
     public Map<Double, Double> getImaginaryPartPoints() {
         return imaginaryPartPoints;
     }
+
+    public Map<Double, Double> getModulePoints() {
+        return points.entrySet()
+                .stream()
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        entry -> Math.sqrt(
+                                Math.pow(entry.getValue(), 2) + Math.pow(imaginaryPartPoints.get(entry.getKey()), 2)
+                        )
+                ));
+    }
+
+    public Map<Double, Double> getPhasePoints() {
+        return points.entrySet()
+                .stream()
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        entry -> Math.atan2(imaginaryPartPoints.get(entry.getKey()), entry.getValue())
+                ));
+    }
 }
