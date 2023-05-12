@@ -101,19 +101,4 @@ public class DiscreteFourierTransformWithDecimationInTimeDomain {
         Complex i = new Complex(0, 1);
         return i.multiply(2 * Math.PI / N).exp();
     }
-
-    private static Map<Double, Double> getProperPointsNumber(Map<Double, Double> points) {
-        if (points.size() % 2 != 0) {
-            int nearestPowerOfTwoUnderPointsSize = 1;
-            while (nearestPowerOfTwoUnderPointsSize < points.size()) {
-                nearestPowerOfTwoUnderPointsSize *= 2;
-            }
-            nearestPowerOfTwoUnderPointsSize /= 2;
-            points = points.entrySet()
-                    .stream()
-                    .limit(nearestPowerOfTwoUnderPointsSize)
-                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-        }
-        return points;
-    }
 }
