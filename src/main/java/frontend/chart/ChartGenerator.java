@@ -53,6 +53,9 @@ public class ChartGenerator {
                 .min(Map.Entry.comparingByValue());
         if (maxEntry.isPresent() && minEntry.isPresent()) {
             double chartMargin = Math.max(Math.abs(minEntry.get().getValue()), Math.abs(maxEntry.get().getValue())) / 10.0;
+            if (chartMargin == 0) {
+                chartMargin = 1;
+            }
             plot.getRangeAxis().setRange(minEntry.get().getValue() - chartMargin,
                     maxEntry.get().getValue() + chartMargin);
         }

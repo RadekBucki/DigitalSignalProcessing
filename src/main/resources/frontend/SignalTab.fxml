@@ -52,7 +52,7 @@
         </VBox>
         <VBox>
             <TabPane fx:id="rightPanel" visible="false">
-                <Tab text="Amplitude from time" closable="false">
+                <Tab text="Amplitude from time / frequency" closable="false">
                     <VBox>
                         <ImageView fx:id="amplitudeTimeChart" fitHeight="220.0" fitWidth="400.0" pickOnBounds="true"
                                    preserveRatio="true"/>
