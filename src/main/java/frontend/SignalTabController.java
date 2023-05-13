@@ -248,7 +248,8 @@ public class SignalTabController implements Initializable {
                     ChartGenerator.generateAmplitudeTimeChart(
                             signal.getPoints(),
                             true,
-                            "Amplitude / frequency function - real part"
+                            "Amplitude / frequency function - real part",
+                            "frequency"
                     ),
                     400,
                     220
@@ -261,7 +262,8 @@ public class SignalTabController implements Initializable {
                     ChartGenerator.generateAmplitudeTimeChart(
                             ((DiscreteFourierTransformedSignal) signal).getImaginaryPartPoints(),
                             true,
-                            "Amplitude / frequency function - imaginary part"
+                            "Amplitude / frequency function - imaginary part",
+                            "frequency"
                     ),
                     400,
                     220
@@ -274,7 +276,8 @@ public class SignalTabController implements Initializable {
                     ChartGenerator.generateAmplitudeTimeChart(
                             ((DiscreteFourierTransformedSignal) signal).getModulePoints(),
                             true,
-                            "Amplitude / frequency function - module"
+                            "Amplitude / frequency function - module",
+                            "frequency"
                     ),
                     400,
                     220
@@ -287,7 +290,8 @@ public class SignalTabController implements Initializable {
                     ChartGenerator.generateAmplitudeTimeChart(
                             ((DiscreteFourierTransformedSignal) signal).getPhasePoints(),
                             true,
-                            "Amplitude / frequency function - phase"
+                            "Amplitude / frequency function - phase",
+                            "frequency"
                     ),
                     400,
                     220

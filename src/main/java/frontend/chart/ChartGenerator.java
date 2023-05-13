@@ -24,9 +24,11 @@ public class ChartGenerator {
     }
 
     public static JFreeChart generateAmplitudeTimeChart(Map<Double, Double> points, boolean isDiscrete) {
-        return generateAmplitudeTimeChart(points, isDiscrete, "Amplitude / time function");
+        return generateAmplitudeTimeChart(points, isDiscrete, "Amplitude / time function" , "Time");
     }
-    public static JFreeChart generateAmplitudeTimeChart(Map<Double, Double> points, boolean isDiscrete, String title) {
+    public static JFreeChart generateAmplitudeTimeChart(
+            Map<Double, Double> points, boolean isDiscrete, String title, String xLabel
+    ) {
         XYSeries errorFunctionSeries = new XYSeries("Amplitude / time function");
         for (Map.Entry<Double, Double> entry : points.entrySet()) {
             errorFunctionSeries.add(entry.getKey(), entry.getValue());
@@ -36,7 +38,7 @@ public class ChartGenerator {
         seriesCollection.addSeries(errorFunctionSeries);
 
         JFreeChart chart = ChartFactory.createXYLineChart(
-                title, "Time", "Amplitude", seriesCollection,
+                title, xLabel, "Amplitude", seriesCollection,
                 PlotOrientation.VERTICAL, false, true, false
         );
         chart.setBackgroundPaint(new Color(0xF4, 0xF4, 0xF4));

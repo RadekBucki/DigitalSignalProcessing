@@ -1,7 +1,6 @@
 package backend.signal_operation;
 
 import backend.SignalFactory;
-import backend.SignalOperationFactory;
 import backend.signal.DiscreteSignal;
 import org.apache.commons.math3.complex.Complex;
 
@@ -32,14 +31,27 @@ public class DiscreteFourierTransformWithDecimationInTimeDomain {
 
         List<Complex> y = fft(map);
 
+        double normalizationFactor = Math.sqrt(y.stream()
+                .mapToDouble(c -> c.abs() * c.abs())
+                .sum());
+
         Map<Double, Complex> result = IntStream.range(0, y.size())
                 .boxed()
                 .collect(Collectors.toMap(Double::valueOf, y::get, (a, b) -> b, LinkedHashMap::new));
 
+        result = result.entrySet()
+                .stream()
+                .collect(
+                        Collectors.toMap(
+                                Map.Entry::getKey,
+                                entry -> entry.getValue().divide(normalizationFactor)
+                        )
+                );
+
         return (DiscreteSignal) signalFactory.createDiscreteFourierTransformedSignal(result);
     }
 
-    List<Complex> fft(List<Complex> points) {
+    private List<Complex> fft(List<Complex> points) {
         int n = points.size();
         if (n == 1) {
             return points;
