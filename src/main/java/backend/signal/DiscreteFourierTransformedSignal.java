@@ -61,7 +61,7 @@ public class DiscreteFourierTransformedSignal extends DiscreteSignal {
                 .stream()
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
-                        entry -> Math.atan2(imaginaryPartPoints.get(entry.getKey()), entry.getValue())
+                        entry -> Math.atan(imaginaryPartPoints.get(entry.getKey()) / entry.getValue())
                 ));
     }
 }

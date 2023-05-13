@@ -11,7 +11,6 @@ import java.util.stream.IntStream;
 
 public class DiscreteFourierTransformWithDecimationInTimeDomain {
     private final SignalFactory signalFactory;
-    private final SignalOperationFactory signalOperationFactory = new SignalOperationFactory(new SignalFactory());
 
     public DiscreteFourierTransformWithDecimationInTimeDomain(SignalFactory signalFactory) {
         this.signalFactory = signalFactory;
@@ -79,10 +78,16 @@ public class DiscreteFourierTransformWithDecimationInTimeDomain {
     }
 
     private DiscreteSignal executeDirect(DiscreteSignal signal) {
-        List<Double> pointsValues = signal.getPoints().values().stream()
-                .limit(signal.getPoints().size() -1).toList();
-        List<Double> pointsTimes = signal.getPoints().keySet().stream()
-                .limit(signal.getPoints().size() -1).toList();;
+        List<Double> pointsValues = signal.getPoints()
+                .values()
+                .stream()
+                .limit(signal.getPoints().size() -1)
+                .toList();
+        List<Double> pointsTimes = signal.getPoints()
+                .keySet()
+                .stream()
+                .limit(signal.getPoints().size() -1)
+                .toList();
         Map<Double, Complex> transformPoints = new TreeMap<>();
         int N = pointsValues.size();
         for (int i = 0; i < N; i++) {
@@ -92,7 +97,7 @@ public class DiscreteFourierTransformWithDecimationInTimeDomain {
                         calculateWn(N).pow(-i * j).multiply(pointsValues.get(j))
                 );
             }
-            transformPoints.put(pointsTimes.get(i), sum.divide(N));
+            transformPoints.put(pointsTimes.get(i), sum.divide((double) N / 2));
         }
         return (DiscreteSignal) signalFactory.createDiscreteFourierTransformedSignal(transformPoints);
     }
