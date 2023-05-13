@@ -69,25 +69,25 @@ public class DiscreteFourierTransformedSignal extends DiscreteSignal {
     public Map<Double, Double> getModulePoints() {
         return points.entrySet()
                 .stream()
+                .limit(points.size() / 2 + 1)
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
-                        entry -> Math.sqrt(
+                        entry -> Rounder.round(Math.sqrt(
                                 Math.pow(entry.getValue(), 2) + Math.pow(imaginaryPartPoints.get(entry.getKey()), 2)
-                        )
+                        ))
                 ));
     }
 
     public Map<Double, Double> getPhasePoints() {
         return points.entrySet()
                 .stream()
+                .limit(points.size() / 2 + 1)
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
-                        entry -> {
-                            if (entry.getValue() == 0) {
-                                return 0.0;
-                            }
-                            return Math.atan(imaginaryPartPoints.get(entry.getKey()) / entry.getValue());
-                        }
+                        entry -> Rounder.round(Math.atan2(
+                                imaginaryPartPoints.get(entry.getKey()),
+                                entry.getValue()
+                        ))
                 ));
     }
 }
