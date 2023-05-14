@@ -1,10 +1,12 @@
 package backend.signal_operation;
 
+import backend.Rounder;
 import backend.SignalFactory;
 import backend.signal.DiscreteSignal;
 import org.apache.commons.math3.complex.Complex;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -36,6 +38,17 @@ public class DiscreteFourierTransformWithDecimationInTimeDomain {
         Map<Double, Complex> result = IntStream.range(0, y.size())
                 .boxed()
                 .collect(Collectors.toMap(Double::valueOf, y::get, (a, b) -> b, LinkedHashMap::new));
+
+        AtomicInteger numOfSample = new AtomicInteger(0);
+        AtomicInteger pointsSize = new AtomicInteger(result.size());
+        result = result.entrySet()
+                .stream()
+                .collect(
+                        Collectors.toMap(
+                                entry -> Rounder.round((numOfSample.getAndIncrement() / (double) pointsSize.get()) * normalizationFactor),
+                                Map.Entry::getValue
+                        )
+                );
 
         result = result.entrySet()
                 .stream()
