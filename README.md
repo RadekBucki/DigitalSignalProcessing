@@ -755,6 +755,8 @@ package backend {
             # imaginaryPartPoints: double[][]
             + getRealPartPoints(): double[][]
             + getImaginaryPartPoints(): double[][]
+            + getModulePoints(): double[][]
+            + getPhasePoints(): double[][]
         }
     }
 }
