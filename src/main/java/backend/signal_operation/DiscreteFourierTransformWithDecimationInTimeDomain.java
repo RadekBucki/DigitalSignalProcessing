@@ -1,6 +1,5 @@
 package backend.signal_operation;
 
-import backend.Rounder;
 import backend.SignalFactory;
 import backend.signal.DiscreteSignal;
 import org.apache.commons.math3.complex.Complex;
@@ -118,12 +117,12 @@ public class DiscreteFourierTransformWithDecimationInTimeDomain {
         }
 
         AtomicInteger numOfSample = new AtomicInteger(0);
-        AtomicInteger pointsSize = new AtomicInteger(transformPoints.size() - 1);
+        AtomicInteger pointsSize = new AtomicInteger(transformPoints.size());
         transformPoints = transformPoints.entrySet()
                 .stream()
                 .collect(
                         Collectors.toMap(
-                                entry -> Rounder.round((numOfSample.getAndIncrement() / (double) pointsSize.get()) * signal.getF()),
+                                entry -> ((double)numOfSample.getAndIncrement() * signal.getF()) / (double) pointsSize.get(),
                                 Map.Entry::getValue
                         )
                 );
