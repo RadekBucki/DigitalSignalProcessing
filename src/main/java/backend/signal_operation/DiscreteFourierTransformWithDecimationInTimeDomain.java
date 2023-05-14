@@ -38,7 +38,7 @@ public class DiscreteFourierTransformWithDecimationInTimeDomain {
 
         List<Complex> y = fft(map);
 
-        double normalizationFactor = signal.getF() / 2.0;
+        double normalizationFactor = signal.getF() / 2.0 * signal.getD();
 
         Map<Double, Complex> result = IntStream.range(0, y.size())
                 .boxed()
@@ -48,7 +48,7 @@ public class DiscreteFourierTransformWithDecimationInTimeDomain {
                 .stream()
                 .collect(
                         Collectors.toMap(
-                                Map.Entry::getKey,
+                                entry -> entry.getKey() / signal.getD(),
                                 entry -> entry.getValue().divide(normalizationFactor)
                         )
                 );
