@@ -26,10 +26,15 @@ public class DiscreteFourierTransformWithDecimationInTimeDomain {
     }
 
     private DiscreteSignal executeFast(DiscreteSignal signal) {
-        List<Double> points = signal.getPoints().values().stream().toList();
+        List<Double> points = signal.getPoints()
+                .values()
+                .stream()
+                .limit(signal.getPoints().size() -1)
+                .toList();
         List<Complex> map = points.stream()
                 .map(point -> new Complex(point, 0))
-                .collect(Collectors.toList());
+                .limit(signal.getPoints().size() -1)
+                .toList();
 
         List<Complex> y = fft(map);
 
@@ -38,17 +43,6 @@ public class DiscreteFourierTransformWithDecimationInTimeDomain {
         Map<Double, Complex> result = IntStream.range(0, y.size())
                 .boxed()
                 .collect(Collectors.toMap(Double::valueOf, y::get, (a, b) -> b, LinkedHashMap::new));
-
-        AtomicInteger numOfSample = new AtomicInteger(0);
-        AtomicInteger pointsSize = new AtomicInteger(result.size());
-        result = result.entrySet()
-                .stream()
-                .collect(
-                        Collectors.toMap(
-                                entry -> Rounder.round((numOfSample.getAndIncrement() / (double) pointsSize.get()) * normalizationFactor),
-                                Map.Entry::getValue
-                        )
-                );
 
         result = result.entrySet()
                 .stream()
@@ -122,6 +116,17 @@ public class DiscreteFourierTransformWithDecimationInTimeDomain {
             }
             transformPoints.put(pointsTimes.get(i), sum.divide((double) N / 2));
         }
+
+        AtomicInteger numOfSample = new AtomicInteger(0);
+        AtomicInteger pointsSize = new AtomicInteger(transformPoints.size() - 1);
+        transformPoints = transformPoints.entrySet()
+                .stream()
+                .collect(
+                        Collectors.toMap(
+                                entry -> Rounder.round((numOfSample.getAndIncrement() / (double) pointsSize.get()) * signal.getF()),
+                                Map.Entry::getValue
+                        )
+                );
         return (DiscreteSignal) signalFactory.createDiscreteFourierTransformedSignal(transformPoints);
     }
 

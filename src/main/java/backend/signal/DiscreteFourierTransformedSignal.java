@@ -4,7 +4,6 @@ import backend.Rounder;
 import org.apache.commons.math3.complex.Complex;
 
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class DiscreteFourierTransformedSignal extends DiscreteSignal {
@@ -19,35 +18,16 @@ public class DiscreteFourierTransformedSignal extends DiscreteSignal {
     }
 
     public DiscreteFourierTransformedSignal(Map<Double, Complex> points) {
-        // It's because supe must be first statement in constructor
         super(
                 points.entrySet()
                         .stream()
                         .collect(
                                 Collectors.toMap(
                                         Map.Entry::getKey,
-                                        entry -> entry.getValue().getReal()
+                                        entry -> Rounder.round(entry.getValue().getReal())
                                 )
                         )
         );
-        AtomicInteger numOfSample = new AtomicInteger(0);
-        AtomicInteger pointsSize = new AtomicInteger(points.size());
-        points = points.entrySet()
-                .stream()
-                .collect(
-                        Collectors.toMap(
-                                entry -> Rounder.round((numOfSample.getAndIncrement() / (double) pointsSize.get()) * f),
-                                Map.Entry::getValue
-                        )
-                );
-        this.points = points.entrySet()
-                .stream()
-                .collect(
-                        Collectors.toMap(
-                                Map.Entry::getKey,
-                                entry -> Rounder.round(entry.getValue().getReal())
-                        )
-                );
         this.imaginaryPartPoints = points.entrySet()
                 .stream()
                 .collect(
