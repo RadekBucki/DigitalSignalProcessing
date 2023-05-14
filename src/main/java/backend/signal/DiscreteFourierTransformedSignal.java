@@ -69,6 +69,7 @@ public class DiscreteFourierTransformedSignal extends DiscreteSignal {
     public Map<Double, Double> getModulePoints() {
         return points.entrySet()
                 .stream()
+                .sorted(Map.Entry.comparingByKey())
                 .limit(points.size() / 2 + 1)
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
@@ -81,6 +82,7 @@ public class DiscreteFourierTransformedSignal extends DiscreteSignal {
     public Map<Double, Double> getPhasePoints() {
         return points.entrySet()
                 .stream()
+                .sorted(Map.Entry.comparingByKey())
                 .limit(points.size() / 2 + 1)
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
