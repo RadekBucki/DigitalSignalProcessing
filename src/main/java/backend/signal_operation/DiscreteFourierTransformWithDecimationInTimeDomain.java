@@ -31,9 +31,20 @@ public class DiscreteFourierTransformWithDecimationInTimeDomain {
 
         List<Complex> y = fft(map);
 
+        double normalizationFactor = signal.getF() / 2.0;
+
         Map<Double, Complex> result = IntStream.range(0, y.size())
                 .boxed()
                 .collect(Collectors.toMap(Double::valueOf, y::get, (a, b) -> b, LinkedHashMap::new));
+
+        result = result.entrySet()
+                .stream()
+                .collect(
+                        Collectors.toMap(
+                                Map.Entry::getKey,
+                                entry -> entry.getValue().divide(normalizationFactor)
+                        )
+                );
 
         return (DiscreteSignal) signalFactory.createDiscreteFourierTransformedSignal(result);
     }
