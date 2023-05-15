@@ -11,7 +11,7 @@
     <HBox spacing="10" layoutX="10" layoutY="10">
         <VBox spacing="10">
             <HBox spacing="10">
-                <Button fx:id="load" mnemonicParsing="false" onAction="#loadSignal" text="Load"
+                <Button fx:id="load" disable="true" mnemonicParsing="false" onAction="#loadSignal" text="Load"
                         textAlignment="CENTER"/>
                 <Button fx:id="save" disable="true" mnemonicParsing="false" onAction="#saveSignal" text="Save"
                         textAlignment="CENTER"/>
@@ -52,11 +52,20 @@
         </VBox>
         <VBox>
             <TabPane fx:id="rightPanel" visible="false">
-                <Tab text="Amplitude from time" closable="false">
+                <Tab text="Amplitude from time / frequency" closable="false">
                     <VBox>
                         <ImageView fx:id="amplitudeTimeChart" fitHeight="220.0" fitWidth="400.0" pickOnBounds="true"
                                    preserveRatio="true"/>
                         <ImageView fx:id="amplitudeTimeImaginaryChart" fitHeight="220.0" fitWidth="400.0"
+                                   pickOnBounds="true" preserveRatio="true"/>
+                    </VBox>
+
+                </Tab>
+                <Tab text="Module and phase" closable="false" fx:id="moduleAndPhaseTab">
+                    <VBox>
+                        <ImageView fx:id="amplitudeTimeChartModule" fitHeight="220.0" fitWidth="400.0" pickOnBounds="true"
+                                   preserveRatio="true"/>
+                        <ImageView fx:id="amplitudeTimeImaginaryChartPhase" fitHeight="220.0" fitWidth="400.0"
                                    pickOnBounds="true" preserveRatio="true"/>
                     </VBox>
 

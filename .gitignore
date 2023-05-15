@@ -25,6 +25,4 @@ hs_err_pid*
 *.iml
 /target/
 /.idea/
-/chart.png
-/histogram*.png
-/radarChart*.png
+/*.png
