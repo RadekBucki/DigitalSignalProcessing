@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<Pane xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="frontend.TransformationTabController">
+    <VBox spacing="10" layoutX="10.0" layoutY="10.0">
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Discrete Falco Transform"/>
+            <ComboBox fx:id="falcoSignalComboBox" promptText="Choose DiscreteSignal"
+                      onAction="#onUpdateDiscreteFalcoTransformOperationsComboBox"/>
+            <ComboBox fx:id="falcoLevelComboBox" promptText="ChooseLevel"
+                      onAction="#onUpdateDiscreteFalcoTransformOperationsComboBox"/>
+            <Button fx:id="applyFalcoButton" text="Apply" onAction="#discreteFalcoTransformOperation" disable="true"/>
+        </HBox>
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <Label text="Discrete Fourier Transform with decimation in Time Domain"/>
+            <ComboBox fx:id="fourierSignalComboBox" promptText="Choose DiscreteSignal"
+                      onAction="#onUpdateDiscreteFourierTransformOperationsComboBox"/>
+            <ComboBox fx:id="fourierType" promptText="Choose transformation type"
+                      onAction="#onUpdateDiscreteFourierTransformOperationsComboBox"/>
+            <Button fx:id="applyFourierButton" text="Apply" onAction="#discreteFourierTransformOperation"
+                    disable="true"/>
+        </HBox>
+    </VBox>
+</Pane>

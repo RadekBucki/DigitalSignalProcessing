@@ -52,10 +52,12 @@ public class SignalFacade {
         signalReadWriteFactory.createSignalSerializer(type).write(signal, filePath);
     }
 
+    @SuppressWarnings("unused")
     public ContinuousSignal reconstructZeroOrderHold(DiscreteSignal discreteSignal, Integer numberOfSamples) {
         return signalOperationFactory.createDac().reconstructZeroOrderHold(discreteSignal);
     }
 
+    @SuppressWarnings("unused")
     public ContinuousSignal reconstructFirstMethodHold(DiscreteSignal discreteSignal, Integer numberOfSamples) {
         return signalOperationFactory.createDac().reconstructFirstOrderHold(discreteSignal);
     }
@@ -109,5 +111,14 @@ public class SignalFacade {
         return signalOperationFactory.createRadar(probingSignalF, discreteBufferSize, signalSpeed, workTime, stepTime,
                 continuousSignal, radarX, radarY, objectX, objectY, objectSpeedX, objectSpeedY, this)
                 .getRadarMemory();
+    }
+
+    public DiscreteSignal discreteFourierTransform(DiscreteSignal discreteSignal, TransformType transformType) {
+        return signalOperationFactory.createDiscreteFourierTransformWithDecimationInTimeDomain()
+                .execute(discreteSignal, transformType);
+    }
+
+    public List<DiscreteSignal> discreteFalcoTransform(DiscreteSignal discreteSignal, Level level) {
+        return signalOperationFactory.createDiscreteFalcoTransform().execute(discreteSignal, level);
     }
 }

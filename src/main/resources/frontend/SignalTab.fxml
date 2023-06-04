@@ -52,10 +52,21 @@
         </VBox>
         <VBox>
             <TabPane fx:id="rightPanel" visible="false">
-                <Tab text="Amplitude from time" closable="false">
+                <Tab text="Amplitude from time / frequency" closable="false">
                     <VBox>
                         <ImageView fx:id="amplitudeTimeChart" fitHeight="220.0" fitWidth="400.0" pickOnBounds="true"
                                    preserveRatio="true"/>
+                        <ImageView fx:id="amplitudeTimeImaginaryChart" fitHeight="220.0" fitWidth="400.0"
+                                   pickOnBounds="true" preserveRatio="true"/>
+                    </VBox>
+
+                </Tab>
+                <Tab text="Module and phase" closable="false" fx:id="moduleAndPhaseTab">
+                    <VBox>
+                        <ImageView fx:id="amplitudeTimeChartModule" fitHeight="220.0" fitWidth="400.0" pickOnBounds="true"
+                                   preserveRatio="true"/>
+                        <ImageView fx:id="amplitudeTimeImaginaryChartPhase" fitHeight="220.0" fitWidth="400.0"
+                                   pickOnBounds="true" preserveRatio="true"/>
                     </VBox>
 
                 </Tab>
@@ -67,6 +78,13 @@
                             <Slider fx:id="binNumberSlider" majorTickUnit="5.0" max="20.0" min="5.0" minorTickCount="1"
                                     orientation="VERTICAL" prefHeight="190.0" prefWidth="14.0" showTickLabels="true"
                                     showTickMarks="true" value="10.0"/>
+                        </Group>
+                        <Group>
+                            <ImageView fx:id="imaginaryHistogram" fitHeight="220.0" fitWidth="400.0" pickOnBounds="true"
+                                       preserveRatio="true"/>
+                            <Slider fx:id="binNumberImaginarySlider" majorTickUnit="5.0" max="20.0" min="5.0"
+                                    minorTickCount="1" orientation="VERTICAL" prefHeight="190.0" prefWidth="14.0"
+                                    showTickLabels="true" showTickMarks="true" value="10.0" visible="false"/>
                         </Group>
                     </VBox>
                 </Tab>

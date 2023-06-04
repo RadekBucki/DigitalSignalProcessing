@@ -22,21 +22,27 @@ public class SignalOperationFactory {
     public SignalAdd createSignalAdd(SignalFactory signalFactory) {
         return new SignalAdd(signalFactory);
     }
+
     public SignalSubtract createSignalSubtract(SignalFactory signalFactory) {
         return new SignalSubtract(signalFactory);
     }
+
     public SignalMultiply createSignalMultiply(SignalFactory signalFactory) {
         return new SignalMultiply(signalFactory);
     }
+
     public SignalDivide createSignalDivide(SignalFactory signalFactory) {
         return new SignalDivide(signalFactory);
     }
+
     public Adc createAdc() {
         return new Adc(quantizationMethodFactory, signalFactory);
     }
+
     public Dac createDac() {
         return new Dac(reconstructMethodFactory, signalFactory);
     }
+
     public Convolution createConvolution() {
         return new Convolution(signalFactory);
     }
@@ -72,5 +78,13 @@ public class SignalOperationFactory {
                 facade,
                 signalFactory
         );
+    }
+
+    public DiscreteFourierTransformWithDecimationInTimeDomain createDiscreteFourierTransformWithDecimationInTimeDomain() {
+        return new DiscreteFourierTransformWithDecimationInTimeDomain(signalFactory);
+    }
+
+    public DiscreteFalcoTransform createDiscreteFalcoTransform() {
+        return new DiscreteFalcoTransform(signalFactory, createConvolution());
     }
 }

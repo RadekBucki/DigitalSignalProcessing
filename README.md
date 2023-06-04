@@ -706,3 +706,87 @@ package backend {
     SignalOperationFactory ..> DiscreteSignalsCorrelation
 }
 ```
+# Task 4 - Fourier and falco transforms, fast algorithms
+## Backend
+```plantuml
+package backend {
+    class SignalFacade {
+        + discreteFourierTransformWithDecimationInTimeDomain(DiscreteSignal,TransformType): DiscreteFourierTransformedSignal
+        + discreteFalcoTransform(DiscreteSignal,Level): DiscreteSignal[]
+    }
+    class SignalOperationFactory {
+        + createDiscreteFourierTransformWithDecimationInTimeDomain(): DiscreteFourierTransformWithDecimationInTimeDomain
+        + createDiscreteFalcoTransform(): DiscreteFalcoTransform
+    }
+    SignalFacade --> SignalOperationFactory
+    package signal_operation {
+        enum TransformType {
+            + DIRECT
+            + FAST
+        }
+        class DiscreteFourierTransformWithDecimationInTimeDomain {
+            + execute(DiscreteSignal,TransformType): DiscreteSignal
+            - executeDirect(DiscreteSignal): DiscreteSignal
+            - executeFast(DiscreteSignal): DiscreteSignal
+        }
+        DiscreteFourierTransformWithDecimationInTimeDomain ..> TransformType
+        
+        enum Level {
+            + DB4
+            + DB6
+            + DB8
+        }
+        class DiscreteFalcoTransform {
+            + execute(DiscreteSignal,Level): DiscreteSignal
+            - getTransformedPoints(double[],double[]: double[][]
+        }
+        DiscreteFalcoTransform ..> Level
+    }
+    SignalOperationFactory ..> DiscreteFourierTransformWithDecimationInTimeDomain
+    SignalOperationFactory ..> DiscreteFalcoTransform
+    class SignalFactory {
+        + createDiscreteFourierTransformedSignal(double[]): DiscreteSignal
+    }
+    package signal {
+        SignalFactory ..> DiscreteFourierTransformedSignal
+        SignalFacade --> SignalFactory
+        class DiscreteSignal extends AbstractSignal
+        class DiscreteFourierTransformedSignal extends DiscreteSignal {
+            # imaginaryPartPoints: double[][]
+            + getRealPartPoints(): double[][]
+            + getImaginaryPartPoints(): double[][]
+            + getModulePoints(): double[][]
+            + getPhasePoints(): double[][]
+        }
+    }
+}
+```
+## Frontend
+```plantuml
+package frontend {
+    class TransformTabController {
+        + discreteFourierTransformOperation()
+        + onUpdateDiscreteFourierTransformOperationsComboBox()
+    }
+}
+package backend {
+    class SignalFacade {
+        + discreteFourierTransformWithDecimationInTimeDomain(DiscreteSignal,TransformType): DiscreteSignal
+        + discreteFalcoTransform(DiscreteSignal,Level): DiscreteSignal[]
+    }
+    package signal_operation {
+        enum TransformType {
+            + DIRECT
+            + FAST
+        }
+        enum Level {
+            + DB4
+            + DB6
+            + DB8
+        }
+    }
+}
+TransformTabController ....> SignalFacade
+TransformTabController ..> TransformType
+TransformTabController ..> Level
+```

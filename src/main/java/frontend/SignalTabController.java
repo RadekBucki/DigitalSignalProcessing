@@ -2,6 +2,7 @@ package frontend;
 
 import backend.SignalFacade;
 import backend.signal.AbstractSignal;
+import backend.signal.DiscreteFourierTransformedSignal;
 import backend.signal.DiscreteSignal;
 import backend.signal_serialize.SignalSerializeType;
 import frontend.chart.ChartGenerator;
@@ -55,11 +56,23 @@ public class SignalTabController implements Initializable {
     @FXML
     private ImageView amplitudeTimeChart;
     @FXML
+    private ImageView amplitudeTimeImaginaryChart;
+    @FXML
     private ImageView histogram;
     @FXML
     private Slider binNumberSlider;
     @FXML
-    public GridPane statisticsGrid;
+    private ImageView imaginaryHistogram;
+    @FXML
+    private Slider binNumberImaginarySlider;
+    @FXML
+    private GridPane statisticsGrid;
+    @FXML
+    private ImageView amplitudeTimeChartModule;
+    @FXML
+    private ImageView amplitudeTimeImaginaryChartPhase;
+    @FXML
+    private Tab moduleAndPhaseTab;
     private final List<BiConsumer<String, AbstractSignal>> signalConsumers = new ArrayList<>();
     private String tabName;
 
@@ -87,6 +100,14 @@ public class SignalTabController implements Initializable {
             }
         });
         loadSaveFileTypeComboBox.getItems().addAll(SignalSerializeType.values());
+        binNumberImaginarySlider.valueProperty().addListener((observableValue, oldValue, newValue) -> {
+            try {
+                FileInputStream input = new FileInputStream(getHistogramFileName((int) binNumberImaginarySlider.getValue()));
+                imaginaryHistogram.setImage(new Image(input));
+            } catch (FileNotFoundException ignored) {
+                //ignored
+            }
+        });
     }
 
     private void createParametersTextFields(Class<?> classDefinition) {
@@ -208,18 +229,6 @@ public class SignalTabController implements Initializable {
     }
 
     private void createRightPanel(AbstractSignal signal) throws IOException {
-        ChartUtilities.saveChartAsPNG(
-                new File("chart.png"),
-                ChartGenerator.generateAmplitudeTimeChart(
-                        signal.getPoints(),
-                        signal instanceof DiscreteSignal
-                ),
-                400,
-                220
-        );
-        FileInputStream input = new FileInputStream("chart.png");
-        amplitudeTimeChart.setImage(new Image(input));
-
         for (int i = 5; i <= 20; i++) {
             ChartUtilities.saveChartAsPNG(
                     new File(getHistogramFileName(i)),
@@ -230,8 +239,93 @@ public class SignalTabController implements Initializable {
                     220
             );
         }
-        input = new FileInputStream(getHistogramFileName((int) binNumberSlider.getValue()));
+        FileInputStream input = new FileInputStream(getHistogramFileName((int) binNumberSlider.getValue()));
         histogram.setImage(new Image(input));
+
+        if (signal instanceof DiscreteFourierTransformedSignal) {
+            ChartUtilities.saveChartAsPNG(
+                    new File("chart.png"),
+                    ChartGenerator.generateAmplitudeTimeChart(
+                            signal.getPoints(),
+                            true,
+                            "Amplitude / frequency function - real part",
+                            "frequency"
+                    ),
+                    400,
+                    220
+            );
+            input = new FileInputStream("chart.png");
+            amplitudeTimeChart.setImage(new Image(input));
+
+            ChartUtilities.saveChartAsPNG(
+                    new File("chart_imaginary.png"),
+                    ChartGenerator.generateAmplitudeTimeChart(
+                            ((DiscreteFourierTransformedSignal) signal).getImaginaryPartPoints(),
+                            true,
+                            "Amplitude / frequency function - imaginary part",
+                            "frequency"
+                    ),
+                    400,
+                    220
+            );
+            input = new FileInputStream("chart_imaginary.png");
+            amplitudeTimeImaginaryChart.setImage(new Image(input));
+
+            ChartUtilities.saveChartAsPNG(
+                    new File("chart_module.png"),
+                    ChartGenerator.generateAmplitudeTimeChart(
+                            ((DiscreteFourierTransformedSignal) signal).getModulePoints(),
+                            true,
+                            "Amplitude / frequency function - module",
+                            "frequency"
+                    ),
+                    400,
+                    220
+            );
+            input = new FileInputStream("chart_module.png");
+            amplitudeTimeChartModule.setImage(new Image(input));
+
+            ChartUtilities.saveChartAsPNG(
+                    new File("chart_phase.png"),
+                    ChartGenerator.generateAmplitudeTimeChart(
+                            ((DiscreteFourierTransformedSignal) signal).getPhasePoints(),
+                            true,
+                            "Amplitude / frequency function - phase",
+                            "frequency"
+                    ),
+                    400,
+                    220
+            );
+            input = new FileInputStream("chart_phase.png");
+            amplitudeTimeImaginaryChartPhase.setImage(new Image(input));
+
+            for (int i = 5; i <= 20; i++) {
+                ChartUtilities.saveChartAsPNG(
+                        new File(getImaginaryHistogramFileName(i)),
+                        ChartGenerator.generateHistogram(
+                                ((DiscreteFourierTransformedSignal) signal).getImaginaryPartPoints(), i
+                        ),
+                        400,
+                        220
+                );
+            }
+            input = new FileInputStream(getImaginaryHistogramFileName((int) binNumberImaginarySlider.getValue()));
+            imaginaryHistogram.setImage(new Image(input));
+            binNumberImaginarySlider.setVisible(true);
+        } else {
+            rightPanel.getTabs().remove(moduleAndPhaseTab);
+            ChartUtilities.saveChartAsPNG(
+                    new File("chart.png"),
+                    ChartGenerator.generateAmplitudeTimeChart(
+                            signal.getPoints(),
+                            signal instanceof DiscreteSignal
+                    ),
+                    400,
+                    220
+            );
+            input = new FileInputStream("chart.png");
+            amplitudeTimeChart.setImage(new Image(input));
+        }
 
         try {
             createStatistics(Map.of(
@@ -281,6 +375,10 @@ public class SignalTabController implements Initializable {
 
     private String getHistogramFileName(int number) {
         return "histogram" + number + ".png";
+    }
+
+    private String getImaginaryHistogramFileName(int number) {
+        return "histogram_imaginary" + number + ".png";
     }
 
     private void notifyAllConsumers(String t, AbstractSignal signal) {
